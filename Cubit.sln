@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cubit", "Cubit.csproj", "{84025BAF-4F07-F4D9-A461-130F9A058A79}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cubit.Editor", "Cubit.Editor.csproj", "{AB91D74D-D0CB-63EB-33CC-A145CBC0C41E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{84025BAF-4F07-F4D9-A461-130F9A058A79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84025BAF-4F07-F4D9-A461-130F9A058A79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84025BAF-4F07-F4D9-A461-130F9A058A79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84025BAF-4F07-F4D9-A461-130F9A058A79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB91D74D-D0CB-63EB-33CC-A145CBC0C41E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB91D74D-D0CB-63EB-33CC-A145CBC0C41E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB91D74D-D0CB-63EB-33CC-A145CBC0C41E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB91D74D-D0CB-63EB-33CC-A145CBC0C41E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

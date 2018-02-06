@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{84025BAF-4F07-F4D9-A461-130F9A058A79}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
+    <CompilerResponseFile></CompilerResponseFile>
+    <UnityProjectType>Game:1</UnityProjectType>
+    <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
+    <UnityVersion>5.6.0f3</UnityVersion>
+    <RootNamespace></RootNamespace>
+    <LangVersion>4</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\UnityVS_bin\Debug\</OutputPath>
+    <IntermediateOutputPath>Temp\UnityVS_obj\Debug\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_5_6_0;UNITY_5_6;UNITY_5;UNITY_64;UNITY_ANALYTICS;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;INCLUDE_DYNAMIC_GI;INCLUDE_GI;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_SCRIPTING_NEW_CSHARP_COMPILER;ENABLE_VIDEO;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE;ENABLE_VSTU;UNITY_POST_PROCESSING_STACK_V2</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\UnityVS_bin\Release\</OutputPath>
+    <IntermediateOutputPath>Temp\UnityVS_obj\Release\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DefineConstants>TRACE;UNITY_5_3_OR_NEWER;UNITY_5_4_OR_NEWER;UNITY_5_5_OR_NEWER;UNITY_5_6_OR_NEWER;UNITY_5_6_0;UNITY_5_6;UNITY_5;UNITY_64;UNITY_ANALYTICS;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_GENERICS;ENABLE_PVR_GI;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_RUNTIME_NAVMESH_BUILDING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_LZMA;ENABLE_UNITYEVENTS;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES_COLLAB;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;ENABLE_NATIVE_ARRAY;INCLUDE_DYNAMIC_GI;INCLUDE_GI;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;INCLUDE_PUBNUB;ENABLE_PLAYMODE_TESTS_RUNNER;ENABLE_SCRIPTING_NEW_CSHARP_COMPILER;ENABLE_VIDEO;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_UNITYWEBREQUEST;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_CRASH_REPORTING;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_VR;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;NET_2_0_SUBSET;ENABLE_PROFILER;DEBUG;TRACE;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;ENABLE_NATIVE_ARRAY_CHECKS;UNITY_TEAM_LICENSE;ENABLE_VSTU;UNITY_POST_PROCESSING_STACK_V2</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="Boo.Lang" />
+    <Reference Include="UnityScript.Lang" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>D:/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Networking">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TestRunner">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/TestRunner/nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.Analytics">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.HoloLens">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.VR">
+      <HintPath>D:/Unity/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>D:/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets\Assets\Materials\Camera\CameraWobbleScript.cs" />
+    <Compile Include="Assets\Extern\EffectExamples\Shared\Scripts\DecalDestroyer.cs" />
+    <Compile Include="Assets\Extern\EffectExamples\Shared\Scripts\GunAim.cs" />
+    <Compile Include="Assets\Extern\EffectExamples\Shared\Scripts\GunShoot.cs" />
+    <Compile Include="Assets\Extern\EffectExamples\Shared\Scripts\ParticleExamples.cs" />
+    <Compile Include="Assets\Extern\EffectExamples\Shared\Scripts\ParticleMenu.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Attributes\GetSetAttribute.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Attributes\MinAttribute.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Attributes\TrackballAttribute.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Attributes\TrackballGroupAttribute.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\AmbientOcclusionComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\BloomComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\BuiltinDebugViewsComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\ChromaticAberrationComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\ColorGradingComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\DepthOfFieldComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\DitheringComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\EyeAdaptationComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\FogComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\FxaaComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\GrainComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\MotionBlurComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\ScreenSpaceReflectionComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\TaaComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\UserLutComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Components\VignetteComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\AmbientOcclusionModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\AntialiasingModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\BloomModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\BuiltinDebugViewsModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\ChromaticAberrationModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\ColorGradingModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\DepthOfFieldModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\DitheringModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\EyeAdaptationModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\FogModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\GrainModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\MotionBlurModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\ScreenSpaceReflectionModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\UserLutModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Models\VignetteModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\PostProcessingBehaviour.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\PostProcessingComponent.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\PostProcessingContext.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\PostProcessingModel.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\PostProcessingProfile.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Utils\ColorGradingCurve.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Utils\GraphicsUtils.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Utils\MaterialFactory.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Runtime\Utils\RenderTextureFactory.cs" />
+    <Compile Include="Assets\Extern\PostProcessing\Utilities\CustomMotionTexture\ExampleWheelController.cs" />
+    <Compile Include="Assets\Extern\Standard Assets\Utility\FPSCounter.cs" />
+    <Compile Include="Assets\Scripts\AI\AiDroneMovement.cs" />
+    <Compile Include="Assets\Scripts\Checkpoint\Checkpoint.cs" />
+    <Compile Include="Assets\Scripts\Checkpoint\CheckpointRoute.cs" />
+    <Compile Include="Assets\Scripts\Checkpoint\CheckpointSystem.cs" />
+    <Compile Include="Assets\Scripts\Constants.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Cube\ColorCube.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Cube\ColorCubeSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Cube\InitializeCubes.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\AttachEntity.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Appearance Entity\CubeEntityAppearance.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Appearance Entity\CubeEntityFadeEmission.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Appearance Entity\CubeEntityTransform.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Cge\CubeEntityCge.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Charge Entity\CubeEntityCharge.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Collision Entity\CubeEntityCollision.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Collision Entity\CubeEntityCollisionEffect.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\CubeEntitySkill.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\CubeEntitySystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Movement Entity\Boid System\CEMBoidSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Movement Entity\CubeEntityMovement.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Movement Entity\CubeEntityMovementAcceleration.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Movement Entity\CubeEntityMovementFollowPoint.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Pooling\CubeEntityPooling.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Prefab Entity\CubeEntityPrefapSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Sound.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Sound\CubeEntitySoundInstance.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\Sound\SoundManager.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\State Entity\CubeEntityAttached.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\State Entity\CubeEntityEndState.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Cube Entity\State Entity\CubeEntityState.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CGE.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CgeCell.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CgeForm.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CgeFormRect.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CgeInstance.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CgeTidyUp.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\CgeZone.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Dynamic Cube Generation\Enemy\CgeMonsterManager.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Level Entity\Area\LevelEntityArea.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Level Entity\Area\LevelEntityMonsterManager.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Level Entity\Cube Cluster\LevelEntityCubeCluster.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Level Entity\Cube Cluster\LevelEntityCubeClusterBox.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Level Entity\Level\LevelEntityLevelManager.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Death Effect\MonsterEntityDeathEffect.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Death Effect\MonsterEntityDeathEffectExplosion.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Death Effect\MonsterEntityDeathEffectExplosionEffect.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Ejector\MonsterEntityEjector.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\MonsterEntityAttachSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\MonsterEntityBase.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Skills\MonsterEntitySkillEject.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Skills\MonsterEntitySkillGrab.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Monster Entity\Worm\MonsterEntityWorm.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Parent Entity\ParentEntityDeleteOnStateChange.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntityAim.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntityAttachSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntityInput.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntityLifeSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntitySkillGattling.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntitySkillGrab.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Player Entity\PlayerEntitySkillSpawn.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Singletons\CubeEntityMaterials.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Singletons\CubeEntityPrefabs.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Entity System\Swarm Behaviour\SwarmBehaviour.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Misc\Goal.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Monster\ChangeEnemyAtRuntime.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Monster\CubeMonster.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Monster\EnemyLevel.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Monster\MonsterChase.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Monster\MonsterManager.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Monster\MonsterManagerV2.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Player\Aim.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Player\GrabSystem.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Player\PlayerLife.cs" />
+    <Compile Include="Assets\Scripts\Cubit\ShowText.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Skills\SkillGather.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Skills\SkillGattling.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Skills\SkillPush.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Tutorial\DisableAtStart.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Tutorial\PlayerMovementTutorial.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Tutorial\PlayerRotationTutorial.cs" />
+    <Compile Include="Assets\Scripts\Cubit\Tutorial\Tutorial.cs" />
+    <Compile Include="Assets\Scripts\GenralScript.cs" />
+    <Compile Include="Assets\Scripts\Log\Log.cs" />
+    <Compile Include="Assets\Scripts\Log\PlayerCounter.cs" />
+    <Compile Include="Assets\Scripts\Log\ShowLog.cs" />
+    <Compile Include="Assets\Scripts\Misc\DeleteSelfScript.cs" />
+    <Compile Include="Assets\Scripts\Misc\DontDestroyOnLoadScript.cs" />
+    <Compile Include="Assets\Scripts\Misc\GameTime.cs" />
+    <Compile Include="Assets\Scripts\Misc\LightRotation.cs" />
+    <Compile Include="Assets\Scripts\Misc\LineRendererExample.cs" />
+    <Compile Include="Assets\Scripts\Player\Boost.cs" />
+    <Compile Include="Assets\Scripts\Player\CameraRotation.cs" />
+    <Compile Include="Assets\Scripts\Player\HitIndicator.cs" />
+    <Compile Include="Assets\Scripts\Player\PMArcade.cs" />
+    <Compile Include="Assets\Scripts\Player\Penalty.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerRotation.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerTrailRenderer.cs" />
+    <Compile Include="Assets\Scripts\Player\SoundSystem.cs" />
+    <Compile Include="Assets\Scripts\Resetter\ResetLevel.cs" />
+    <Compile Include="Assets\Scripts\Teleport\TeleportTrigger.cs" />
+    <Compile Include="Assets\Scripts\Test.cs" />
+    <Compile Include="Assets\Scripts\Trigger\BoostTrigger.cs" />
+    <Compile Include="Assets\Scripts\Trigger\PenaltyTrigger.cs" />
+    <Compile Include="Assets\Scripts\Trigger\RoundTrigger.cs" />
+    <Compile Include="Assets\Scripts\UI\GeneralUIStuff.cs" />
+    <Compile Include="Assets\Scripts\UI\Options.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\ActiveStateToggler.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\ApplicationManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\ChangeColor.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\DragMe.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\DragPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\DropMe.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\PanelManager.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\ResizePanel.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\ScrollDetailTexture.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\ShowSliderValue.cs" />
+    <Compile Include="Assets\Scripts\UI\Sample UI\TiltWindow.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowFps.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowTextClickToContinue.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowTime.cs" />
+    <Compile Include="Assets\Scripts\UI\ShowTimedText.cs" />
+    <Compile Include="Assets\Scripts\UI\showStartText.cs" />
+    <Compile Include="Assets\Scripts\Walls\WallColor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Assets\Materials\Camera\CameraWobbleShader.shader" />
+    <None Include="Assets\Assets\Materials\CubeMaterials\Emissives\2\ikkki.shader" />
+    <None Include="Assets\Assets\Text\TextShader.shader" />
+    <None Include="Assets\Extern\Day-Night Skyboxes\Textures\Readme for Assigning.txt" />
+    <None Include="Assets\Extern\Day-Night Skyboxes\readme.txt" />
+    <None Include="Assets\Extern\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />
+    <None Include="Assets\Extern\FireExplosionEffects\Materials\SurfaceShader_VC.shader" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\HistogramCompute.compute" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\HistogramRender.shader" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\ParadeRender.shader" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\VectorscopeCompute.compute" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\VectorscopeRender.shader" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\WaveformCompute.compute" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\Monitors\WaveformRender.shader" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\UI\CurveBackground.shader" />
+    <None Include="Assets\Extern\PostProcessing\Editor Resources\UI\Trackball.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Bluenoise64\COPYING.txt" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Bluenoise64\LICENSE.txt" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\ACES.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\AmbientOcclusion.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\AmbientOcclusion.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Blit.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Bloom.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Bloom.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\BuiltinDebugViews.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\ColorGrading.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Common.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\DepthOfField.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\DepthOfField.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\DiskKernels.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\EyeAdaptation.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\EyeAdaptation.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\EyeHistogram.compute" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\FXAA.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\FXAA3.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Fog.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\GrainGen.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\LutGen.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\MotionBlur.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\MotionBlur.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\ScreenSpaceRaytrace.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\ScreenSpaceReflection.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\TAA.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\TAA.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Tonemapping.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\Uber.shader" />
+    <None Include="Assets\Extern\PostProcessing\Resources\Shaders\UberSecondPass.cginc" />
+    <None Include="Assets\Extern\PostProcessing\Utilities\CustomMotionTexture\Shaders\CustomMotionVectorTexture.shader" />
+    <None Include="Assets\Extern\Sample UI\Fonts\Jupiter\LICENSE.txt" />
+    <None Include="Assets\Extern\Sample UI\Materials\UI-Default-No-Alpha.shader" />
+    <None Include="Assets\Extern\Sample UI\Textures and Sprites\SF UI\Background\LICENSE.txt" />
+    <None Include="Assets\Log\Old\logCubeEnemyHit.txt" />
+    <None Include="Assets\Log\Old\logCubePlayerHit.txt" />
+    <None Include="Assets\Log\Old\logDeaths.txt" />
+    <None Include="Assets\Log\Old\logLifeGain.txt" />
+    <None Include="Assets\Log\Old\logLifeLoss.txt" />
+    <None Include="Assets\Log\Old\logSkillGather.txt" />
+    <None Include="Assets\Log\Old\logSkillGattling.txt" />
+    <None Include="Assets\Log\Old\logSkillPush.txt" />
+    <None Include="Assets\Log\Old\logWaveInformation.txt" />
+    <None Include="Assets\Log\Old\statistic.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="GenerateTargetFrameworkMonikerAttribute" />
+</Project>
