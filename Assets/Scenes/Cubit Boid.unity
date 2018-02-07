@@ -10186,7 +10186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &603281522
 Transform:
   m_ObjectHideFlags: 0
@@ -13592,7 +13592,7 @@ MonoBehaviour:
     m_Bits: 0
   unitsPerScroll: 1
   minCamScroll: 5
-  maxCamScroll: 800
+  maxCamScroll: 8000
   currentAngleX: 0
   currentAngleY: 0
   currentScroll: 18
@@ -13895,7 +13895,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_duration: -1
-  m_maxCubesGrabbed: 500
+  m_maxCubesGrabbed: 5000
   m_catchOffset: {x: 0, y: -10, z: 0}
   m_movementAffectsCubesFactor: 0.9
   m_cubeMovementPower: 100
@@ -14152,11 +14152,12 @@ MonoBehaviour:
   m_separationMaxPartners: 10
   m_separationMaxPartnerChecks: 15
   m_useRepellence: 0
-  m_repellenceObjects: []
   m_repellenceConstantPower: 0
   m_repellenceRadius: 0
   m_repellenceMaxPartners: 0
   m_repellenceMaxPartnerChecks: 0
+  m_repellenceObjects: []
+  m_repellenceMaterial: {fileID: 0}
   m_useSwarmMovement: 1
   m_swarmMovementObject: {fileID: 861254637}
   m_swarmMovementPower: 30
@@ -14850,11 +14851,12 @@ MonoBehaviour:
   m_separationMaxPartners: 10
   m_separationMaxPartnerChecks: 15
   m_useRepellence: 0
-  m_repellenceObjects: []
   m_repellenceConstantPower: 0
   m_repellenceRadius: 0
   m_repellenceMaxPartners: 0
   m_repellenceMaxPartnerChecks: 0
+  m_repellenceObjects: []
+  m_repellenceMaterial: {fileID: 0}
   m_useSwarmMovement: 1
   m_swarmMovementObject: {fileID: 861254637}
   m_swarmMovementPower: 200
@@ -16068,7 +16070,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &969207540
 Transform:
   m_ObjectHideFlags: 0
@@ -16155,7 +16157,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 972936459}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 40, y: 40, z: 40}
+  m_LocalPosition: {x: 60, y: 60, z: 60}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2063332529}
@@ -20469,11 +20471,12 @@ MonoBehaviour:
   m_separationMaxPartners: 10
   m_separationMaxPartnerChecks: 15
   m_useRepellence: 0
-  m_repellenceObjects: []
   m_repellenceConstantPower: 0
   m_repellenceRadius: 0
   m_repellenceMaxPartners: 0
   m_repellenceMaxPartnerChecks: 0
+  m_repellenceObjects: []
+  m_repellenceMaterial: {fileID: 0}
   m_useSwarmMovement: 1
   m_swarmMovementObject: {fileID: 861254637}
   m_swarmMovementPower: 200
@@ -22921,7 +22924,7 @@ MonoBehaviour:
   m_spawnPrefab: {fileID: 1171172515848604, guid: ee204b24bb447324bae226ed3aced229,
     type: 2}
   m_cubesName: Cubes
-  m_cellSize: {x: 10, y: 10, z: 10}
+  m_cellSize: {x: 15, y: 15, z: 15}
   m_checkForActivisionTime: 11
   m_createCubesPerFrame: 50
   m_cubes: []
@@ -22935,7 +22938,7 @@ MonoBehaviour:
   m_isCreatingCubes: 0
   m_showGizmos: 0
   devideBy: 0
-  m_areaSize: {x: 80, y: 80, z: 80}
+  m_areaSize: {x: 120, y: 120, z: 120}
   m_cellNumbers: {x: 8, y: 8, z: 8}
   m_forcedPadding: {x: 0, y: 0, z: 0}
   m_forcedPaddingPerCell: {x: 0, y: 0, z: 0}
@@ -22944,16 +22947,16 @@ MonoBehaviour:
   m_currentCreateY: 0
   m_currentCreateZ: 0
   m_currentCreateIndex: 0
-  m_calculateEdgesB: 1
+  m_calculateEdgesB: 0
   m_edges:
-  - {x: 40, y: 40, z: 40}
-  - {x: -40, y: 40, z: 40}
-  - {x: -40, y: 40, z: -40}
-  - {x: 40, y: 40, z: -40}
-  - {x: 40, y: -40, z: 40}
-  - {x: -40, y: -40, z: 40}
-  - {x: -40, y: -40, z: -40}
-  - {x: 40, y: -40, z: -40}
+  - {x: 60, y: 60, z: 60}
+  - {x: -60, y: 60, z: 60}
+  - {x: -60, y: 60, z: -60}
+  - {x: 60, y: 60, z: -60}
+  - {x: 60, y: -60, z: 60}
+  - {x: -60, y: -60, z: 60}
+  - {x: -60, y: -60, z: -60}
+  - {x: 60, y: -60, z: -60}
 --- !u!4 &1455524111
 Transform:
   m_ObjectHideFlags: 0
@@ -32955,7 +32958,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1906337310}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -40, y: -40, z: -40}
+  m_LocalPosition: {x: -60, y: -60, z: -60}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2063332529}
@@ -33156,155 +33159,57 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_object: {fileID: 861254637}
-  m_maxSwarmSize: 500
-  m_maxSpeed: 150
+  m_maxSwarmSize: 5000
+  m_maxSpeed: 200
   m_resistancePower: 10
   m_useLookInDirection: 1
   m_useIsAffectedByPlayerMovement: 0
   m_useCohesion: 1
-  m_cohesionPerFrame: 20
-  m_cohesionPower: 20
+  m_cohesionPerFrame: 25
+  m_cohesionPower: 50
   m_cohesionRadius: 50
   m_cohesionMaxPartners: 10
-  m_cohesionMaxPartnerChecks: 20
+  m_cohesionMaxPartnerChecks: 15
   m_useAlignment: 1
-  m_alignmentPerFrame: 20
-  m_alignmentPower: 0.01
+  m_alignmentPerFrame: 25
+  m_alignmentPower: 0.02
   m_alignmentRadius: 50
   m_alignmentMaxPartners: 10
-  m_alignmentMaxPartnerChecks: 20
+  m_alignmentMaxPartnerChecks: 15
   m_useSeperation: 1
-  m_separationPerFrame: 20
-  m_separationPower: 100
-  m_separationRadius: 6
+  m_separationPerFrame: 25
+  m_separationPower: 200
+  m_separationRadius: 4
   m_separationMaxPartners: 10
-  m_separationMaxPartnerChecks: 20
+  m_separationMaxPartnerChecks: 15
   m_useRepellence: 1
-  m_repellenceObjects:
-  - {fileID: 861254637}
-  m_repellenceConstantPower: 500
-  m_repellenceRadius: 40
+  m_repellenceConstantPower: 50
+  m_repellenceRadius: 50
   m_repellenceMaxPartners: 0
   m_repellenceMaxPartnerChecks: 0
+  m_repellenceObjects:
+  - {fileID: 861254637}
+  m_repellenceMaterial: {fileID: 2100000, guid: 88f1b8c4541b53e4ea2da0b5cdfe06ee,
+    type: 2}
   m_useSwarmMovement: 1
   m_swarmMovementObject: {fileID: 861254637}
   m_swarmMovementPower: 150
   m_useGravitation: 1
   m_gravitationCenterObject: {fileID: 0}
   m_gravitationPerFrame: 0
-  m_gravitationPower: 500
-  m_useLineOfSight: 1
-  m_useEvasion: 1
-  m_agents:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_averageSwarmPosition: {x: -1124.3693, y: -1825.2898, z: 1639.2}
-  m_averageSwarmMovement: {x: 2.2487557, y: -91.251915, z: 105.4964}
-  m_cohesionCounter: 65
-  m_alignmentCounter: 65
-  m_separationCounter: 65
+  m_gravitationPower: 30
+  m_useLineOfSight: 0
+  m_useEvasion: 0
+  m_agents: []
+  m_averageSwarmPosition: {x: 0, y: 0, z: 0}
+  m_averageSwarmMovement: {x: 0, y: 0, z: 0}
+  m_cohesionCounter: 0
+  m_alignmentCounter: 0
+  m_separationCounter: 0
   m_swarmMovementCounter: 0
-  m_swarmMovementForceVector: {x: -1.929474, y: -92.50058, z: -38.570435}
+  m_swarmMovementForceVector: {x: 0, y: 0, z: 0}
   m_gravitationCounter: 0
-  m_gravitationCenter: {x: -1124.3693, y: -1825.2898, z: 1639.2}
+  m_gravitationCenter: {x: 0, y: 0, z: 0}
   b: 0
 --- !u!4 &1910614981
 Transform:
@@ -36675,7 +36580,7 @@ Light:
   m_Type: 2
   m_Color: {r: 0.53703505, g: 0.60798234, b: 0.9485294, a: 1}
   m_Intensity: 1
-  m_Range: 500
+  m_Range: 200
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:

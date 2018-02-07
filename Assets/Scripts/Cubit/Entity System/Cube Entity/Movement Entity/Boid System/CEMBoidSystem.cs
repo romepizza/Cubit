@@ -41,12 +41,13 @@ public class CEMBoidSystem : MonoBehaviour
 
     [Header("- (Repellence) -")]
     public bool m_useRepellence = true;
-    public GameObject[] m_repellenceObjects;
     //public List<float> m_repellencePowers;
     public float m_repellenceConstantPower;
     public float m_repellenceRadius;
     public int m_repellenceMaxPartners;
     public int m_repellenceMaxPartnerChecks;
+    public GameObject[] m_repellenceObjects;
+    public Material m_repellenceMaterial;
 
 
     [Header("- (Swarm Movement) -")]
@@ -120,6 +121,15 @@ public class CEMBoidSystem : MonoBehaviour
         {
             applyBoidRules();
             applyPostMovement();
+        }
+
+        if(Input.GetKey(KeyCode.C))
+        {
+            foreach(GameObject agent in m_agents)
+            {
+                Vector3 v = agent.transform.position - m_averageSwarmPosition;
+                agent.GetComponent<Rigidbody>().AddForce(v.normalized * 1000f, ForceMode.Acceleration);
+            }
         }
     }
 
@@ -289,12 +299,11 @@ public class CEMBoidSystem : MonoBehaviour
                     break;
 
 
-                if (m_agents.Contains(collider.gameObject))
+                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
                 {
                     localCenter += collider.gameObject.transform.position;
 
                     nearAgentsCount++;
-                    
                 }
             }
         }
@@ -358,10 +367,11 @@ public class CEMBoidSystem : MonoBehaviour
             if (nearAgentsCount >= m_alignmentMaxPartners && m_alignmentMaxPartners > 0)
                 break;
 
-            if (m_agents.Contains(collider.gameObject))
+            if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
             {
                 //float distanceFactor = 1f - (Vector3.Distance(agent.transform.position, collider.transform.position) / m_alignmentRadius);
-                localAverageMovementVector += collider.GetComponent<Rigidbody>().velocity;// * distanceFactor;
+                if(collider.GetComponent<Rigidbody>() != null)
+                    localAverageMovementVector += collider.GetComponent<Rigidbody>().velocity;// * distanceFactor;
                 nearAgentsCount++;
             }
         }
@@ -426,7 +436,7 @@ public class CEMBoidSystem : MonoBehaviour
             if (nearAgentsCount >= m_separationMaxPartners && m_separationMaxPartners > 0)
                 break;
 
-            if (m_agents.Contains(collider.gameObject))
+            if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
             {
                 float distanceFactor = Mathf.Clamp01(1f - (Vector3.Distance(agent.transform.position, collider.transform.position) / m_separationRadius));
                 forceVector += (agent.transform.position - collider.gameObject.transform.position) * distanceFactor;
@@ -458,6 +468,8 @@ public class CEMBoidSystem : MonoBehaviour
             int nearAgentsCount = 0;
             int nearObjectsCount = 0;
 
+            if (repellor == null)
+                break;
 
             Collider[] colliders = Physics.OverlapSphere(repellor.transform.position, m_repellenceRadius);
             foreach (Collider collider in colliders)
@@ -472,10 +484,12 @@ public class CEMBoidSystem : MonoBehaviour
                 if (nearAgentsCount >= m_repellenceMaxPartners && m_repellenceMaxPartners > 0)
                     break;
 
-                if (m_agents.Contains(agent))
+                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
                 {
                     float distanceFactor = Mathf.Clamp01(1f - (Vector3.Distance(agent.transform.position, repellor.transform.position) / m_repellenceRadius));
-                    m_separationForceVectors[agent] += (agent.transform.position - repellor.gameObject.transform.position).normalized * m_repellenceConstantPower * distanceFactor;
+                    float directionFactor = Vector3.Dot((repellor.transform.position - agent.transform.position).normalized, agent.GetComponent<Rigidbody>().velocity.normalized);
+                    //directionFactor = Mathf.Clamp01(directionFactor);
+                    m_repellenceForceVectors[agent] += (agent.transform.position - repellor.gameObject.transform.position).normalized * m_repellenceConstantPower * distanceFactor;
                     nearAgentsCount++;
                 }
             }
@@ -502,21 +516,6 @@ public class CEMBoidSystem : MonoBehaviour
     void manageSwarmMovementCounter()
     {
         getSwarmMovementForceVector();
-        /*
-        int activisionsActually = m_swarmMovementPerFrame;
-        if (m_swarmMovementPerFrame == 0)
-            activisionsActually = m_agents.Count;
-        if (m_swarmMovementPerFrame >= m_agents.Count)
-            activisionsActually = m_agents.Count;
-
-        for (int i = 0; i < activisionsActually; i++)
-        {
-            int index = m_swarmMovementCounter % m_agents.Count;
-            //getSwarmMovementForceVector(m_agents[index]);
-            m_swarmMovementCounter++;
-        }
-        m_swarmMovementCounter %= m_agents.Count;
-        */
     }
     void getSwarmMovementForceVector()
     {
@@ -597,7 +596,7 @@ public class CEMBoidSystem : MonoBehaviour
         {
             if (agent != null)
             {
-                if (!m_agents.Contains(agent))
+                if (agent.GetComponent < CEMBoidAttached>() == null)
                 {
                     m_agents.Add(agent);
                     m_cohesionForceVectors.Add(agent, Vector3.zero);
@@ -605,12 +604,20 @@ public class CEMBoidSystem : MonoBehaviour
                     m_separationForceVectors.Add(agent, Vector3.zero);
                     m_repellenceForceVectors.Add(agent, Vector3.zero);
                     m_gravitationForceVectors.Add(agent, Vector3.zero);
+
+                    CEMBoidAttached attachedScript = agent.AddComponent<CEMBoidAttached>();
+                    attachedScript.m_attachedTo = this;
+
+                    if(m_agents.Count - 1 < m_repellenceObjects.Length && m_repellenceObjects[m_agents.Count - 1] == null)
+                    {
+                        m_repellenceObjects[m_agents.Count - 1] = agent;
+                        agent.GetComponent<Renderer>().material = m_repellenceMaterial;
+                    }
+
                     return true;
                 }
                 else
                     Debug.Log("Warning: Tried to add agent that was already in the list!");
-
-                
             }
         }
         return false;
@@ -630,7 +637,7 @@ public class CEMBoidSystem : MonoBehaviour
                     m_gravitationForceVectors.Remove(agent);
                 }
                 else
-                    Debug.Log("Warning: Tried to add agent that was already in the list!");
+                    Debug.Log("Warning: Tried to add agent that was not in the list!");
             }
             else
             {
@@ -702,7 +709,7 @@ public class CEMBoidSystem : MonoBehaviour
                 GameObject cubePotential = colliders[i].gameObject;
                 if (cubePotential.layer == 8 && cubePotential.GetComponent<CubeEntitySystem>() != null)
                 {
-                    if (cubePotential.GetComponent<CubeEntitySystem>().getStateComponent() != null && cubePotential.GetComponent<CubeEntitySystem>().getStateComponent().canBeAttachedToPlayer())
+                    if (cubePotential.GetComponent<CubeEntitySystem>().getStateComponent() != null && cubePotential.GetComponent<CubeEntitySystem>().getStateComponent().canBeAttachedToPlayer() && cubePotential.GetComponent<CEMBoidAttached>() == null)
                     {
                         if (true)
                         {
