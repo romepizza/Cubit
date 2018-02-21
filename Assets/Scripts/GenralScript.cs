@@ -6,6 +6,7 @@ public class GenralScript : MonoBehaviour
 {
     public bool isInMenu;
     public bool isInGame;
+    public bool showMouse;
 
     void Awake()
     {
@@ -15,7 +16,8 @@ public class GenralScript : MonoBehaviour
 
 	void Start ()
     {
-        Cursor.visible = false;
+        if(!showMouse)
+            Cursor.visible = false;
     }
 	
 	void Update ()

@@ -197,8 +197,9 @@ public class CubeEntityAppearance : MonoBehaviour
             TrailRenderer tr = GetComponent<TrailRenderer>();
 
             tr.material = m_trailMaterial;
-            tr.startColor = m_trailColor;
-            tr.endColor = m_trailColor;
+            tr.colorGradient = m_colorGradient;
+            //tr.startColor = m_trailColor;
+            //tr.endColor = m_trailColor;
             tr.time = m_trailTime;
             tr.widthMultiplier = m_trailWidth;
             tr.colorGradient = new Gradient();

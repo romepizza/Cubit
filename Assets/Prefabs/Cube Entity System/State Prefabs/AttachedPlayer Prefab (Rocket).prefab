@@ -21,11 +21,11 @@ GameObject:
   - component: {fileID: 4908283375798192}
   - component: {fileID: 33832601785714852}
   - component: {fileID: 54637848151929064}
-  - component: {fileID: 65160039991492922}
   - component: {fileID: 23622577868400234}
   - component: {fileID: 114442374068696460}
   - component: {fileID: 114183241786995218}
   - component: {fileID: 114532363633155348}
+  - component: {fileID: 136087031192381120}
   m_Layer: 8
   m_Name: AttachedPlayer Prefab (Rocket)
   m_TagString: Ball
@@ -41,7 +41,7 @@ Transform:
   m_GameObject: {fileID: 1668736149874840}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -190.83, y: 3.7694771, z: 77.11}
-  m_LocalScale: {x: 20, y: 20, z: 20}
+  m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -100,18 +100,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &65160039991492922
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1668736149874840}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.1, z: 0.3}
-  m_Center: {x: 0, y: 0, z: 0.15}
 --- !u!114 &114183241786995218
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,3 +185,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_entitySystemScript: {fileID: 0}
+--- !u!136 &136087031192381120
+CapsuleCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1668736149874840}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.06
+  m_Height: 0.38
+  m_Direction: 2
+  m_Center: {x: 0, y: 0, z: 0.15646338}

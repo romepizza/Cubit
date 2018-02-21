@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class CEMBoidSystem : MonoBehaviour
@@ -46,7 +45,10 @@ public class CEMBoidSystem : MonoBehaviour
     public float m_repellenceRadius;
     public int m_repellenceMaxPartners;
     public int m_repellenceMaxPartnerChecks;
-    public GameObject[] m_repellenceObjects;
+    [Header("- (Predators) -")]
+    public bool m_repellenceFillPredatorsOnAdd;
+    public int m_repellenceMaxPredators;
+    public GameObject[] m_repellenceInitialPredators;
     public Material m_repellenceMaterial;
 
 
@@ -56,13 +58,20 @@ public class CEMBoidSystem : MonoBehaviour
     //public int m_swarmMovementPerFrame;
     public float m_swarmMovementPower;
 
-    [Header("- (Gravitation)")]
+    [Header("- (Gravitation) -")]
     public bool m_useGravitation = true;
-    public GameObject m_gravitationCenterObject;
+    public GameObject m_gravitationCenterObject; // If equal to null: gravitation center equals center of swarm
     public int m_gravitationPerFrame;
     public float m_gravitationPower;
     //public bool m_gravitationToCenter;
     //public bool m_gravitationToObject;
+
+    [Header("- (Stay in Bubble) -")]
+    public bool m_useBubble;
+    public float m_bubblePower;
+    public float m_bubbleMaxDistance;
+    public int m_bubblePerFrame;
+    public float m_bubbleMaxSpeed;
 
     [Header("- (Line of Sight) -")]
     public bool m_useLineOfSight = true;
@@ -95,6 +104,7 @@ public class CEMBoidSystem : MonoBehaviour
 
     [Header("- (Repellence) -")]
     public Dictionary<GameObject, Vector3> m_repellenceForceVectors;
+    public List<GameObject> m_repellencePredators;
 
     [Header("- (Swarm Movement) -")]
     public int m_swarmMovementCounter;
@@ -104,6 +114,10 @@ public class CEMBoidSystem : MonoBehaviour
     public int m_gravitationCounter;
     Dictionary<GameObject, Vector3> m_gravitationForceVectors;
     public Vector3 m_gravitationCenter;
+
+    [Header("- (Bubble) -")]
+    public int m_bubbleCounter;
+    Dictionary<GameObject, Vector3> m_bubbleForceVectors;
 
     [Header("- (Line of Sight) -")]
 
@@ -151,7 +165,11 @@ public class CEMBoidSystem : MonoBehaviour
         m_alignmentForceVectors = new Dictionary<GameObject, Vector3>();
         m_separationForceVectors = new Dictionary<GameObject, Vector3>();
         m_repellenceForceVectors = new Dictionary<GameObject, Vector3>();
+        m_repellencePredators = new List<GameObject>();
         m_gravitationForceVectors = new Dictionary<GameObject, Vector3>();
+        m_bubbleForceVectors = new Dictionary<GameObject, Vector3>();
+
+        manageInitialPredator();
     }
 
     void getStuff()
@@ -192,6 +210,8 @@ public class CEMBoidSystem : MonoBehaviour
                 applySwarmMovement(agent);
             if (m_useGravitation)
                 applyGravitation(agent);
+            if (m_useBubble)
+                applyBubble(agent);
         }
         if (m_useLineOfSight)
             applyLineOfSight();
@@ -212,6 +232,8 @@ public class CEMBoidSystem : MonoBehaviour
             manageSwarmMovement();
         if (m_useGravitation)
             manageGravitation();
+        if (m_useBubble)
+            manageBubble();
         if (m_useLineOfSight)
             manageLineOfSight();
         if (m_useEvasion)
@@ -240,7 +262,6 @@ public class CEMBoidSystem : MonoBehaviour
     }
 
     // ----- Rules -----
-
     // Cohesion
     void manageCohesion()
     {
@@ -299,7 +320,7 @@ public class CEMBoidSystem : MonoBehaviour
                     break;
 
 
-                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
+                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToNormal == this)
                 {
                     localCenter += collider.gameObject.transform.position;
 
@@ -367,7 +388,7 @@ public class CEMBoidSystem : MonoBehaviour
             if (nearAgentsCount >= m_alignmentMaxPartners && m_alignmentMaxPartners > 0)
                 break;
 
-            if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
+            if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToNormal == this)
             {
                 //float distanceFactor = 1f - (Vector3.Distance(agent.transform.position, collider.transform.position) / m_alignmentRadius);
                 if(collider.GetComponent<Rigidbody>() != null)
@@ -436,7 +457,7 @@ public class CEMBoidSystem : MonoBehaviour
             if (nearAgentsCount >= m_separationMaxPartners && m_separationMaxPartners > 0)
                 break;
 
-            if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
+            if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToNormal == this)
             {
                 float distanceFactor = Mathf.Clamp01(1f - (Vector3.Distance(agent.transform.position, collider.transform.position) / m_separationRadius));
                 forceVector += (agent.transform.position - collider.gameObject.transform.position) * distanceFactor;
@@ -463,7 +484,7 @@ public class CEMBoidSystem : MonoBehaviour
         foreach (GameObject agent in m_agents)
             m_repellenceForceVectors[agent] = Vector3.zero;
 
-        foreach (GameObject repellor in m_repellenceObjects)
+        foreach (GameObject repellor in m_repellencePredators)
         {
             int nearAgentsCount = 0;
             int nearObjectsCount = 0;
@@ -484,7 +505,7 @@ public class CEMBoidSystem : MonoBehaviour
                 if (nearAgentsCount >= m_repellenceMaxPartners && m_repellenceMaxPartners > 0)
                     break;
 
-                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_attachedTo == this)
+                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToNormal == this)
                 {
                     float distanceFactor = Mathf.Clamp01(1f - (Vector3.Distance(agent.transform.position, repellor.transform.position) / m_repellenceRadius));
                     float directionFactor = Vector3.Dot((repellor.transform.position - agent.transform.position).normalized, agent.GetComponent<Rigidbody>().velocity.normalized);
@@ -567,6 +588,48 @@ public class CEMBoidSystem : MonoBehaviour
     {
         agent.GetComponent<Rigidbody>().AddForce(m_gravitationForceVectors[agent], ForceMode.Acceleration);
     }
+    // Bubble
+    void manageBubble()
+    {
+        manageBubbleCounter();
+    }
+    void manageBubbleCounter()
+    {
+        int activisionsActually = m_bubblePerFrame;
+        if (m_bubblePerFrame == 0)
+            activisionsActually = m_agents.Count;
+        if (m_bubblePerFrame >= m_agents.Count)
+            activisionsActually = m_agents.Count;
+
+        for (int i = 0; i < activisionsActually; i++)
+        {
+            int index = m_bubbleCounter % m_agents.Count;
+            getBubbleForceVector(m_agents[index]);
+            m_bubbleCounter++;
+        }
+        m_bubbleCounter %= m_agents.Count;
+    }
+    void getBubbleForceVector(GameObject agent)
+    {
+        m_bubbleForceVectors[agent] = Vector3.zero;
+        float distance = Vector3.Distance(agent.transform.position, m_averageSwarmPosition);
+        if (distance > m_bubbleMaxDistance)
+        {
+            Vector3 direction = (m_averageSwarmPosition - agent.transform.position);
+            Vector3 flightDirection = agent.GetComponent<Rigidbody>().velocity;
+            float angle = Vector3.Dot(direction.normalized, flightDirection.normalized);
+
+            if (!(angle > 0 && flightDirection.magnitude > m_bubbleMaxSpeed))
+            {
+                float distanceFactor = Mathf.Clamp01((distance - m_bubbleMaxDistance) / m_bubbleMaxDistance * 0.2f);
+                m_bubbleForceVectors[agent] = direction.normalized * m_bubblePower * distanceFactor;
+            }
+        }
+    }
+    void applyBubble(GameObject agent)
+    {
+        agent.GetComponent<Rigidbody>().AddForce(m_bubbleForceVectors[agent], ForceMode.Acceleration);
+    }
 
     
     // Line of Sight
@@ -577,6 +640,10 @@ public class CEMBoidSystem : MonoBehaviour
     void applyLineOfSight()
     {
 
+    }
+    bool isLineOfSight()
+    {
+        return false;
     }
 
     // Evasion
@@ -589,14 +656,22 @@ public class CEMBoidSystem : MonoBehaviour
 
     }
     
-
+    // Manage Agents
     public bool addAgent(GameObject agent)
     {
         if (m_agents.Count < m_maxSwarmSize)
         {
             if (agent != null)
             {
-                if (agent.GetComponent < CEMBoidAttached>() == null)
+                bool isLegit = true;
+                CEMBoidAttached[] attachedScripts = agent.GetComponents<CEMBoidAttached>();
+                foreach(CEMBoidAttached attachedScript in attachedScripts)
+                {
+                    if (attachedScript.m_isAttachedToNormal == this)
+                        isLegit = false;
+                }
+
+                if (isLegit)
                 {
                     m_agents.Add(agent);
                     m_cohesionForceVectors.Add(agent, Vector3.zero);
@@ -604,16 +679,16 @@ public class CEMBoidSystem : MonoBehaviour
                     m_separationForceVectors.Add(agent, Vector3.zero);
                     m_repellenceForceVectors.Add(agent, Vector3.zero);
                     m_gravitationForceVectors.Add(agent, Vector3.zero);
+                    m_bubbleForceVectors.Add(agent, Vector3.zero);
+
 
                     CEMBoidAttached attachedScript = agent.AddComponent<CEMBoidAttached>();
-                    attachedScript.m_attachedTo = this;
+                    attachedScript.m_isAttachedToNormal = this;
 
-                    if(m_agents.Count - 1 < m_repellenceObjects.Length && m_repellenceObjects[m_agents.Count - 1] == null)
-                    {
-                        m_repellenceObjects[m_agents.Count - 1] = agent;
-                        agent.GetComponent<Renderer>().material = m_repellenceMaterial;
-                    }
+                    if (m_repellenceFillPredatorsOnAdd)
+                        addPredator(agent);
 
+                    
                     return true;
                 }
                 else
@@ -622,7 +697,7 @@ public class CEMBoidSystem : MonoBehaviour
         }
         return false;
     }
-    public void removeAgent(GameObject agent)
+    public void removeAgent(GameObject agent) // TODO !!!
     {
         if (m_agents.Count > 0)
         {
@@ -635,6 +710,7 @@ public class CEMBoidSystem : MonoBehaviour
                     m_alignmentForceVectors.Remove(agent);
                     m_separationForceVectors.Remove(agent);
                     m_gravitationForceVectors.Remove(agent);
+                    m_bubbleForceVectors.Remove(agent);
                 }
                 else
                     Debug.Log("Warning: Tried to add agent that was not in the list!");
@@ -646,6 +722,174 @@ public class CEMBoidSystem : MonoBehaviour
         }
     }
 
+    // Manage Predators
+    public void manageInitialPredator()
+    {
+        if (m_repellenceInitialPredators.Length > m_repellenceMaxPredators)
+            Debug.Log("Warning: parameter maxPredators is smaller than the amount of initial predators!");
+
+        foreach (GameObject predator in m_repellenceInitialPredators)
+        {
+            addPredator(predator);
+        }
+    }
+    public bool addPredator(GameObject predator)
+    {
+        if (m_repellencePredators.Count < m_repellenceMaxPredators)
+        {
+            if (predator != null)
+            {
+                CEMBoidAttached script = null;
+                CEMBoidAttached[] attachedScripts = predator.GetComponents<CEMBoidAttached>();
+                foreach (CEMBoidAttached attachedScript in attachedScripts)
+                {
+                    if (attachedScript.m_isAttachedToNormal == this)
+                    {
+                        script = attachedScript;
+                    }
+                }
+
+                if (script != null)
+                {
+                    if (script.m_isPredatorToNormal != null)
+                        Debug.Log("Warning: Tried to mark attached script of predator, but it was already marked!");
+
+                    script.m_isPredatorToNormal = this;
+                    m_repellencePredators.Add(predator);
+
+                    if(predator.GetComponent<CubeEntitySystem>() != null)
+                        predator.GetComponent<Renderer>().material = m_repellenceMaterial;
+
+                    return true;
+                }
+                else
+                    Debug.Log("Warning: Tried to add object to predators, that was already in the list!");
+            }
+            else
+            {
+                Debug.Log("Warning: Tried to add Null object to predators!");
+                return false;
+            }
+        }
+        return false;
+    }
+    public bool addRandomPredator()
+    {
+        GameObject predator = m_agents[Random.Range(0, m_agents.Count)];
+
+        if (m_repellencePredators.Count < m_repellenceMaxPredators)
+        {
+            if (predator != null)
+            {
+                CEMBoidAttached script = null;
+                CEMBoidAttached[] attachedScripts = predator.GetComponents<CEMBoidAttached>();
+                foreach (CEMBoidAttached attachedScript in attachedScripts)
+                {
+                    if (attachedScript.m_isAttachedToNormal == this)
+                    {
+                        script = attachedScript;
+                    }
+                }
+
+                if (script != null)
+                {
+                    if (script.m_isPredatorToNormal != null)
+                        Debug.Log("Warning: Tried to mark attached script of predator, but it was already marked!");
+
+                    script.m_isPredatorToNormal = this;
+                    m_repellencePredators.Add(predator);
+
+                    if (predator.GetComponent<CubeEntitySystem>() != null)
+                        predator.GetComponent<Renderer>().material = m_repellenceMaterial;
+
+                    return true;
+                }
+                else
+                    Debug.Log("Warning: Tried to add object to predators, that was already in the list!");
+            }
+            else
+            {
+                Debug.Log("Warning: Tried to add Null object to predators!");
+                return false;
+            }
+        }
+        return false;
+    }
+    public bool removePredator(GameObject predator)
+    {
+        if (predator != null)
+        {
+            if (m_repellencePredators.Contains(predator))
+            {
+                CEMBoidAttached script = null;
+                CEMBoidAttached[] attachedScripts = predator.GetComponents<CEMBoidAttached>();
+                foreach (CEMBoidAttached attachedScript in attachedScripts)
+                {
+                    if (attachedScript.m_isPredatorToNormal == this)
+                        script = attachedScript;
+                }
+
+                if (script != null)
+                {
+                    script.m_isPredatorToNormal = null;
+                    m_repellencePredators.Remove(predator);
+
+                    if (predator.GetComponent<CubeEntitySystem>() != null)
+                        predator.GetComponent<Renderer>().material = predator.GetComponent<CubeEntitySystem>().getAppearanceComponent().m_material;
+
+                    return true;
+                }
+                else
+                    Debug.Log("Warning: Tried to remove predator to predators, that did not have an attached script attached!");
+            }
+            else
+                Debug.Log("Warning: Tried to remove object to predators, that was not in the list!");
+        }
+        else
+            Debug.Log("Warning: Tried to remove Null object to predators!");
+        return false;
+    }
+    public bool removeRandomPredator()
+    {
+        if (m_repellencePredators.Count <= 0)
+            return false;
+
+        GameObject predator = m_repellencePredators[Random.Range(0, m_repellencePredators.Count)];
+
+        if (predator != null)
+        {
+            if (m_repellencePredators.Contains(predator))
+            {
+                CEMBoidAttached script = null;
+                CEMBoidAttached[] attachedScripts = predator.GetComponents<CEMBoidAttached>();
+                foreach (CEMBoidAttached attachedScript in attachedScripts)
+                {
+                    if (attachedScript.m_isPredatorToNormal == this)
+                        script = attachedScript;
+                }
+
+                if (script != null)
+                {
+                    script.m_isPredatorToNormal = null;
+                    m_repellencePredators.Remove(predator);
+
+                    if (predator.GetComponent<CubeEntitySystem>() != null)
+                        predator.GetComponent<Renderer>().material = predator.GetComponent<CubeEntitySystem>().getAppearanceComponent().m_material;
+
+                    return true;
+                }
+                else
+                    Debug.Log("Warning: Tried to remove predator from predators, that did not have an attached script attached!");
+            }
+            else
+                Debug.Log("Warning: Tried to remove object to predators, that was not in the list!");
+        }
+        else
+            Debug.Log("Warning: Tried to remove Null object to predators!");
+        return false;
+    }
+
+    // Input Stuff
     void getInput()
     {
         if (Input.GetKey(KeyCode.Mouse0))
@@ -655,6 +899,16 @@ public class CEMBoidSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Mouse1))
         {
             addAllCubes();
+        }
+
+        // Manage Predators
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            addRandomPredator();
+        }
+        if(Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            removeRandomPredator();
         }
 
         // Movement
@@ -739,16 +993,13 @@ public class CEMBoidSystem : MonoBehaviour
             }
         }
     }
-
     void addAllCubes()
     {
         if (m_agents.Count < m_maxSwarmSize)
         {
             GameObject cubeAdd = null;
             Collider[] colliders = Physics.OverlapSphere(Constants.getPlayer().transform.position, 100);
-
-            float nearestDist = float.MaxValue;
-
+            
             for (int i = 0; i < colliders.Length; i++)
             {
                 GameObject cubePotential = colliders[i].gameObject;
@@ -777,7 +1028,6 @@ public class CEMBoidSystem : MonoBehaviour
             }*/
         }
     }
-
     void removeRandomCube()
     {
 

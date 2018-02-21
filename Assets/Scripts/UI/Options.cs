@@ -21,6 +21,7 @@ public class Options : MonoBehaviour
     // Use this for initialization
     [Header("----- SETTINGS -----")]
     public int[] lightCountNumbers;
+    public bool showMouse;
 
     public bool m_allowSpawnEjector = true;
     public bool m_allowSpawnWorm = true;
@@ -55,7 +56,8 @@ public class Options : MonoBehaviour
 
         gameFinishedPanel.SetActive(true);
         Time.timeScale = 0.0f;
-        Cursor.visible = true;
+        if(showMouse)
+            Cursor.visible = true;
         gameIsFinished = true;
     }
 
@@ -80,8 +82,8 @@ public class Options : MonoBehaviour
             Time.timeScale = 1;
         else
             Time.timeScale = 0.0f;
-
-        Cursor.visible = isFreeze;
+        if(showMouse)
+            Cursor.visible = isFreeze;
         menu.gameObject.SetActive(isFreeze);
     }
 
@@ -272,7 +274,8 @@ public class Options : MonoBehaviour
     {
         isFreeze = false;
         Time.timeScale = 1;
-        Cursor.visible = true;
+        if(showMouse)
+            Cursor.visible = true;
         SceneManager.LoadScene(sceneIndex);
     }
 
@@ -285,7 +288,8 @@ public class Options : MonoBehaviour
 
         isFreeze = false;
         Time.timeScale = 1;
-        Cursor.visible = true;
+        if(showMouse)
+            Cursor.visible = true;
         SceneManager.LoadScene(sceneIndex);
     }
 }

@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class CEMBoidAttached : MonoBehaviour
 {
-    public CEMBoidSystem m_attachedTo;
+    public CEMBoidSystem m_isAttachedToNormal;
+    public CemBoidBase m_isAttachedToBase;
+    public CEMBoidSystem m_isPredatorToNormal;
+    //public CemBoidRulePredator m_isPredatorToBase;
+    public List<CemBoidRuleBase> m_predatorBaseScripts;
 
-	// Use this for initialization
-	void Start ()
+    [Header("- (Cohesion) -")]
+    [Header("- (Alignment) -")]
+    [Header("- (Separation) -")]
+    bool b;
+
+    void Awake()
     {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        m_predatorBaseScripts = new List<CemBoidRuleBase>();
+    }
 }

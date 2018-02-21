@@ -34,11 +34,24 @@ public class CubeEntityTransform : MonoBehaviour
         {
             gameObject.AddComponent<BoxCollider>();
             GetComponent<BoxCollider>().size = transformObject.GetComponent<BoxCollider>().size;
+            GetComponent<BoxCollider>().center = transformObject.GetComponent<BoxCollider>().center;
+            GetComponent<BoxCollider>().material = transformObject.GetComponent<BoxCollider>().sharedMaterial;
         }
         if (transformObject.GetComponent<SphereCollider>() != null)
         {
             gameObject.AddComponent<SphereCollider>();
             GetComponent<SphereCollider>().radius = transformObject.GetComponent<SphereCollider>().radius;
+            GetComponent<SphereCollider>().center = transformObject.GetComponent<SphereCollider>().center;
+            GetComponent<SphereCollider>().material = transformObject.GetComponent<SphereCollider>().sharedMaterial;
+        }
+        if (transformObject.GetComponent<CapsuleCollider>() != null)
+        {
+            gameObject.AddComponent<CapsuleCollider>();
+            GetComponent<CapsuleCollider>().radius = transformObject.GetComponent<CapsuleCollider>().radius;
+            GetComponent<CapsuleCollider>().direction = transformObject.GetComponent<CapsuleCollider>().direction;
+            GetComponent<CapsuleCollider>().center = transformObject.GetComponent<CapsuleCollider>().center;
+            GetComponent<CapsuleCollider>().height = transformObject.GetComponent<CapsuleCollider>().height;
+            GetComponent<CapsuleCollider>().material = transformObject.GetComponent<CapsuleCollider>().sharedMaterial;
         }
 
         Rigidbody rb = transformObject.GetComponent<Rigidbody>();

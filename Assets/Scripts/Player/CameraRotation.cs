@@ -25,15 +25,16 @@ public class CameraRotation : MonoBehaviour
     public float currentScroll;
     public bool isTargetLocked;
     public bool m_toggleJoypad;
+    public Vector3 m_lookAtWorldPositionFinal;
 
     void Start ()
     {
-        currentAngleY = 30;
+        currentAngleY = 15;
     }
 
     void FixedUpdate()
     {
-        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze)
+        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze && Constants.getBoidSystem() != null && !Constants.getBoidSystem().m_isFreeze)
         {
             bool isPressingUp = Input.GetAxis("ButtonUp") > 0.5f;
             bool isPressingDown = Input.GetAxis("ButtonDown") < -0.5f;
@@ -70,7 +71,7 @@ public class CameraRotation : MonoBehaviour
 
     void Update()
     {
-        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze)
+        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze && Constants.getBoidSystem() != null && !Constants.getBoidSystem().m_isFreeze)
         {
             if(Input.GetKeyDown(KeyCode.Z))
             {
@@ -149,6 +150,7 @@ public class CameraRotation : MonoBehaviour
 
         Vector3 cameraPositionFinal = transform.position + transform.rotation * positionOffsetWorldActual + direction;
         Vector3 lookAtWorldPositionFinal = transform.position + cameraRotationYBodyRotationXZ * lookAtOffsetWorldActual;
+        m_lookAtWorldPositionFinal = lookAtWorldPositionFinal;
 
         /*
         bool cameraIsHit = false;
@@ -165,7 +167,7 @@ public class CameraRotation : MonoBehaviour
             lookAtWorldPositionFinal = transform.position + cameraRotationYBodyRotationXZ * lookOffset + positionOffset * (transform.position - playerCamera.transform.position).magnitude / distance; ;
         }
         */
-        
+
 
 
         playerCamera.transform.position = cameraPositionFinal;

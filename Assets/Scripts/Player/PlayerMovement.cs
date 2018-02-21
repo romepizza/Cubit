@@ -210,6 +210,15 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        CemBoidBase boidScript = Constants.getBoidSystem();
+        if (boidScript.m_affectedByplayerMovementPower > 0)
+        {
+            foreach (GameObject agent in boidScript.m_agents)
+            {
+                agent.GetComponent<Rigidbody>().AddForce((forceMovementVectorTotal + airRestianceVectorTotal) * boidScript.m_affectedByplayerMovementPower, ForceMode.Acceleration);
+            }
+        }
+        /* OLD
         // Affect CGEBoidSystem aswell
         CEMBoidSystem boidScript = Constants.getBoidSystem();
         if(boidScript.m_useIsAffectedByPlayerMovement)
@@ -219,5 +228,6 @@ public class PlayerMovement : MonoBehaviour
                 agent.GetComponent<Rigidbody>().AddForce((forceMovementVectorTotal + airRestianceVectorTotal) , ForceMode.Acceleration);
             }
         }
+        */
     }
 }

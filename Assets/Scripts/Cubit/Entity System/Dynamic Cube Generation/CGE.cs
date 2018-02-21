@@ -99,7 +99,7 @@ public class CGE : MonoBehaviour
                 //cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 //cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-                cube.SetActive(true);
+                //cube.SetActive(true);
                 //cube.transform.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 100f, ForceMode.Acceleration);
                 //cube.transform.GetComponent<Rigidbody>().velocity = m_player.GetComponent<Rigidbody>().velocity * 0.5f;
                 //cube.transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -154,7 +154,7 @@ public class CGE : MonoBehaviour
     }
     public void deactivateCube(GameObject cube)
     {
-        cube.SetActive(false);
+        //cube.SetActive(false);
 
         //Vector3 position = m_inactivePosition + Vector3.right * m_inactivePositionIndex * 4f;
         //m_inactivePositionIndex++;

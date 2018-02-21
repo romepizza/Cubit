@@ -6,11 +6,11 @@ public class Constants : MonoBehaviour
 {
     public GameObject m_player;
     public GameObject m_mainCge;
-    public CEMBoidSystem m_boidSystem;
+    public CemBoidBase m_boidSystem;
 
     private static GameObject s_player;
     private static CGE s_mainCge;
-    private static CEMBoidSystem s_boidSystem;
+    private static CemBoidBase s_boidSystem;
 
 	// Use this for initialization
 	void Start ()
@@ -35,7 +35,7 @@ public class Constants : MonoBehaviour
         return s_mainCge;
     }
 
-    public static CEMBoidSystem getBoidSystem()
+    public static CemBoidBase getBoidSystem()
     {
         return s_boidSystem;
     }

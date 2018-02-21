@@ -5,15 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class GeneralUIStuff : MonoBehaviour
 {
-    public GameObject enablePanel;
-    public GameObject disablePanel;
+    public GameObject[] enablePanel;
+    public GameObject[] disablePanel;
+    public GameObject[] togglePanel;
 
     public GameObject logInformationObject;
 
     public void onClickChangePanel()
     {
-        enablePanel.SetActive(true);
-        disablePanel.SetActive(false);
+        foreach (GameObject panel in enablePanel)
+        {
+            if (panel != null)
+                panel.SetActive(true);
+        }
+        foreach (GameObject panel in disablePanel)
+        {
+            if (panel != null)
+                panel.SetActive(false);
+        }
+    }
+
+    public void onClickTogglePanel()
+    {
+        foreach (GameObject panel in togglePanel)
+        {
+            if (panel != null)
+                panel.SetActive(!panel.activeSelf);
+        }
     }
 
     public void loadSceneByIndex(int sceneIndex)
