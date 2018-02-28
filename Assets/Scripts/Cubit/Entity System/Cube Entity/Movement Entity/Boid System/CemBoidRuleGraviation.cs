@@ -9,6 +9,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
     public bool m_gravitationUseSwamCenter;
     public GameObject m_gravitationCenterObject; // If equal to null: gravitation center equals center of swarm
     public int m_gravitationPerFrame;
+    public float m_gravitationMinPercentPerFrame;
     public float m_gravitationPower;
     public float m_gravitationMaxSpeed;
 
@@ -31,11 +32,17 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
 
     void Update()
     {
-        getInformation();
+        if(!CemBoidBase.s_calculateInBase && !CemBoidBase.s_calculateInFixedUpdate)
+            getInformation();
     }
     private void FixedUpdate()
     {
-        applyRule();
+        if (!CemBoidBase.s_calculateInBase)
+        {
+            if (CemBoidBase.s_calculateInFixedUpdate)
+                getInformation();
+            applyRule();
+        }
     }
 
     public override void getInformation(List<GameObject> agents)
@@ -61,7 +68,8 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
             m_gravitationCenter = m_baseScript.getAverageSwarmPosition();
         }
 
-        int activisionsActually = m_gravitationPerFrame;
+        // determine, which force vectors of which agents should be calculated
+        int activisionsActually = Mathf.Max(m_gravitationPerFrame, (int)(agents.Count * m_gravitationMinPercentPerFrame));
         if (m_gravitationPerFrame == 0)
             activisionsActually = agents.Count;
         if (m_gravitationPerFrame >= agents.Count)
@@ -102,7 +110,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
             m_gravitationCenter = m_baseScript.getAverageSwarmPosition();
         }
 
-        int activisionsActually = m_gravitationPerFrame;
+        int activisionsActually = Mathf.Max(m_gravitationPerFrame, (int)(agents.Count * m_gravitationMinPercentPerFrame));
         if (m_gravitationPerFrame == 0)
             activisionsActually = agents.Count;
         if (m_gravitationPerFrame >= agents.Count)
@@ -126,7 +134,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
         Vector3 flightDirection = agent.GetComponent<Rigidbody>().velocity;
         float angle = Vector3.Dot(direction.normalized, flightDirection.normalized);
 
-        if (!(angle > 0 && (m_gravitationMaxSpeed <= 0 || flightDirection.magnitude > m_gravitationMaxSpeed)))
+        if (m_gravitationMaxSpeed <= 0  || angle < 0 || flightDirection.magnitude < m_gravitationMaxSpeed)
         {
             float distanceFactor = Mathf.Clamp01((Vector3.Distance(agent.transform.position, m_gravitationCenter) / 200f));
             m_gravitationForceVectors[agent] = direction.normalized * m_gravitationPower * distanceFactor;
@@ -139,6 +147,9 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
 
     public override void applyRule(List<GameObject> agents)
     {
+        if (!m_useRule)
+            return;
+
         foreach (GameObject agent in agents)
         {
             agent.GetComponent<Rigidbody>().AddForce(m_gravitationForceVectors[agent], ForceMode.Acceleration);
@@ -190,6 +201,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
         m_useRule = copyScript2.m_useRule;
 
         m_gravitationPerFrame = copyScript2.m_gravitationPerFrame;
+        m_gravitationMinPercentPerFrame = copyScript2.m_gravitationMinPercentPerFrame;
         m_gravitationPower = copyScript2.m_gravitationPower;
         m_gravitationUseSwamCenter = copyScript2.m_gravitationUseSwamCenter;
         m_gravitationMaxSpeed = copyScript2.m_gravitationMaxSpeed;

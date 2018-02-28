@@ -9,6 +9,7 @@ public class CemBoidRuleBubble : CemBoidRuleBase
     public bool m_bubbleUseSwamCenter;
     public GameObject m_bubbleCenterObject;
     public int m_bubblePerFrame;
+    public float m_bubbleMinPercentPerFrame;
     public float m_bubblePower;
     public float m_bubbleMaxDistance;
     public float m_bubbleMaxSpeed;
@@ -32,11 +33,17 @@ public class CemBoidRuleBubble : CemBoidRuleBase
 
     void Update()
     {
-        getInformation();
+        if(!CemBoidBase.s_calculateInBase && !CemBoidBase.s_calculateInFixedUpdate)
+            getInformation();
     }
     private void FixedUpdate()
     {
-        applyRule();
+        if (!CemBoidBase.s_calculateInBase)
+        {
+            if (CemBoidBase.s_calculateInFixedUpdate)
+                getInformation();
+            applyRule();
+        }
     }
 
     public override void getInformation(List<GameObject> agents)
@@ -58,7 +65,7 @@ public class CemBoidRuleBubble : CemBoidRuleBase
             m_bubbleCenter = m_baseScript.getAverageSwarmPosition();
         }
 
-        int activisionsActually = m_bubblePerFrame;
+        int activisionsActually = Mathf.Max(m_bubblePerFrame, (int)(agents.Count * m_bubbleMinPercentPerFrame));
         if (m_bubblePerFrame == 0)
             activisionsActually = agents.Count;
         if (m_bubblePerFrame >= agents.Count)
@@ -99,7 +106,7 @@ public class CemBoidRuleBubble : CemBoidRuleBase
             m_bubbleCenter = m_baseScript.getAverageSwarmPosition();
         }
 
-        int activisionsActually = m_bubblePerFrame;
+        int activisionsActually = Mathf.Max(m_bubblePerFrame, (int)(agents.Count * m_bubbleMinPercentPerFrame));
         if (m_bubblePerFrame == 0)
             activisionsActually = agents.Count;
         if (m_bubblePerFrame >= agents.Count)
@@ -127,7 +134,7 @@ public class CemBoidRuleBubble : CemBoidRuleBase
             Vector3 flightDirection = agent.GetComponent<Rigidbody>().velocity;
             float angle = Vector3.Dot(direction.normalized, flightDirection.normalized);
 
-            if (!(angle > 0.5f && flightDirection.magnitude > m_bubbleMaxSpeed))
+            if (!(/*angle > 0.5f && */flightDirection.magnitude > m_bubbleMaxSpeed))
             {
                 float distanceFactor = Mathf.Clamp01((distance - m_bubbleMaxDistance) / m_bubbleMaxDistance * 0.2f);
                 m_bubbleForceVectors[agent] = direction.normalized * m_bubblePower * distanceFactor;
@@ -141,6 +148,9 @@ public class CemBoidRuleBubble : CemBoidRuleBase
 
     public override void applyRule(List<GameObject> agents)
     {
+        if (!m_useRule)
+            return;
+
         foreach (GameObject agent in agents)
         {
             agent.GetComponent<Rigidbody>().AddForce(m_bubbleForceVectors[agent], ForceMode.Acceleration);
@@ -192,6 +202,7 @@ public class CemBoidRuleBubble : CemBoidRuleBase
         m_useRule = copyScript2.m_useRule;
 
         m_bubblePerFrame = copyScript2.m_bubblePerFrame;
+        m_bubbleMinPercentPerFrame = copyScript2.m_bubbleMinPercentPerFrame;
         m_bubblePower = copyScript2.m_bubblePower;
         m_bubbleUseSwamCenter = copyScript2.m_bubbleUseSwamCenter;
         m_bubbleMaxDistance = copyScript2.m_bubbleMaxDistance;

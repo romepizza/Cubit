@@ -6,6 +6,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
 {
     [Header("------- Settings -------")]
     public int m_separationPerFrame;
+    public float m_separationMinPercentPerFrame;
     public float m_separationPower;
     public float m_separationRadius;
     public int m_separationMaxPartners;
@@ -31,7 +32,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
     [Header("------- Debug -------")]
     public int m_separationCounter;
     Dictionary<GameObject, Vector3> m_separationForceVectors;
-    Dictionary<GameObject, float> m_separationAcualRadii;
+    Dictionary<GameObject, float> m_separationActualRadii;
 
 
     void Start()
@@ -41,16 +42,22 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
     void initializeStuff()
     {
         m_separationForceVectors = new Dictionary<GameObject, Vector3>();
-        m_separationAcualRadii = new Dictionary<GameObject, float>();
+        m_separationActualRadii = new Dictionary<GameObject, float>();
     }
 
     void Update()
     {
-        getInformation();
+        if(!CemBoidBase.s_calculateInBase && !CemBoidBase.s_calculateInFixedUpdate)
+            getInformation();
     }
     private void FixedUpdate()
     {
-        applyRule();
+        if(!CemBoidBase.s_calculateInBase)
+        {
+            if (CemBoidBase.s_calculateInFixedUpdate)
+                getInformation();
+            applyRule();
+        }
     }
 
     public override void getInformation(List<GameObject> agents)
@@ -58,7 +65,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         if (!m_useRule)
             return;
 
-        int activisionsActually = m_separationPerFrame;
+        int activisionsActually = Mathf.Max(m_separationPerFrame, (int)(agents.Count * m_separationMinPercentPerFrame));
         if (m_separationPerFrame == 0)
             activisionsActually = agents.Count;
         if (m_separationPerFrame >= agents.Count)
@@ -81,7 +88,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         if (agents.Count <= 0)
             return;
 
-        int activisionsActually = m_separationPerFrame;
+        int activisionsActually = Mathf.Max(m_separationPerFrame, (int)(agents.Count * m_separationMinPercentPerFrame));
         if (m_separationPerFrame == 0)
             activisionsActually = agents.Count;
         if (m_separationPerFrame >= agents.Count)
@@ -105,19 +112,19 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         int nearAgentsCount = 0;
         int nearObjectsCount = 0;
 
-        Collider[] colliders = Physics.OverlapSphere(agent.transform.position, m_separationAcualRadii[agent]);
+        Collider[] colliders = Physics.OverlapSphere(agent.transform.position, m_separationActualRadii[agent]);
         // adjust radius
-        if (m_useAdjustRadius && m_separationMaxPartnerChecks > 0)
+        if (m_useAdjustRadius && m_separationMaxPartners > 0)
         {
-            if (colliders.Length - m_separationMaxPartnerChecks > m_separationMinAdjustmentDifference)
+            if (colliders.Length - m_separationMaxPartners > m_separationMinAdjustmentDifference)
             {
-                m_separationAcualRadii[agent] -= m_separationAdjustStep;
+                m_separationActualRadii[agent] -= m_separationAdjustStep;
             }
-            else if (colliders.Length - m_separationMaxPartnerChecks < -m_separationMinAdjustmentDifference)
+            else if (colliders.Length - m_separationMaxPartners < -m_separationMinAdjustmentDifference)
             {
-                m_separationAcualRadii[agent] += m_separationAdjustStep;
+                m_separationActualRadii[agent] += m_separationAdjustStep;
             }
-            m_separationAcualRadii[agent] = Mathf.Clamp(m_separationAcualRadii[agent], m_separationMinRadius, m_separationRadius);
+            m_separationActualRadii[agent] = Mathf.Clamp(m_separationActualRadii[agent], m_separationMinRadius, m_separationRadius);
         }
         foreach (Collider collider in colliders)
         {
@@ -154,6 +161,9 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
 
     public override void applyRule(List<GameObject> agents)
     {
+        if (!m_useRule)
+            return;
+
         foreach (GameObject agent in agents)
         {
             agent.GetComponent<Rigidbody>().AddForce(m_separationForceVectors[agent], ForceMode.Acceleration);
@@ -176,7 +186,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         if (!m_separationForceVectors.ContainsKey(agent))
         {
             m_separationForceVectors.Add(agent, Vector3.zero);
-            m_separationAcualRadii.Add(agent, m_separationRadius);
+            m_separationActualRadii.Add(agent, m_separationRadius);
         }
         else
             Debug.Log("Warning: Tried to add agent to separation vectors, but it was already in the list!");
@@ -186,7 +196,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         if (m_separationForceVectors.ContainsKey(agent))
         {
             m_separationForceVectors.Remove(agent);
-            m_separationAcualRadii.Remove(agent);
+            m_separationActualRadii.Remove(agent);
         }
         else
             Debug.Log("Warning: Tried to remove agent from separation vectors, but it was not in the list!");
@@ -211,9 +221,9 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
     }
     public void resetRadii()
     {
-        List<GameObject> agnets = new List<GameObject>(m_separationAcualRadii.Keys);
+        List<GameObject> agnets = new List<GameObject>(m_separationActualRadii.Keys);
         foreach (GameObject agent in agnets)
-            m_separationAcualRadii[agent] = m_separationRadius;
+            m_separationActualRadii[agent] = m_separationRadius;
     }
 
     // copy
@@ -235,6 +245,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         m_useRule = copyScript2.m_useRule;
 
         m_separationPerFrame = copyScript2.m_separationPerFrame;
+        m_separationMinPercentPerFrame = copyScript2.m_separationMinPercentPerFrame;
         m_separationPower = copyScript2.m_separationPower;
         m_separationRadius = copyScript2.m_separationRadius;
         m_separationMaxPartners = copyScript2.m_separationMaxPartners;
@@ -255,8 +266,8 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         foreach (GameObject agent in agnets)
             m_separationForceVectors[agent] = Vector3.zero;
 
-        agnets = new List<GameObject>(m_separationAcualRadii.Keys);
+        agnets = new List<GameObject>(m_separationActualRadii.Keys);
         foreach (GameObject agent in agnets)
-            m_separationAcualRadii[agent] = m_separationRadius;
+            m_separationActualRadii[agent] = m_separationRadius;
     }
 }

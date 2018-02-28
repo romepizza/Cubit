@@ -9,6 +9,7 @@ public class BoidPanelGravitation : MonoBehaviour
 
     public GameObject m_gravitationUseSwamCenter;
     public GameObject m_gravitationPerFrame;
+    public GameObject m_gravitationMinPercentPerFrame;
     public GameObject m_gravitationPower;
     public GameObject m_gravitationMaxSpeed;
 
@@ -48,6 +49,7 @@ public class BoidPanelGravitation : MonoBehaviour
         m_gravitationUseSwamCenter.GetComponent<Toggle>().isOn = m_script.m_gravitationUseSwamCenter;
 
         m_gravitationPerFrame.GetComponent<InputField>().text = m_script.m_gravitationPerFrame.ToString();
+        m_gravitationMinPercentPerFrame.GetComponent<InputField>().text = m_script.m_gravitationMinPercentPerFrame.ToString();
         m_gravitationPower.GetComponent<InputField>().text = m_script.m_gravitationPower.ToString();
         m_gravitationMaxSpeed.GetComponent<InputField>().text = m_script.m_gravitationMaxSpeed.ToString();
     }
@@ -69,6 +71,15 @@ public class BoidPanelGravitation : MonoBehaviour
         int output;
         if (int.TryParse(input, out output))
             m_script.m_gravitationPerFrame = output;
+        else
+            Debug.Log("Aborted: Parsing error!");
+    }
+    public void updateCohesionMinPercentPerFrame()
+    {
+        string input = m_gravitationMinPercentPerFrame.GetComponent<InputField>().text;
+        float output;
+        if (float.TryParse(input, out output))
+            m_script.m_gravitationMinPercentPerFrame = output;
         else
             Debug.Log("Aborted: Parsing error!");
     }

@@ -6,6 +6,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
 {
     [Header("------- Settings -------")]
     public int m_cohesionPerFrame;
+    public float m_cohesionMinPercentPerFrame;
     public float m_cohesionPower;
     public float m_cohesionRadius;
     public int m_cohesionMaxPartners;
@@ -31,7 +32,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
     [Header("------- Debug -------")]
     public int m_cohesionCounter;
     Dictionary<GameObject, Vector3> m_cohesionForceVectors;
-    Dictionary<GameObject, float> m_cohesionAcualRadii;
+    Dictionary<GameObject, float> m_cohesionActualRadii;
 
     // Use this for initialization
     void Start ()
@@ -41,16 +42,22 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
     void initializeStuff()
     {
         m_cohesionForceVectors = new Dictionary<GameObject, Vector3>();
-        m_cohesionAcualRadii = new Dictionary<GameObject, float>();
+        m_cohesionActualRadii = new Dictionary<GameObject, float>();
     }
 
     private void Update()
     {
-        getInformation();
+        if(!CemBoidBase.s_calculateInBase && !CemBoidBase.s_calculateInFixedUpdate)
+            getInformation();
     }
     private void FixedUpdate()
     {
-        applyRule();
+        if (!CemBoidBase.s_calculateInBase)
+        {
+            if (CemBoidBase.s_calculateInFixedUpdate)
+                getInformation();
+            applyRule();
+        }
     }
 
 
@@ -59,7 +66,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         if (!m_useRule)
             return;
 
-        int activisionsActually = m_cohesionPerFrame;
+        int activisionsActually = Mathf.Max(m_cohesionPerFrame, (int)(agents.Count * m_cohesionMinPercentPerFrame));
         if (m_cohesionPerFrame == 0)
             activisionsActually = agents.Count;
         if (m_cohesionPerFrame >= agents.Count)
@@ -82,7 +89,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         if (agents.Count <= 0)
             return;
 
-        int activisionsActually = m_cohesionPerFrame;
+        int activisionsActually = Mathf.Max(m_cohesionPerFrame, (int)(agents.Count * m_cohesionMinPercentPerFrame));
         if (m_cohesionPerFrame == 0)
             activisionsActually = agents.Count;
         if (m_cohesionPerFrame >= agents.Count)
@@ -124,19 +131,19 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         }
         else
         {
-            Collider[] colliders = Physics.OverlapSphere(agent.transform.position, m_cohesionAcualRadii[agent]);
+            Collider[] colliders = Physics.OverlapSphere(agent.transform.position, m_cohesionActualRadii[agent]);
             // adjust radius
-            if (m_useAdjustRadius && m_cohesionMaxPartnerChecks > 0)
+            if (m_useAdjustRadius && m_cohesionMaxPartners > 0)
             {
-                if (colliders.Length - m_cohesionMaxPartnerChecks > m_cohesionMinAdjustmentDifference)
+                if (colliders.Length - m_cohesionMaxPartners > m_cohesionMinAdjustmentDifference)
                 {
-                    m_cohesionAcualRadii[agent] -= m_cohesionAdjustStep;
+                    m_cohesionActualRadii[agent] -= m_cohesionAdjustStep;
                 }
-                else if(colliders.Length - m_cohesionMaxPartnerChecks < -m_cohesionMinAdjustmentDifference)
+                else if(colliders.Length - m_cohesionMaxPartners < -m_cohesionMinAdjustmentDifference)
                 {
-                    m_cohesionAcualRadii[agent] += m_cohesionAdjustStep;
+                    m_cohesionActualRadii[agent] += m_cohesionAdjustStep;
                 }
-                m_cohesionAcualRadii[agent] = Mathf.Clamp(m_cohesionAcualRadii[agent], m_cohesionMinRadius, m_cohesionRadius);
+                m_cohesionActualRadii[agent] = Mathf.Clamp(m_cohesionActualRadii[agent], m_cohesionMinRadius, m_cohesionRadius);
             }
             foreach (Collider collider in colliders)
             {
@@ -156,15 +163,17 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
                 // check for angle
                 if (m_requireAngle && getAngle(collider.transform.position - agent.transform.position, agent.transform.forward) > m_maxAngle)
                     continue;
-                    
-                if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToBase == m_baseScript)
-                {
-                    localCenter += collider.gameObject.transform.position;
 
-                    nearAgentsCount++;
-                }
+                if (!(collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToBase == m_baseScript))
+                    return;
+                
+                localCenter += collider.gameObject.transform.position;
+
+                nearAgentsCount++;
+                
             }
         }
+
         if (nearAgentsCount > 0)
         {
             localCenter /= nearAgentsCount;
@@ -182,6 +191,9 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
 
     public override void applyRule(List<GameObject> agents)
     {
+        if (!m_useRule)
+            return;
+
         foreach(GameObject agent in agents)
         {
             agent.GetComponent<Rigidbody>().AddForce(m_cohesionForceVectors[agent], ForceMode.Acceleration);
@@ -205,7 +217,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         if (!m_cohesionForceVectors.ContainsKey(agent))
         {
             m_cohesionForceVectors.Add(agent, Vector3.zero);
-            m_cohesionAcualRadii.Add(agent, m_cohesionRadius);
+            m_cohesionActualRadii.Add(agent, m_cohesionRadius);
         }
         else
             Debug.Log("Warning: Tried to add agent to cohesion vectors, but it was already in the list!");
@@ -215,7 +227,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         if (m_cohesionForceVectors.ContainsKey(agent))
         {
             m_cohesionForceVectors.Remove(agent);
-            m_cohesionAcualRadii.Remove(agent);
+            m_cohesionActualRadii.Remove(agent);
         }
         else
             Debug.Log("Warning: Tried to remove agent from cohesion vectors, but it was not in the list!");
@@ -250,9 +262,9 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
     }
     public void resetRadii()
     {
-        List<GameObject> agents = new List<GameObject>(m_cohesionAcualRadii.Keys);
+        List<GameObject> agents = new List<GameObject>(m_cohesionActualRadii.Keys);
         foreach (GameObject agent in agents)
-            m_cohesionAcualRadii[agent] = m_cohesionRadius;
+            m_cohesionActualRadii[agent] = m_cohesionRadius;
     }
 
     // copy
@@ -274,6 +286,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         m_useRule = copyScript2.m_useRule;
 
         m_cohesionPerFrame = copyScript2.m_cohesionPerFrame;
+        m_cohesionMinPercentPerFrame = copyScript2.m_cohesionMinPercentPerFrame;
         m_cohesionPower = copyScript2.m_cohesionPower;
         m_cohesionRadius = copyScript2.m_cohesionRadius;
         m_cohesionMaxPartners = copyScript2.m_cohesionMaxPartners;
@@ -287,6 +300,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         m_cohesionAdjustStep = copyScript2.m_cohesionAdjustStep;
 
         m_requireLineOfSight = copyScript2.m_requireLineOfSight;
+
         m_requireAngle = copyScript2.m_requireAngle;
         m_maxAngle = copyScript2.m_maxAngle;
 
@@ -294,8 +308,8 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         foreach (GameObject agent in agents)
             m_cohesionForceVectors[agent] = Vector3.zero;
 
-        agents = new List<GameObject>(m_cohesionAcualRadii.Keys);
+        agents = new List<GameObject>(m_cohesionActualRadii.Keys);
         foreach (GameObject agent in agents)
-            m_cohesionAcualRadii[agent] = m_cohesionRadius;
+            m_cohesionActualRadii[agent] = m_cohesionRadius;
     }
 }

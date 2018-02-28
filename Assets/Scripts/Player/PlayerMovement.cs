@@ -211,11 +211,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         CemBoidBase boidScript = Constants.getBoidSystem();
-        if (boidScript.m_affectedByplayerMovementPower > 0)
+        if (boidScript != null)
         {
-            foreach (GameObject agent in boidScript.m_agents)
+            if (boidScript.m_affectedByplayerMovementPower > 0)
             {
-                agent.GetComponent<Rigidbody>().AddForce((forceMovementVectorTotal + airRestianceVectorTotal) * boidScript.m_affectedByplayerMovementPower, ForceMode.Acceleration);
+                foreach (GameObject agent in boidScript.m_agents)
+                {
+                    agent.GetComponent<Rigidbody>().AddForce((forceMovementVectorTotal + airRestianceVectorTotal) * boidScript.m_affectedByplayerMovementPower, ForceMode.Acceleration);
+                }
             }
         }
         /* OLD

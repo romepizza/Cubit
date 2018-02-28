@@ -135,7 +135,7 @@ MonoBehaviour:
   m_isEmissive: 1
   m_emissionIntensity: 1
   m_emissionColor: {r: 1, g: 0, b: 0, a: 0.5019608}
-  m_lightColor: {r: 0.43382353, g: 0.64858013, b: 1, a: 0}
+  m_lightColor: {r: 0.43382353, g: 0.8594321, b: 1, a: 0}
   m_lightIntensity: 0
   m_lightRange: 0
   m_lightShadowType: 0

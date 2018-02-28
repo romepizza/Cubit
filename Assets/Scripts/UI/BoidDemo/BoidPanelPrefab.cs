@@ -18,19 +18,11 @@ public class BoidPanelPrefab : MonoBehaviour
     public GameObject m_resetPositionToggle;
 
     [Header("--- (Labels) ---")]
+    public GameObject m_infoLabel;
     public GameObject m_prefabRecommendedSwarmSize;
     public GameObject m_prefabRecommendedNumberPredators;
     public GameObject m_prefabPerformanceFactorLabel;
-
     
-    /*
-    public GameObject m_useRule;
-
-    public GameObject m_gravitationUseSwamCenter;
-    public GameObject m_gravitationPerFrame;
-    public GameObject m_gravitationPower;
-    public GameObject m_gravitationMaxSpeed;
-    */
     [Header("--- (Debug) ---")]
     bool boidFound = false;
     CemBoidBase m_scriptBase;
@@ -70,7 +62,7 @@ public class BoidPanelPrefab : MonoBehaviour
     public void updateInfo()
     {
         m_prefabSwarmSize.GetComponent<InputField>().text = m_scriptBase.m_agents.Count.ToString();
-        m_prefabNumberPredator.GetComponent<InputField>().text = m_scriptPredator.m_predatorPredators.Count.ToString();
+        m_prefabNumberPredator.GetComponent<InputField>().text = m_scriptPredator.getNumberPredators().ToString();
         onDropDownChange();
         /*
         m_useRule.GetComponent<Toggle>().isOn = m_script.m_useRule;
@@ -104,6 +96,18 @@ public class BoidPanelPrefab : MonoBehaviour
     public void onDropDownChange()
     {
         updateRecommendation();
+        updateInfoLabel();
+    }
+    public void updateInfoLabel()
+    {
+        Text labelText = m_boidPrefabs[m_dropDown.value].GetComponentInChildren<Text>();
+        if(labelText == null)
+        {
+            Debug.Log("Aborted: Description not found!");
+            return;
+        }
+
+        m_infoLabel.GetComponent<Text>().text = labelText.text;
     }
     public void resetPosition()
     {
@@ -219,11 +223,11 @@ public class BoidPanelPrefab : MonoBehaviour
                 actualNumberPredatorMinRec = 1;
         }
 
-        int actualNumberPredatorMaxRec = script.m_numberPredatorRecommendation;
+        int actualNumberPredatorMaxRec = script.m_numberPredatorMaxRecommendation;
         if (actualNumberPredatorMaxRec >= 2 && m_prefabConsiderToggle.GetComponent<Toggle>().isOn)
         {
-            actualNumberPredatorMaxRec = (int)((float)script.m_numberPredatorRecommendation * BoidRecommendation.s_performanceFactor + 0.1);
-            if (actualNumberPredatorMaxRec == 0 && script.m_numberPredatorRecommendation > 0)
+            actualNumberPredatorMaxRec = (int)((float)script.m_numberPredatorMaxRecommendation * BoidRecommendation.s_performanceFactor + 0.1);
+            if (actualNumberPredatorMaxRec == 0 && script.m_numberPredatorMaxRecommendation > 0)
                 actualNumberPredatorMaxRec = 1;
         }
 

@@ -31,11 +31,17 @@ public class CemBoidRuleSwarmMovement : CemBoidRuleBase {
 
     void Update()
     {
+        if(!CemBoidBase.s_calculateInBase && !CemBoidBase.s_calculateInFixedUpdate)
         getInformation();
     }
     void FixedUpdate()
     {
-        applyRule();
+        if (!CemBoidBase.s_calculateInBase)
+        {
+            if (CemBoidBase.s_calculateInFixedUpdate)
+                getInformation();
+            applyRule();
+        }
     }
 
     public override void getInformation(List<GameObject> agents)

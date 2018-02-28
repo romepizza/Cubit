@@ -9,6 +9,7 @@ public class BoidPanelSparation : MonoBehaviour
     public GameObject m_useRule;
 
     public GameObject m_separationPerFrame;
+    public GameObject m_separationMinPercentPerFrame;
     public GameObject m_separationPower;
     public GameObject m_separationRadius;
     public GameObject m_separationMaxPartners;
@@ -59,6 +60,7 @@ public class BoidPanelSparation : MonoBehaviour
         m_useRule.GetComponent<Toggle>().isOn = m_script.m_useRule;
 
         m_separationPerFrame.GetComponent<InputField>().text = m_script.m_separationPerFrame.ToString();
+        m_separationMinPercentPerFrame.GetComponent<InputField>().text = m_script.m_separationMinPercentPerFrame.ToString();
         m_separationPower.GetComponent<InputField>().text = m_script.m_separationPower.ToString();
         m_separationRadius.GetComponent<InputField>().text = m_script.m_separationRadius.ToString();
         m_separationMaxPartners.GetComponent<InputField>().text = m_script.m_separationMaxPartners.ToString();
@@ -90,6 +92,15 @@ public class BoidPanelSparation : MonoBehaviour
         else
             Debug.Log("Aborted: Parsing error!");
     }
+    public void updateSeparationMinPercentPerFrame()
+    {
+        string input = m_separationMinPercentPerFrame.GetComponent<InputField>().text;
+        float output;
+        if (float.TryParse(input, out output))
+            m_script.m_separationMinPercentPerFrame = output;
+        else
+            Debug.Log("Aborted: Parsing error!");
+    }
     public void updateSeparationPower()
     {
         string input = m_separationPower.GetComponent<InputField>().text;
@@ -104,7 +115,10 @@ public class BoidPanelSparation : MonoBehaviour
         string input = m_separationRadius.GetComponent<InputField>().text;
         float output;
         if (float.TryParse(input, out output))
+        {
             m_script.m_separationRadius = output;
+            m_script.resetRadii();
+        }
         else
             Debug.Log("Aborted: Parsing error!");
     }

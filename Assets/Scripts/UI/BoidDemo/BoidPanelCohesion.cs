@@ -8,6 +8,7 @@ public class BoidPanelCohesion : MonoBehaviour
     public GameObject m_useRule;
 
     public GameObject m_cohesionPerFrame;
+    public GameObject m_cohesionMinPercentPerFrame;
     public GameObject m_cohesionPower;
     public GameObject m_cohesionRadius;
     public GameObject m_cohesionMaxPartners;
@@ -60,6 +61,7 @@ public class BoidPanelCohesion : MonoBehaviour
         m_useRule.GetComponent<Toggle>().isOn = m_script.m_useRule;
 
         m_cohesionPerFrame.GetComponent<InputField>().text = m_script.m_cohesionPerFrame.ToString();
+        m_cohesionMinPercentPerFrame.GetComponent<InputField>().text = m_script.m_cohesionMinPercentPerFrame.ToString();
         m_cohesionPower.GetComponent<InputField>().text = m_script.m_cohesionPower.ToString();
         m_cohesionRadius.GetComponent<InputField>().text = m_script.m_cohesionRadius.ToString();
         m_cohesionMaxPartners.GetComponent<InputField>().text = m_script.m_cohesionMaxPartners.ToString();
@@ -91,6 +93,15 @@ public class BoidPanelCohesion : MonoBehaviour
         else
             Debug.Log("Aborted: Parsing error!");
     }
+    public void updateCohesionMinPercentPerFrame()
+    {
+        string input = m_cohesionMinPercentPerFrame.GetComponent<InputField>().text;
+        float output;
+        if (float.TryParse(input, out output))
+            m_script.m_cohesionMinPercentPerFrame = output;
+        else
+            Debug.Log("Aborted: Parsing error!");
+    }
     public void updateCohesionPower()
     {
         string input = m_cohesionPower.GetComponent<InputField>().text;
@@ -105,7 +116,10 @@ public class BoidPanelCohesion : MonoBehaviour
         string input = m_cohesionRadius.GetComponent<InputField>().text;
         float output;
         if (float.TryParse(input, out output))
+        {
             m_script.m_cohesionRadius = output;
+            m_script.resetRadii();
+        }
         else
             Debug.Log("Aborted: Parsing error!");
     }

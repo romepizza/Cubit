@@ -10,6 +10,7 @@ public class BoidPanelBubble : MonoBehaviour
 
     public GameObject m_bubbleUseSwamCenter;
     public GameObject m_bubblePerFrame;
+    public GameObject m_bubbleMinPercentPerFrame;
     public GameObject m_bubblePower;
     public GameObject m_bubbleMaxDistance;
     public GameObject m_bubbleMaxSpeed;
@@ -50,6 +51,7 @@ public class BoidPanelBubble : MonoBehaviour
         m_bubbleUseSwamCenter.GetComponent<Toggle>().isOn = m_script.m_bubbleUseSwamCenter;
 
         m_bubblePerFrame.GetComponent<InputField>().text = m_script.m_bubblePerFrame.ToString();
+        m_bubbleMinPercentPerFrame.GetComponent<InputField>().text = m_script.m_bubbleMinPercentPerFrame.ToString();
         m_bubblePower.GetComponent<InputField>().text = m_script.m_bubblePower.ToString();
         m_bubbleMaxDistance.GetComponent<InputField>().text = m_script.m_bubbleMaxDistance.ToString();
         m_bubbleMaxSpeed.GetComponent<InputField>().text = m_script.m_bubbleMaxSpeed.ToString();
@@ -72,6 +74,15 @@ public class BoidPanelBubble : MonoBehaviour
         int output;
         if (int.TryParse(input, out output))
             m_script.m_bubblePerFrame = output;
+        else
+            Debug.Log("Aborted: Parsing error!");
+    }
+    public void updateBubbleMinPercentPerFrame()
+    {
+        string input = m_bubbleMinPercentPerFrame.GetComponent<InputField>().text;
+        float output;
+        if (float.TryParse(input, out output))
+            m_script.m_bubbleMinPercentPerFrame = output;
         else
             Debug.Log("Aborted: Parsing error!");
     }

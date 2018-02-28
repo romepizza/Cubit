@@ -439,7 +439,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Start Game
+  m_Text: Start Arena
 --- !u!222 &141376377
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -538,14 +538,14 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &406047331
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 406047330}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0936d867b9fde7641a914305325ddb8c, type: 3}
   m_Name: 
@@ -661,7 +661,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 406047330}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ea7be6781f3cf5f46826f6f23c9694cb, type: 3}
   m_Name: 
@@ -2000,7 +2000,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Start Boid Gym (current)
+  m_Text: Start Boid Gym
 --- !u!222 &1115144093
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2488,7 +2488,7 @@ GameObject:
   - component: {fileID: 1629859961}
   - component: {fileID: 1629859960}
   m_Layer: 0
-  m_Name: ButtonStartGame
+  m_Name: ButtonStartArena
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3177,7 +3177,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Start Entity
+  m_Text: Start Free Roam
 --- !u!222 &1921031208
 CanvasRenderer:
   m_ObjectHideFlags: 0

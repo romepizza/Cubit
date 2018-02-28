@@ -71,7 +71,7 @@ public class BoidPanelPredator : MonoBehaviour
         m_predatorMaxPartnerChecks.GetComponent<InputField>().text = m_script.m_predatorMaxPartnerChecks.ToString();
 
         m_predatorHighlightPredators.GetComponent<Toggle>().isOn = m_script.m_predatorsHighlightPredators;
-        m_predatorSetNumber.GetComponent<InputField>().text = m_script.m_predatorPredators.Count.ToString();
+        m_predatorSetNumber.GetComponent<InputField>().text = m_script.getNumberPredators().ToString();
 
         m_useAdjustRadius.GetComponent<Toggle>().isOn = m_script.m_useAdjustRadius;
         m_predatorMinAdjustmentDifference.GetComponent<InputField>().text = m_script.m_predatorMinAdjustmentDifference.ToString();
@@ -106,7 +106,10 @@ public class BoidPanelPredator : MonoBehaviour
         string input = m_predatorRadius.GetComponent<InputField>().text;
         float output;
         if (float.TryParse(input, out output))
+        {
             m_script.m_predatorRadius = output;
+            m_script.resetRadii();
+        }
         else
             Debug.Log("Aborted: Parsing error!");
     }

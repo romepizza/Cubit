@@ -42,7 +42,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     public Dictionary<GameObject, Vector3> m_predatorForceVectors;
     public List<GameObject> m_predatorPredators;
     public List<GameObject> m_predatorNotPredators;
-    Dictionary<GameObject, float> m_predatorAcualRadii;
+    Dictionary<GameObject, float> m_predatorActualRadii;
     public bool m_predatorPlayerIsPredator;
 
     void Start()
@@ -52,7 +52,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     void initializeStuff()
     {
         m_predatorForceVectors = new Dictionary<GameObject, Vector3>();
-        m_predatorAcualRadii = new Dictionary<GameObject, float>();
+        m_predatorActualRadii = new Dictionary<GameObject, float>();
         m_predatorNotPredators = new List<GameObject>();
         manageInitialPredator();
     }
@@ -60,11 +60,17 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     void Update()
     {
         getInput();
-        getInformation();
+        if(!CemBoidBase.s_calculateInBase && !CemBoidBase.s_calculateInFixedUpdate)
+            getInformation();
     }
     void FixedUpdate()
     {
-        applyRule();
+        if (!CemBoidBase.s_calculateInBase)
+        {
+            if (CemBoidBase.s_calculateInFixedUpdate)
+                getInformation();
+            applyRule();
+        }
     }
 
     public override void getInformation(List<GameObject> agents)
@@ -103,21 +109,21 @@ public class CemBoidRulePredator : CemBoidRuleBase {
             int nearObjectsCount = 0;
 
             if (predator == null)
-                break;
+                continue;
 
-            Collider[] colliders = Physics.OverlapSphere(predator.transform.position, m_predatorAcualRadii[predator]);
+            Collider[] colliders = Physics.OverlapSphere(predator.transform.position, m_predatorActualRadii[predator]);
             // adjust radius
-            if (m_useAdjustRadius && m_predatorMaxPartnerChecks > 0)
+            if (m_useAdjustRadius && m_predatorMaxPartners > 0)
             {
-                if (colliders.Length - m_predatorMaxPartnerChecks > m_predatorMinAdjustmentDifference)
+                if (colliders.Length - m_predatorMaxPartners > m_predatorMinAdjustmentDifference)
                 {
-                    m_predatorAcualRadii[predator] -= m_predatorAdjustStep;
+                    m_predatorActualRadii[predator] -= m_predatorAdjustStep;
                 }
-                else if (colliders.Length - m_predatorMaxPartnerChecks < -m_predatorMinAdjustmentDifference)
+                else if (colliders.Length - m_predatorMaxPartners < -m_predatorMinAdjustmentDifference)
                 {
-                    m_predatorAcualRadii[predator] += m_predatorAdjustStep * 2f;
+                    m_predatorActualRadii[predator] += m_predatorAdjustStep * 2f;
                 }
-                m_predatorAcualRadii[predator] = Mathf.Clamp(m_predatorAcualRadii[predator], m_predatorMinRadius, m_predatorRadius);
+                m_predatorActualRadii[predator] = Mathf.Clamp(m_predatorActualRadii[predator], m_predatorMinRadius, m_predatorRadius);
             }
             foreach (Collider collider in colliders)
             {
@@ -142,7 +148,6 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                 if (collider.GetComponent<CEMBoidAttached>() != null && collider.GetComponent<CEMBoidAttached>().m_isAttachedToBase == m_baseScript)
                 {
                     float distanceFactor = Mathf.Clamp01(1f - (Vector3.Distance(agent.transform.position, predator.transform.position) / m_predatorRadius));
-                    float directionFactor = Vector3.Dot((predator.transform.position - agent.transform.position).normalized, agent.GetComponent<Rigidbody>().velocity.normalized);
                     Vector3 forceVector = (agent.transform.position - predator.gameObject.transform.position).normalized * m_predatorPower * distanceFactor;
                     //directionFactor = Mathf.Clamp01(directionFactor);
                     if (m_predatorForceVectors.ContainsKey(agent))
@@ -159,6 +164,9 @@ public class CemBoidRulePredator : CemBoidRuleBase {
 
     public override void applyRule(List<GameObject> agents)
     {
+        if (!m_useRule)
+            return;
+
         foreach (GameObject agent in agents)
         {
             agent.GetComponent<Rigidbody>().AddForce(m_predatorForceVectors[agent], ForceMode.Acceleration);
@@ -236,16 +244,13 @@ public class CemBoidRulePredator : CemBoidRuleBase {
 
         int p = m_predatorPredators.Contains(Constants.getPlayer()) ? 1 : 0;
 
-        while (m_predatorPredators.Count + p != number && tries < 1000)
+        while (m_predatorPredators.Count - p != number && tries < 1000)
         {
-            //Debug.Log(tries);
-            
-
-            if (m_predatorPredators.Count + p < number && m_predatorNotPredators.Count > 0)
+            if (m_predatorPredators.Count - p < number && m_predatorNotPredators.Count > 0)
             {
                 addRandomPredator();
             }
-            else if(m_predatorPredators.Count + p > 0)
+            else if(m_predatorPredators.Count - p > 0)
             {
                 removeRandomPredator();
             }
@@ -271,7 +276,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                 }
 
                 m_predatorPredators.Add(predator);
-                m_predatorAcualRadii.Add(predator, m_predatorRadius);
+                m_predatorActualRadii.Add(predator, m_predatorRadius);
                 m_predatorNotPredators.Remove(predator);
 
                 if (script != null)
@@ -322,7 +327,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                     }
                 }
                 m_predatorPredators.Add(predator);
-                m_predatorAcualRadii.Add(predator, m_predatorRadius);
+                m_predatorActualRadii.Add(predator, m_predatorRadius);
                 m_predatorNotPredators.Remove(predator);
 
                 if (script != null)
@@ -364,7 +369,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                 }
 
                 m_predatorPredators.Remove(predator);
-                m_predatorAcualRadii.Remove(predator);
+                m_predatorActualRadii.Remove(predator);
                 m_predatorNotPredators.Add(predator);
 
                 if (script != null)
@@ -393,13 +398,14 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     }
     public bool removeRandomPredator()
     {
-        if (m_predatorPredators.Count <= 0)
+        List<GameObject> predators = new List<GameObject>(m_predatorPredators);
+        if (predators.Contains(Constants.getPlayer()))
+            predators.Remove(Constants.getPlayer());
+
+        if (predators.Count <= 0)
             return false;
 
-        if (m_predatorPredators.Contains(Constants.getPlayer()) && m_predatorPredators.Count == 1)
-            return false;
-
-        GameObject predator = m_predatorPredators[Random.Range(0, m_predatorPredators.Count)];
+        GameObject predator = predators[Random.Range(0, predators.Count)];
         
 
         if (predator != null)
@@ -415,7 +421,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                 }
 
                 m_predatorPredators.Remove(predator);
-                m_predatorAcualRadii.Remove(predator);
+                m_predatorActualRadii.Remove(predator);
                 m_predatorNotPredators.Add(predator);
 
                 if (script != null)
@@ -443,6 +449,13 @@ public class CemBoidRulePredator : CemBoidRuleBase {
             Debug.Log("Warning: Tried to remove Null object to predators!");
         return false;
     }
+    public int getNumberPredators()
+    {
+        int number = m_predatorPredators.Count;
+        if (m_predatorPredators.Contains(Constants.getPlayer()))
+            number--;
+        return number;
+    }
     
     // utility
     bool isLineOfSight(GameObject from, Collider to)
@@ -463,9 +476,9 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     }
     public void resetRadii()
     {
-        List<GameObject> agnets = new List<GameObject>(m_predatorAcualRadii.Keys);
+        List<GameObject> agnets = new List<GameObject>(m_predatorActualRadii.Keys);
         foreach (GameObject agent in agnets)
-            m_predatorAcualRadii[agent] = m_predatorRadius;
+            m_predatorActualRadii[agent] = m_predatorRadius;
     }
     public void setPredatorHighlight(bool highlight)
     {
@@ -591,13 +604,14 @@ public class CemBoidRulePredator : CemBoidRuleBase {
         setPlayerAsPredator(m_predatorPlayerIsPredator);
 
         setNumberOfPredators(numberPredators);
+        setPredatorHighlight(m_predatorsHighlightPredators);
 
         List<GameObject> agnets = new List<GameObject>(m_predatorForceVectors.Keys);
         foreach (GameObject agent in agnets)
             m_predatorForceVectors[agent] = Vector3.zero;
 
-        agnets = new List<GameObject>(m_predatorAcualRadii.Keys);
+        agnets = new List<GameObject>(m_predatorActualRadii.Keys);
         foreach (GameObject agent in agnets)
-            m_predatorAcualRadii[agent] = m_predatorRadius;
+            m_predatorActualRadii[agent] = m_predatorRadius;
     }
 }

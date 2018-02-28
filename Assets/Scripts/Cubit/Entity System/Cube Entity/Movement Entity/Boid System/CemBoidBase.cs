@@ -9,6 +9,9 @@ public class CemBoidBase : MonoBehaviour
     public static float s_cameraRotationSpeed = 3f;
     public static bool s_moveCameraWhileIdle = true;
 
+    public static bool s_calculateInBase = true;
+    public static bool s_calculateInFixedUpdate = false;
+
     public GameObject m_spawnPrefab;
     public GameObject m_showGrabbedObject;
     [Header("------- Settings -------")]
@@ -19,14 +22,15 @@ public class CemBoidBase : MonoBehaviour
     public bool m_lookInFlightDirection;
     public float m_lookInFlightDirectionPower;
     public float m_affectedByplayerMovementPower;
+
     [Header("--- (Leader) ---")]
     public GameObject m_leader;
     public bool m_leaderApplyPostMovement;
+
     [Header("--- (Input) ---")]
     public bool m_allowInput;
     public float m_inputRadius;
     public GameObject m_customAddObject;
-    //[Header("--- (Camera Rotation) ---")]
 
     [Header("------- Debug -------")]
     public List<CemBoidRuleBase> m_rules;
@@ -55,7 +59,8 @@ public class CemBoidBase : MonoBehaviour
         updateStuff();
         getRules();
         manageCameraRotation();
-        //getMovementInformation();
+        if(s_calculateInBase && !s_calculateInFixedUpdate)
+            getMovementInformation();
     }
     void updateStuff()
     {
@@ -91,7 +96,12 @@ public class CemBoidBase : MonoBehaviour
 
     void FixedUpdate()
     {
-        //applyRules();
+        if (s_calculateInBase)
+        {
+            if(s_calculateInFixedUpdate)
+                getMovementInformation();
+            applyRules();
+        }
         applyPostMovement();
     }
     void applyPostMovement()
@@ -104,13 +114,15 @@ public class CemBoidBase : MonoBehaviour
             Rigidbody rb = agent.GetComponent<Rigidbody>();
 
             // (air) resistance
-            if (rb.velocity.magnitude > 10f)
+            if (rb.velocity.magnitude > 10f && m_airResistancePower > 0)
             {
                 rb.AddForce(rb.velocity.normalized * -m_airResistancePower);
             }
             // max speed
-            rb.velocity = rb.velocity.normalized * Mathf.Min(rb.velocity.magnitude, m_maxIndividualSpeed);
-
+            if (rb.velocity.magnitude > m_maxIndividualSpeed)
+            {
+                rb.velocity = rb.velocity.normalized * m_maxIndividualSpeed;
+            }
             // look direction
             if (m_lookInFlightDirection && rb.velocity.magnitude > 0)
             {
@@ -195,6 +207,7 @@ public class CemBoidBase : MonoBehaviour
                 agent.GetComponent<CubeEntitySystem>().getPrefapSystem().setToAttachedPlayer();
                 agent.GetComponent<CubeEntitySystem>().getMovementComponent().removeAllAccelerationComponents();
                 addAgent(agent);
+
             }
             else if(m_agents.Count >= 1)
             {

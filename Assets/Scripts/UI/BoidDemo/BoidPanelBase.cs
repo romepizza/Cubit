@@ -16,6 +16,8 @@ public class BoidPanelBase : MonoBehaviour
 
     public GameObject m_affectedByPlayerMovementPower;
 
+    public GameObject m_calculateInBaseScript;
+    public GameObject m_calculateInFixedUpdate;
     public GameObject m_moveCamerWhileIdle;
 
     bool boidFound = false;
@@ -57,7 +59,12 @@ public class BoidPanelBase : MonoBehaviour
         m_airResistancePower.GetComponent<InputField>().text = m_script.m_airResistancePower.ToString();
         m_lookInFlightDirection.GetComponent<Toggle>().isOn = m_script.m_lookInFlightDirection;
         m_lookInFlightDirectionPower.GetComponent<InputField>().text = m_script.m_lookInFlightDirectionPower.ToString();
+
         m_affectedByPlayerMovementPower.GetComponent<InputField>().text = m_script.m_affectedByplayerMovementPower.ToString();
+
+
+        m_calculateInBaseScript.GetComponent<Toggle>().isOn = CemBoidBase.s_calculateInBase;
+        m_calculateInFixedUpdate.GetComponent<Toggle>().isOn = CemBoidBase.s_calculateInFixedUpdate;
         m_moveCamerWhileIdle.GetComponent<Toggle>().isOn = CemBoidBase.s_moveCameraWhileIdle;
     }
     public void updateBaseSwarmSize()
@@ -112,6 +119,16 @@ public class BoidPanelBase : MonoBehaviour
             m_script.m_affectedByplayerMovementPower = output;
         else
             Debug.Log("Aborted: Parsing error!");
+    }
+    public void updateCalculateInBaseScript()
+    {
+        bool active = m_calculateInBaseScript.GetComponent<Toggle>().isOn;
+        CemBoidBase.s_calculateInBase = active;
+    }
+    public void updateCalculateInFixedUpdate()
+    {
+        bool active = m_calculateInFixedUpdate.GetComponent<Toggle>().isOn;
+        CemBoidBase.s_calculateInFixedUpdate = active;
     }
     public void updateMoveCameraWhileIdle()
     {

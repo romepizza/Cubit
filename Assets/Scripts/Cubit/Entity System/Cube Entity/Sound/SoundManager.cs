@@ -35,7 +35,7 @@ public class SoundManager : MonoBehaviour
         s_sourceBackground = m_sourceBackground.GetComponent<AudioSource>();
 
 
-        SoundManager.addSoundBackground(Vector3.zero);
+        //SoundManager.addSoundBackground(Vector3.zero);
     }
 	
 	// Update is called once per frame

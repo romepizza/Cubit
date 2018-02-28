@@ -8,6 +8,7 @@ public class BoidPanelAlignment : MonoBehaviour
     public GameObject m_useRule;
 
     public GameObject m_alignmentPerFrame;
+    public GameObject m_alignmentMinPercentPerFrame;
     public GameObject m_alignmentPower;
     public GameObject m_alignmentRadius;
     public GameObject m_alignmentMaxPartners;
@@ -58,6 +59,7 @@ public class BoidPanelAlignment : MonoBehaviour
         m_useRule.GetComponent<Toggle>().isOn = m_script.m_useRule;
 
         m_alignmentPerFrame.GetComponent<InputField>().text = m_script.m_alignmentPerFrame.ToString();
+        m_alignmentMinPercentPerFrame.GetComponent<InputField>().text = m_script.m_alignmentMinPercentPerFrame.ToString();
         m_alignmentPower.GetComponent<InputField>().text = m_script.m_alignmentPower.ToString();
         m_alignmentRadius.GetComponent<InputField>().text = m_script.m_alignmentRadius.ToString();
         m_alignmentMaxPartners.GetComponent<InputField>().text = m_script.m_alignmentMaxPartners.ToString();
@@ -89,6 +91,15 @@ public class BoidPanelAlignment : MonoBehaviour
         else
             Debug.Log("Aborted: Parsing error!");
     }
+    public void updateAlignmentMinPercentPerFrame()
+    {
+        string input = m_alignmentMinPercentPerFrame.GetComponent<InputField>().text;
+        float output;
+        if (float.TryParse(input, out output))
+            m_script.m_alignmentMinPercentPerFrame = output;
+        else
+            Debug.Log("Aborted: Parsing error!");
+    }
     public void updateAlignmentPower()
     {
         string input = m_alignmentPower.GetComponent<InputField>().text;
@@ -103,7 +114,10 @@ public class BoidPanelAlignment : MonoBehaviour
         string input = m_alignmentRadius.GetComponent<InputField>().text;
         float output;
         if (float.TryParse(input, out output))
+        {
             m_script.m_alignmentRadius = output;
+            m_script.resetRadii();
+        }
         else
             Debug.Log("Aborted: Parsing error!");
     }

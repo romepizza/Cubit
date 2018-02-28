@@ -147,9 +147,9 @@ MonoBehaviour:
   m_isEmissive: 1
   m_emissionIntensity: 1
   m_emissionColor: {r: 1, g: 0, b: 0, a: 0.5019608}
-  m_lightColor: {r: 0.43382353, g: 0.64858013, b: 1, a: 0}
-  m_lightIntensity: 1
-  m_lightRange: 75
+  m_lightColor: {r: 0.5735294, g: 0.9117646, b: 1, a: 0}
+  m_lightIntensity: 0
+  m_lightRange: 0
   m_lightShadowType: 0
   m_trailMaterial: {fileID: 2100000, guid: 071bf0ed64629284682abe617cd83802, type: 2}
   m_trailTime: 0

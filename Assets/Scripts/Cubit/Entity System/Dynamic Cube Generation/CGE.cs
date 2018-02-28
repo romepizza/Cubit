@@ -24,6 +24,7 @@ public class CGE : MonoBehaviour
     [Header("------- Debug -------")]
     public List<List<GameObject>> m_allCubes;
     public int m_checkedTotal;
+    public bool m_spawnCubes;
 
    // public List<GameObject> m_activeCubes;
     public CGE m_cge;
@@ -65,6 +66,9 @@ public class CGE : MonoBehaviour
     // Activate
     public void activateCube(Vector3 targetPosition)
     {
+        if (!m_spawnCubes)
+            return;
+
         if (m_inactiveCubes.Count > 0)
         {
             /*

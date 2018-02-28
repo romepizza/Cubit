@@ -241,7 +241,7 @@ public class Options : MonoBehaviour
         }
 
         // Enable/Disable Post-Processing
-        if (Input.GetKeyDown(KeyCode.Period))
+        if (Input.GetKeyDown(KeyCode.Comma))
         {
             Camera.main.GetComponent<UnityEngine.PostProcessing.PostProcessingBehaviour>().enabled = !Camera.main.GetComponent<UnityEngine.PostProcessing.PostProcessingBehaviour>().enabled;
             changedText2.GetComponent<ShowTimedText>().showText("Post-Processing set to " + Camera.main.GetComponent<UnityEngine.PostProcessing.PostProcessingBehaviour>().enabled, 5.0f);
