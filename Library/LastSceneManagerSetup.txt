@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/Cubit Boid.unity
+- path: Assets/Scenes/Cubit Entity.unity
   isLoaded: 1
   isActive: 1

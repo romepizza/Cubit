@@ -148,17 +148,17 @@ MonoBehaviour:
   m_isEmissive: 1
   m_emissionIntensity: 0.5
   m_emissionColor: {r: 0, g: 0.627451, b: 1, a: 0.5019608}
-  m_lightColor: {r: 0, g: 0.62745094, b: 1, a: 0}
+  m_lightColor: {r: 0, g: 0.9998646, b: 1, a: 0}
   m_lightIntensity: 1
   m_lightRange: 50
   m_lightShadowType: 0
   m_trailMaterial: {fileID: 2100000, guid: 123ac6dc79004e54b8b352a7e64acdca, type: 2}
   m_trailTime: 0.6
   m_trailWidth: 2
-  m_trailColor: {r: 0, g: 0.41983852, b: 0.6691177, a: 0}
+  m_trailColor: {r: 0, g: 0.7541027, b: 0.78676474, a: 0}
   m_colorGradient:
     serializedVersion: 2
-    key0: {r: 0, g: 0.627451, b: 1, a: 1}
+    key0: {r: 0, g: 0.8758622, b: 1, a: 1}
     key1: {r: 0, g: 0, b: 0, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}

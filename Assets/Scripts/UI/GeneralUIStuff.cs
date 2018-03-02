@@ -36,11 +36,6 @@ public class GeneralUIStuff : MonoBehaviour
 
     public void loadSceneByIndex(int sceneIndex)
     {
-        logInformationObject = GameObject.Find("LogInformationObject");
-        if(logInformationObject != null)
-        {
-            logInformationObject.GetComponent<PlayerCounter>().registerNewPlayer();
-        }
         SceneManager.LoadScene(sceneIndex);
     }
 

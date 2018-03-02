@@ -34,8 +34,11 @@ public class CameraRotation : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze && Constants.getBoidSystem() != null && !Constants.getBoidSystem().m_isFreeze)
+        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze)
         {
+            //if (Constants.getBoidSystem() != null && !Constants.getBoidSystem().m_isFreeze)
+                //return;
+
             bool isPressingUp = Input.GetAxis("ButtonUp") > 0.5f;
             bool isPressingDown = Input.GetAxis("ButtonDown") < -0.5f;
             if (isPressingUp || isPressingDown)
@@ -71,9 +74,12 @@ public class CameraRotation : MonoBehaviour
 
     void Update()
     {
-        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze && Constants.getBoidSystem() != null && !Constants.getBoidSystem().m_isFreeze)
+        if (!GameObject.Find("GeneralScriptObject").GetComponent<Options>().isFreeze)
         {
-            if(Input.GetKeyDown(KeyCode.Z))
+            //if (Constants.getBoidSystem() != null && !Constants.getBoidSystem().m_isFreeze)
+                //return;
+
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 sensitivityXAxisMouse *= 1.1f;
                 sensitivityYAxisMouse *= 1.1f;

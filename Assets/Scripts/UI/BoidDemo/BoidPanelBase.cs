@@ -65,7 +65,7 @@ public class BoidPanelBase : MonoBehaviour
 
         m_calculateInBaseScript.GetComponent<Toggle>().isOn = CemBoidBase.s_calculateInBase;
         m_calculateInFixedUpdate.GetComponent<Toggle>().isOn = CemBoidBase.s_calculateInFixedUpdate;
-        m_moveCamerWhileIdle.GetComponent<Toggle>().isOn = CemBoidBase.s_moveCameraWhileIdle;
+        //m_moveCamerWhileIdle.GetComponent<Toggle>().isOn = CemBoidBase.s_moveCameraWhileIdle;
     }
     public void updateBaseSwarmSize()
     {
@@ -73,7 +73,7 @@ public class BoidPanelBase : MonoBehaviour
         int output;
         if (int.TryParse(input, out output))
         {
-            m_script.setSwarmSize(output);
+            //m_script.setSwarmSize(output);
             m_setSawrmSize.GetComponent<InputField>().text = m_script.m_agents.Count.ToString();
         }
         else
@@ -133,6 +133,6 @@ public class BoidPanelBase : MonoBehaviour
     public void updateMoveCameraWhileIdle()
     {
         bool active = m_moveCamerWhileIdle.GetComponent<Toggle>().isOn;
-        CemBoidBase.s_moveCameraWhileIdle = active;
+        //CemBoidBase.s_moveCameraWhileIdle = active;
     }
 }

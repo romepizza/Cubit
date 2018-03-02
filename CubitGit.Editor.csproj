@@ -156,9 +156,8 @@
     <Compile Include="Assets\Extern\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Assets\Materials\Camera\CameraWobbleShader.shader" />
-    <None Include="Assets\Assets\Materials\CubeMaterials\Emissives\2\ikkki.shader" />
-    <None Include="Assets\Assets\Text\TextShader.shader" />
+    <None Include="Assets\Assets\Fonds\TextShader.shader" />
+    <None Include="Assets\Assets\Materials\Camera\Camera\Wobble Shader\CameraWobbleShader.shader" />
     <None Include="Assets\Extern\Day-Night Skyboxes\Textures\Readme for Assigning.txt" />
     <None Include="Assets\Extern\Day-Night Skyboxes\readme.txt" />
     <None Include="Assets\Extern\EffectExamples\Shared\Shaders\SurfaceShader_VC.shader" />

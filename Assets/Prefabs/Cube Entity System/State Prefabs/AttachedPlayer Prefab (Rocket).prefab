@@ -130,23 +130,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_material: {fileID: 2100000, guid: e8a064872dd211647b19a5b8e5981323, type: 2}
-  m_materialColor: {r: 1, g: 0, b: 0, a: 0.5019608}
+  m_materialColor: {r: 0, g: 0.6275863, b: 1, a: 0.5019608}
   m_materialColorIntensity: 1
   m_isEmissive: 1
-  m_emissionIntensity: 1
-  m_emissionColor: {r: 1, g: 0, b: 0, a: 0.5019608}
-  m_lightColor: {r: 0.43382353, g: 0.8594321, b: 1, a: 0}
+  m_emissionIntensity: 0.5
+  m_emissionColor: {r: 0, g: 1, b: 1, a: 0.5019608}
+  m_lightColor: {r: 0, g: 0.74264705, b: 0.74264705, a: 0}
   m_lightIntensity: 0
   m_lightRange: 0
   m_lightShadowType: 0
-  m_trailMaterial: {fileID: 2100000, guid: 071bf0ed64629284682abe617cd83802, type: 2}
+  m_trailMaterial: {fileID: 2100000, guid: 123ac6dc79004e54b8b352a7e64acdca, type: 2}
   m_trailTime: 0
   m_trailWidth: 0
-  m_trailColor: {r: 0.43529415, g: 0.64705884, b: 1, a: 0}
+  m_trailColor: {r: 0, g: 0.778, b: 0.772, a: 0}
   m_colorGradient:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 0, g: 0.741, b: 0.747, a: 1}
+    key1: {r: 0, g: 0, b: 0, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}

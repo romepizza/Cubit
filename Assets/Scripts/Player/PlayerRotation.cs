@@ -84,15 +84,9 @@ public class PlayerRotation : MonoBehaviour
     public Quaternion finalQuaternionWingRight;
     public Quaternion finalQuaternionGyrometer;
 
-    private Boost boostScript;
-    private Penalty penaltyScript;
-
 
     void Start ()
     {
-        boostScript = GetComponent<Boost>();
-        penaltyScript = GetComponent<Penalty>();
-
         defaultRotationBody = visualBody.transform.rotation;
         defaultRotationWingLeft = visualWingLeft.transform.rotation;
         defaultRotationWingRight = visualWingRight.transform.rotation;
@@ -110,27 +104,10 @@ public class PlayerRotation : MonoBehaviour
 
     void updateInformation()
     {
-        if (penaltyScript.isPenalty)
-        {
-            maxRotationXAxisActual = maxRotationXAxisPenalty;
-            maxRotationZAxisActual = maxRotationZAxisPenalty;
-            rotationSpeedXZActual = rotationSpeedXZPenalty;
-            rotationSpeedYActual = rotationSpeedYPenalty;
-        }
-        else if (boostScript.isBoosting)
-        {
-            maxRotationXAxisActual = maxRotationXAxisBoost;
-            maxRotationZAxisActual = maxRotationZAxisBoost;
-            rotationSpeedXZActual = rotationSpeedXZBoost;
-            rotationSpeedYActual = rotationSpeedYBoost;
-        }
-        else
-        {
-            maxRotationXAxisActual = maxRotationXAxis;
-            maxRotationZAxisActual = maxRotationZAxis;
-            rotationSpeedXZActual = rotationSpeedXZ;
-            rotationSpeedYActual = rotationSpeedY;
-        }
+        maxRotationXAxisActual = maxRotationXAxis;
+        maxRotationZAxisActual = maxRotationZAxis;
+        rotationSpeedXZActual = rotationSpeedXZ;
+        rotationSpeedYActual = rotationSpeedY;
     }
 
     void getInput()

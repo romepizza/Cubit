@@ -38,7 +38,6 @@ public class Options : MonoBehaviour
 
 
     private SkillGather skillGatherScript;
-    public ShowTime showTimeText1;
     void Start ()
     {
         //goal = GameObject.Find("Goal");
@@ -49,11 +48,6 @@ public class Options : MonoBehaviour
 
     public void endGame()
     {
-        if (GameObject.Find("LogInformationObject") != null && GameObject.Find("LogInformationObject").GetComponent<Log>() != null)
-            GameObject.Find("LogInformationObject").GetComponent<Log>().logRegisterPlayerSummary();
-        else if (GameObject.Find("GeneralScriptObject").GetComponent<Log>())
-            GameObject.Find("GeneralScriptObject").GetComponent<Log>().logRegisterPlayerSummary();
-
         gameFinishedPanel.SetActive(true);
         Time.timeScale = 0.0f;
         if(showMouse)
@@ -63,7 +57,10 @@ public class Options : MonoBehaviour
 
 
     void showGrabbed()
-    { 
+    {
+        if (player.GetComponent<GrabSystem>() == null)
+            return;
+
         int grabbedNumber = player.GetComponent<GrabSystem>().grabbedCubes.Count;
         showGrabbedText.GetComponent<Text>().text = grabbedNumber + " / " + player.GetComponent<GrabSystem>().maxCubes;
     }
@@ -153,14 +150,14 @@ public class Options : MonoBehaviour
         // ----- EFFECTS -----
         if (isShowGrabbed)
             showGrabbed();
-        if (isShowPlayerHp && cubeSystem.GetComponent<MonsterManager>().wavesIsActive)
+        if (isShowPlayerHp && cubeSystem != null && cubeSystem.GetComponent<MonsterManager>().wavesIsActive)
             showPlayerHp();
         else
             playerHpText.GetComponent<Text>().text = "";
 
         // ----- INPUTS -----
 
-        if ((Input.GetKeyDown(KeyCode.B)/* || Input.GetButton("ButtonY")*/) && !cubeSystem.GetComponent<MonsterManager>().wavesIsActive)
+        if ((Input.GetKeyDown(KeyCode.B)/* || Input.GetButton("ButtonY")*/) && cubeSystem != null && !cubeSystem.GetComponent<MonsterManager>().wavesIsActive)
         {
             cubeSystem.GetComponent<MonsterManager>().startWaves();
         }
@@ -187,13 +184,13 @@ public class Options : MonoBehaviour
         // Monster Worm Spawn
         if (Input.GetKeyDown(KeyCode.G) && m_allowSpawnWorm)
         {
-            cubeSystem.GetComponent<MonsterManager>().createMonsterChase(1);
+            //cubeSystem.GetComponent<MonsterManager>().createMonsterChase(1);
         }
 
         // Monster Throw Spawn
         if ((Input.GetKeyDown(KeyCode.T) || Input.GetButtonDown("LBumper")) && m_allowSpawnEjector)
         {
-            cubeSystem.GetComponent<MonsterManager>().createMonsterThrow(1);
+            //cubeSystem.GetComponent<MonsterManager>().createMonsterThrow(1);
         }
         // Esc
         if(Input.GetKeyDown(KeyCode.Escape) && !gameIsFinished)
@@ -281,11 +278,6 @@ public class Options : MonoBehaviour
 
     public void returnMenuSettingsLog(int sceneIndex)
     {
-        if (GameObject.Find("LogInformationObject") != null && GameObject.Find("LogInformationObject").GetComponent<Log>() != null)
-            GameObject.Find("LogInformationObject").GetComponent<Log>().logRegisterPlayerSummary();
-        else if (GameObject.Find("GeneralScriptObject").GetComponent<Log>())
-            GameObject.Find("GeneralScriptObject").GetComponent<Log>().logRegisterPlayerSummary();
-
         isFreeze = false;
         Time.timeScale = 1;
         if(showMouse)
