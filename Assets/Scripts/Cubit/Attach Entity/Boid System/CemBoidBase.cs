@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿//using System;
+//using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 
 public class CemBoidBase : AttachEntityBase
 {
@@ -280,7 +281,7 @@ public class CemBoidBase : AttachEntityBase
     {
         if(m_agents.Count <= 0)
             return;
-
+        
         GameObject agent = m_agents[Random.Range(0, m_agents.Count)];
         if(agent == null)
         {
@@ -345,6 +346,10 @@ public class CemBoidBase : AttachEntityBase
         }
     }
 
+    public override void setValuesByPrefab(GameObject prefab)
+    {
+        
+    }
     // Input Stuff
 
     /*

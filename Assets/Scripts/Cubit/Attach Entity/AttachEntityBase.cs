@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class AttachEntityBase : MonoBehaviour
 {
-
 	// Use this for initialization
 	void Start () {
 		
@@ -17,4 +16,5 @@ public abstract class AttachEntityBase : MonoBehaviour
 
     public abstract bool addAgent(GameObject agent);
     public abstract void removeAgent(GameObject agent);
+    public abstract void setValuesByPrefab(GameObject prefab);
 }

@@ -153,7 +153,7 @@ public class Options : MonoBehaviour
         if (isShowPlayerHp && cubeSystem != null && cubeSystem.GetComponent<MonsterManager>().wavesIsActive)
             showPlayerHp();
         else
-            playerHpText.GetComponent<Text>().text = "";
+            ;// playerHpText.GetComponent<Text>().text = "";
 
         // ----- INPUTS -----
 

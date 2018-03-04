@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerEntityAttachSystem : AttachEntity
+public class PlayerEntityAttachSystem : AttachSystemBase
 {
     [Header("----- SETTINGS -----")]
     public float m_duration = -1;
@@ -17,18 +17,20 @@ public class PlayerEntityAttachSystem : AttachEntity
     public int m_lastCatchPositionsCount;
     */
 
+        
     [Header("--- (Cube Movement) ---")]
     public float m_movementAffectsCubesFactor;
+    /*
     public float m_cubeMovementPower;
     public float m_maxSpeed;
-
+    */
     [Header("----- DEBUG -----")]
     public List<GameObject> m_grabbedCubes;
     public AttachEntityBase m_attachEntity;
     //public List<CubeEntityMovementFollowPoint> m_grabbedCubesFollowPointScripts;
 
-    [Header("--- (Catch System) ---")]
-    public Vector3 m_catchPoint;
+    //[Header("--- (Catch System) ---")]
+   // public Vector3 m_catchPoint;
 
     /*
     [Header("--- (Smooth Arrival) ---")]
@@ -64,7 +66,7 @@ public class PlayerEntityAttachSystem : AttachEntity
             CubeEntityAttached attachedScript = cubeAdd.GetComponent<CubeEntitySystem>().getStateComponent().addAttachedScript();
             attachedScript.setValuesByObject(this.gameObject, this);
             
-            cubeAdd.GetComponent<CubeEntitySystem>().setToAttachedPlayer(Vector3.zero, m_duration, m_cubeMovementPower, m_maxSpeed);
+            cubeAdd.GetComponent<CubeEntitySystem>().setToAttachedPlayer();
             //CubeEntityMovementFollowPoint script = cubeAdd.GetComponent<CubeEntitySystem>().getMovementComponent().getSingleFollowPointScript();
             m_grabbedCubes.Add(cubeAdd);
             m_attachEntity.addAgent(cubeAdd);
@@ -94,7 +96,7 @@ public class PlayerEntityAttachSystem : AttachEntity
     {
         if (m_grabbedCubes.Count > 0)
         {
-            m_catchPoint = transform.position + /*Camera.main.transform.rotation **/ m_catchOffset;
+            //m_catchPoint = transform.position + /*Camera.main.transform.rotation **/ m_catchOffset;
             moveGrabbedCubesSinglePoint();
         }
     }

@@ -16,12 +16,19 @@ public class MonsterEntitySkillGrab : MonoBehaviour
     [Header("--- (Timer) ---")]
     public float m_grabFinishTime;
 
-    public MonsterEntityAttachSystem attachSystemScript;
+    public MonsterEntityAttachSystem m_attachSystemScript;
+    public MonsterEntityAttachSystemNew m_attachSystemScriptNew;
     public MonsterEntityBase m_baseScript;
 
     void Start()
     {
-        attachSystemScript = gameObject.GetComponent<MonsterEntityAttachSystem>();
+        m_attachSystemScript = gameObject.GetComponent<MonsterEntityAttachSystem>();
+        if (m_attachSystemScript == null)
+            Debug.Log("Warning: Attach system old not found!");
+
+        m_attachSystemScriptNew = gameObject.GetComponent<MonsterEntityAttachSystemNew>();
+        if (m_attachSystemScript == null)
+            Debug.Log("Warning: Attach system new not found!");
     }
 
     // Updates
@@ -49,7 +56,7 @@ public class MonsterEntitySkillGrab : MonoBehaviour
     // Skill specific
     void manageSkill()
     {
-        if (m_grabFinishTime < Time.time && attachSystemScript.m_occupiedPositions.Count < m_baseScript.m_currentMaxCubes)
+        if (m_grabFinishTime < Time.time && m_attachSystemScript.m_occupiedPositions.Count < m_baseScript.m_currentMaxCubes)
         {
             activateSkill();
 
@@ -60,7 +67,7 @@ public class MonsterEntitySkillGrab : MonoBehaviour
         // chose cube to add to attached
         GameObject cubeAdd = null;
 
-        if (attachSystemScript.m_cubeList.Length < 5000)
+        if (m_attachSystemScript.m_cubeList.Length < 5000)
         {
             if (m_grabRadiusIncrease <= 0)
             {
@@ -122,7 +129,12 @@ public class MonsterEntitySkillGrab : MonoBehaviour
         {
             if (cubeAdd.GetComponent<CubeEntityState>().m_state == CubeEntityState.s_STATE_ACTIVE)
                 Debug.Log("Caution");
-            attachSystemScript.addToGrab(cubeAdd);
+
+            if(m_attachSystemScript != null)
+                m_attachSystemScript.addToGrab(cubeAdd);
+
+            if (m_attachSystemScriptNew != null)
+                m_attachSystemScriptNew.addToGrab(cubeAdd);
         }
 
         m_grabFinishTime = m_grabCooldown + Time.time;

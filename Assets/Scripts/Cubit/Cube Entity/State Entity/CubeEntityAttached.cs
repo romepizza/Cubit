@@ -7,9 +7,9 @@ public class CubeEntityAttached : MonoBehaviour
     public GameObject m_attachedToGameObject;
     public int m_affiliation;
     public int m_monster;
-    public AttachEntity m_attachSystemScript;
+    public AttachSystemBase m_attachSystemScript;
 
-    public void setValuesByScript(GameObject prefab, AttachEntity attachSystemScript)
+    public void setValuesByScript(GameObject prefab, AttachSystemBase attachSystemScript)
     {
         CubeEntityAttached script = prefab.GetComponent<CubeEntityAttached>();
         m_affiliation = script.m_affiliation;
@@ -17,7 +17,7 @@ public class CubeEntityAttached : MonoBehaviour
         m_attachSystemScript = attachSystemScript;
     }
 
-    public void setValuesByObject(GameObject gameObject, AttachEntity attachSystemScript)
+    public void setValuesByObject(GameObject gameObject, AttachSystemBase attachSystemScript)
     {
         m_attachSystemScript = attachSystemScript;
         if (gameObject == Constants.getPlayer())
@@ -26,12 +26,14 @@ public class CubeEntityAttached : MonoBehaviour
             m_affiliation = CubeEntityState.s_AFFILIATION_PLAYER;
             m_monster = CubeEntityState.s_MONSTER_NONE;
         }
-        else if(gameObject.GetComponent<CubeEntitySystem>() != null)
+        else if (gameObject.GetComponent<CubeEntitySystem>() != null)
         {
             m_attachedToGameObject = gameObject;
             m_affiliation = gameObject.GetComponent<CubeEntitySystem>().getStateComponent().m_affiliation;
             m_monster = gameObject.GetComponent<CubeEntitySystem>().getStateComponent().m_monster;
         }
+        else
+            Debug.Log("Warning: Something might have gone wrong here!");
     }
 
     public void deregisterAttach()

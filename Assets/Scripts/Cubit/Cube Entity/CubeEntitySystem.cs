@@ -91,14 +91,14 @@ public class CubeEntitySystem : MonoBehaviour
     }
     public void setToAttachedPlayer(Vector3 targetPoint, float duration, float power, float maxSpeed)
     {
-        getPrefapSystem().setToAttachedPlayer();
         getMovementComponent().removeAllMovementComponents();
+        getPrefapSystem().setToAttachedPlayer();
         //getMovementComponent().addFollowPointComponent(targetPoint, duration, power, maxSpeed);
     }
     public void setToAttachedPlayer()
     {
-        getPrefapSystem().setToAttachedPlayer();
         getMovementComponent().removeAllMovementComponents();
+        getPrefapSystem().setToAttachedPlayer();
     }
     public void setToActiveEnemyEjector(/*Vector3 targetPoint, float duration, float power, float maxSpeed*/)
     {

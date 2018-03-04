@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterEntityAttachSystem : AttachEntity
+public class MonsterEntityAttachSystem : AttachSystemBase
 {
     public class GrabbedCube
     {
@@ -63,7 +63,6 @@ public class MonsterEntityAttachSystem : AttachEntity
     {
         m_monsterBaseScript = GetComponent<MonsterEntityBase>();
         initializeCubeList();
-        
     }
 
     // Update is called once per frame

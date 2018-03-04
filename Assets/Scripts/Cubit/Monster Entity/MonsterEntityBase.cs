@@ -28,6 +28,7 @@ public class MonsterEntityBase : MonoBehaviour
     
     [Header("--- (Scripts) ---")]
     public MonsterEntityAttachSystem m_attachSystemScript;
+    public AttachSystemBase m_attachSystemScriptNew;
     public CubeEntityAttached m_attachedToScript;
     [Header("- (Monster Type) -")]
     public MonsterEntityEjector m_ejectorScript;
@@ -86,6 +87,14 @@ public class MonsterEntityBase : MonoBehaviour
             Debug.Log("Warning: Tried to Copy MonsterEntityBase script from prefab, that didn't have it attached!");
         initializeValues();
 
+        // other scripts
+        MonsterEntityAbstractCopiable[] copyScripts = prefab.GetComponents<MonsterEntityAbstractCopiable>();
+        foreach(MonsterEntityAbstractCopiable copyScript in copyScripts)
+        {
+            MonsterEntityAbstractCopiable pasteScript = gameObject.AddComponent<MonsterEntityAbstractCopiable>();
+            pasteScript.pasteScript(copyScript);
+        }
+
         // Monster Ejector
         MonsterEntityEjector scriptEjector = prefab.GetComponent<MonsterEntityEjector>();
         if (scriptEjector != null)
@@ -101,6 +110,18 @@ public class MonsterEntityBase : MonoBehaviour
         }
         // Monster Worm
         // ...
+
+        // Attach System New
+        AttachSystemBase[] scriptAttachSystemNew = prefab.GetComponents<AttachSystemBase>();
+        if(scriptAttachSystemNew.Length == 1)
+        {
+            if (GetComponent<AttachSystemBase>() == null)
+            {
+
+            }
+            else
+                Debug.Log("Aborted: AttachSystemBase was already attached!");
+        }
 
         // Attach System
         MonsterEntityAttachSystem scriptAttachSystem = prefab.GetComponent<MonsterEntityAttachSystem>();
