@@ -36,7 +36,8 @@ public class CubeEntityFadeEmission : ParentEntityDeleteOnStateChange
             if (gameObject.GetComponent<Light>() != null)
                 gameObject.GetComponent<Light>().range = m_defaultLightRadius * factor;
             //T Trail Renderer
-            m_trailRenderer.time = m_appearanceScript.m_trailTime * factor;
+            if(m_trailRenderer != null)
+                m_trailRenderer.time = m_appearanceScript.m_trailTime * factor;
             
             m_durationTimer -= 0.1f;// Time.deltaTime;
 

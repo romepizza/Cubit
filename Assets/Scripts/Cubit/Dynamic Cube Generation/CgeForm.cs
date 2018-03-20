@@ -81,7 +81,7 @@ public abstract class CgeForm : MonoBehaviour
 
     public void activateCubeInsideCell(Vector3 position)
     {
-        m_cge.activateCube(position);
+        m_cge.activateCubeUnsafe(position);
     }
 
     public void addCell(CgeCell cell)

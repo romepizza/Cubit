@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterEntitySkillGrab : MonoBehaviour
+public class MonsterEntitySkillGrab : EntityCopiableAbstract
 {
     [Header("----- SETTINGS -----")]
     [Header("--- (Skill) ---")]
@@ -10,6 +10,10 @@ public class MonsterEntitySkillGrab : MonoBehaviour
     public float m_grabCooldown;
     public float m_grabRadius;
     public float m_grabRadiusIncrease;
+
+    [Header("--- (Selection) ---")]
+    public bool m_createCubesIfNoneFound;
+    public bool m_createCubesOnly;
 
     [Header("----- DEBUG -----")]
 
@@ -23,11 +27,10 @@ public class MonsterEntitySkillGrab : MonoBehaviour
     void Start()
     {
         m_attachSystemScript = gameObject.GetComponent<MonsterEntityAttachSystem>();
-        if (m_attachSystemScript == null)
-            Debug.Log("Warning: Attach system old not found!");
+        
 
         m_attachSystemScriptNew = gameObject.GetComponent<MonsterEntityAttachSystemNew>();
-        if (m_attachSystemScript == null)
+        if (m_attachSystemScriptNew == null)
             Debug.Log("Warning: Attach system new not found!");
     }
 
@@ -37,29 +40,14 @@ public class MonsterEntitySkillGrab : MonoBehaviour
         manageSkill();
     }
 
-    // Setter
-    public void setValuesByScript(GameObject prefab, MonsterEntityBase baseScript)
-    {
-        MonsterEntitySkillGrab script = prefab.GetComponent<MonsterEntitySkillGrab>();
-        if (script != null)
-        {
-            m_grabNearestCube = script.m_grabNearestCube;
-            m_grabCooldown = script.m_grabCooldown;
-            m_grabRadius = script.m_grabRadius;
-            m_grabRadiusIncrease = script.m_grabRadiusIncrease;
-            m_baseScript = baseScript;
-        }
-        else
-            Debug.Log("Warning: Tried to copy values of MonsterEntitySkillGrab from prefab, that didn't have the script attached!");
-    }
+    
 
     // Skill specific
     void manageSkill()
     {
-        if (m_grabFinishTime < Time.time && m_attachSystemScript.m_occupiedPositions.Count < m_baseScript.m_currentMaxCubes)
+        if (m_grabFinishTime < Time.time && m_attachSystemScriptNew.m_cubeList.Count < m_attachSystemScriptNew.m_maxCubesGrabbed)
         {
             activateSkill();
-
         }
     }
     void activateSkill()
@@ -67,7 +55,7 @@ public class MonsterEntitySkillGrab : MonoBehaviour
         // chose cube to add to attached
         GameObject cubeAdd = null;
 
-        if (m_attachSystemScript.m_cubeList.Length < 5000)
+        if (false)
         {
             if (m_grabRadiusIncrease <= 0)
             {
@@ -80,7 +68,7 @@ public class MonsterEntitySkillGrab : MonoBehaviour
                 for (int col = 0; col < colliders.Length; col++)
                 {
                     GameObject potentialCube = colliders[col].gameObject;
-                    if (potentialCube.layer == 8 && potentialCube.GetComponent<CubeEntitySystem>() != null && potentialCube.GetComponent<CubeEntitySystem>().getStateComponent() != null && potentialCube.GetComponent<CubeEntitySystem>().getStateComponent().canBeAttachedToEnemy())
+                    if (potentialCube.GetComponent<CubeEntitySystem>() != null && potentialCube.GetComponent<CubeEntitySystem>().getStateComponent() != null && potentialCube.GetComponent<CubeEntitySystem>().getStateComponent().canBeAttachedToEnemy())
                     {
                         cubeAdd = potentialCube;
                         break;
@@ -90,18 +78,17 @@ public class MonsterEntitySkillGrab : MonoBehaviour
                     break;
             }
         }
-        else
+        else if (!m_createCubesOnly)
         {
             // chose cube to add to attached
             Collider[] colliders = Physics.OverlapSphere(transform.position, m_grabRadius);
-            Debug.Log(colliders.Length);
 
             float nearestDist = float.MaxValue;
 
             for (int i = 0; i < colliders.Length; i++)
             {
                 GameObject cubePotential = colliders[i].gameObject;
-                if (cubePotential.layer == 8 && cubePotential.GetComponent<CubeEntitySystem>() != null)
+                if (cubePotential.GetComponent<CubeEntitySystem>() != null)
                 {
                     if (cubePotential.GetComponent<CubeEntitySystem>().getStateComponent() != null && cubePotential.GetComponent<CubeEntitySystem>().getStateComponent().canBeAttachedToEnemy())
                     {
@@ -124,19 +111,80 @@ public class MonsterEntitySkillGrab : MonoBehaviour
             }
         }
 
+        if(m_createCubesOnly || (m_createCubesIfNoneFound && cubeAdd == null))
+        {
+            Vector3 spawnPosition = transform.position + Random.insideUnitSphere.normalized * Random.Range(50f, 100f);
+            cubeAdd = Constants.getMainCge().activateCubeUnsafe(spawnPosition);
+        }
+
         // add cube to attached
         if (cubeAdd != null)
         {
-            if (cubeAdd.GetComponent<CubeEntityState>().m_state == CubeEntityState.s_STATE_ACTIVE)
+            if (cubeAdd.GetComponent<CubeEntityState>().m_state == CubeEntityState.s_STATE_ATTACHED)
                 Debug.Log("Caution");
 
-            if(m_attachSystemScript != null)
-                m_attachSystemScript.addToGrab(cubeAdd);
-
             if (m_attachSystemScriptNew != null)
-                m_attachSystemScriptNew.addToGrab(cubeAdd);
+                m_attachSystemScriptNew.registerToGrab(cubeAdd);
         }
 
         m_grabFinishTime = m_grabCooldown + Time.time;
+    }
+
+
+    // Setter
+    /*
+    public void setValuesByScript(GameObject prefab, MonsterEntityBase baseScript)
+    {
+        MonsterEntitySkillGrab script = prefab.GetComponent<MonsterEntitySkillGrab>();
+        if (script != null)
+        {
+            m_grabNearestCube = script.m_grabNearestCube;
+            m_grabCooldown = script.m_grabCooldown;
+            m_grabRadius = script.m_grabRadius;
+            m_grabRadiusIncrease = script.m_grabRadiusIncrease;
+            m_createCubesIfNoneFound = script.m_createCubesIfNoneFound;
+            m_baseScript = baseScript;
+        }
+        else
+            Debug.Log("Warning: Tried to copy values of MonsterEntitySkillGrab from prefab, that didn't have the script attached!");
+    }
+    */
+    public void setValuesPlain(MonsterEntitySkillGrab script)
+    {
+        if (script != null)
+        {
+            m_grabNearestCube = script.m_grabNearestCube;
+            m_grabCooldown = script.m_grabCooldown;
+            m_grabRadius = script.m_grabRadius;
+            m_grabRadiusIncrease = script.m_grabRadiusIncrease;
+            m_createCubesIfNoneFound = script.m_createCubesIfNoneFound;
+            m_createCubesOnly = script.m_createCubesOnly;
+        }
+        else
+            Debug.Log("Warning: Tried to copy values of MonsterEntitySkillGrab from prefab, that didn't have the script attached!");
+    }
+
+
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        setValuesPlain((MonsterEntitySkillGrab)baseScript);
+    }
+    
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+
+    public override void assignScripts()
+    {
+        m_attachSystemScript = gameObject.GetComponent<MonsterEntityAttachSystem>();
+
+        m_attachSystemScriptNew = gameObject.GetComponent<MonsterEntityAttachSystemNew>();
+        if (m_attachSystemScriptNew == null)
+            Debug.Log("Warning: Attach system new not found!");
+
+        m_baseScript = GetComponent<MonsterEntityBase>();
+        if (m_baseScript == null)
+            Debug.Log("Warning: m_attachSystemScript was null");
     }
 }

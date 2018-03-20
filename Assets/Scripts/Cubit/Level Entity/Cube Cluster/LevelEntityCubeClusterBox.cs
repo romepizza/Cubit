@@ -104,7 +104,7 @@ public class LevelEntityCubeClusterBox : LevelEntityCubeCluster
     {
         GameObject cube = Instantiate(m_spawnPrefab);
         cube.GetComponent<CubeEntitySystem>().addComponentsAtStart();
-        cube.GetComponent<CubeEntitySystem>().setToInactive();
+        cube.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_inactivePrefab);
 
         Vector3 randomVector = Vector3.zero;
         randomVector.x = Random.Range(-m_cellSize.x + m_cubePadding.x, m_cellSize.x - m_cubePadding.x) / 2;

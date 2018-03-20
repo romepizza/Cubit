@@ -5,18 +5,18 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Save Scenes/MainMenu Old.unity
-    guid: cbbeeb25fb7286d49a552ad8f6b5b23e
-  - enabled: 1
+  - enabled: 0
+    path: Assets/Scenes/MainMenu New.unity
+    guid: 0668f85af0b06ee478748bb1ac933152
+  - enabled: 0
     path: Assets/Scenes/Cubit.unity
     guid: 0db3c9b3926e4624a9c10f166632c159
   - enabled: 1
     path: Assets/Scenes/Cubit Entity.unity
     guid: 8a855d644e8af1f4982359d491963d6b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Cubit Boid.unity
     guid: d795134c0af9cab4aba8595e37b4b1e4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Cubit New.unity
     guid: 3653baf0057ce2e48a555341fa9e6b84

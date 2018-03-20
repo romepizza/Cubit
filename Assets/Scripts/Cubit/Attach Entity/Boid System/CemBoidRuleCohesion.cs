@@ -33,6 +33,7 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
     public int m_cohesionCounter;
     Dictionary<GameObject, Vector3> m_cohesionForceVectors;
     Dictionary<GameObject, float> m_cohesionActualRadii;
+    public bool m_isInitialized;
 
     // Use this for initialization
     void Start ()
@@ -311,5 +312,21 @@ public class CemBoidRuleCohesion : CemBoidRuleBase
         agents = new List<GameObject>(m_cohesionActualRadii.Keys);
         foreach (GameObject agent in agents)
             m_cohesionActualRadii[agent] = m_cohesionRadius;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+
     }
 }

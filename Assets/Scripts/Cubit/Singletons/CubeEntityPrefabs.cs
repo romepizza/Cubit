@@ -12,6 +12,10 @@ public class CubeEntityPrefabs : MonoBehaviour
     [Header("--- (Player) ---")]
     public GameObject s_activePlayerPrefab;
     public GameObject s_attachedPlayerPrefab;
+    [Header("- (Skill Drone) -")]
+    public GameObject s_activeDronePrefab;
+    public GameObject s_attachedDronePrefab;
+    public GameObject s_coreDronePrefab;
 
     [Header("--- (Enemy) ---")]
 
@@ -22,6 +26,10 @@ public class CubeEntityPrefabs : MonoBehaviour
     [Header("- (Worm) -")]
     public GameObject s_attachedEnemyWorm;
     public GameObject s_coreEnemyWorm;
+    [Header("- (Morpher) -")]
+    public GameObject s_activeEnemyMorpher;
+    public GameObject s_attachedEnemyMorpher;
+    public GameObject s_coreEnemyMorpher;
 
 
     private static CubeEntityPrefabs s_Instance = null;

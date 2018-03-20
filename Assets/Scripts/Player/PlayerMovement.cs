@@ -204,7 +204,7 @@ public class PlayerMovement : MonoBehaviour
         // Affect CubeEntityPlayerGrabSystem aswell
         if (GetComponent<PlayerEntityAttachSystem>() != null && GetComponent<PlayerEntityAttachSystem>().m_movementAffectsCubesFactor != 0)
         {
-            foreach (GameObject cube in GetComponent<PlayerEntityAttachSystem>().m_grabbedCubes)
+            foreach (GameObject cube in GetComponent<PlayerEntityAttachSystem>().m_cubeList)
             {
                 cube.GetComponent<Rigidbody>().AddForce((forceMovementVectorTotal + airRestianceVectorTotal) * GetComponent<PlayerEntityAttachSystem>().m_movementAffectsCubesFactor, ForceMode.Acceleration);
             }

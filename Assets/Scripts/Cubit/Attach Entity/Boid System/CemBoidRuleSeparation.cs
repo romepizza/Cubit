@@ -33,6 +33,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
     public int m_separationCounter;
     Dictionary<GameObject, Vector3> m_separationForceVectors;
     Dictionary<GameObject, float> m_separationActualRadii;
+    public bool m_isInitialized;
 
 
     void Start()
@@ -199,7 +200,7 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
             m_separationActualRadii.Remove(agent);
         }
         else
-            Debug.Log("Warning: Tried to remove agent from separation vectors, but it was not in the list!");
+            ;// Debug.Log("Warning: Tried to remove agent from separation vectors, but it was not in the list!");
     }
 
     // utility
@@ -269,5 +270,22 @@ public class CemBoidRuleSeparation : CemBoidRuleBase
         agnets = new List<GameObject>(m_separationActualRadii.Keys);
         foreach (GameObject agent in agnets)
             m_separationActualRadii[agent] = m_separationRadius;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        m_separationForceVectors = new Dictionary<GameObject, Vector3>();
+        m_separationActualRadii = new Dictionary<GameObject, float>();
     }
 }

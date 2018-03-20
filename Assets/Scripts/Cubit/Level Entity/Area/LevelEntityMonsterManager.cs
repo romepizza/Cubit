@@ -23,7 +23,7 @@ public class LevelEntityMonsterManager : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.T))
         {
-            createEjector();
+            //createEjector();
         }
     }
 
@@ -34,7 +34,7 @@ public class LevelEntityMonsterManager : MonoBehaviour
         {
             foreach (GameObject cube in m_areaScript.m_cubesInArea[i])
             {
-                if (cube.GetComponent<CubeEntityState>().canBeCoreToEnemyEjector())
+                if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral())
                 {
                     potentialCubes.Add(cube);
                 }
@@ -52,7 +52,9 @@ public class LevelEntityMonsterManager : MonoBehaviour
 
         if(core != null)
         {
-            core.GetComponent<CubeEntitySystem>().setToCoreEjector();
+            Debug.Log("Warning: This line of code should not have been reached!");
+            return;
+            //core.GetComponent<CubeEntitySystem>().setToCoreEjector();
             m_ejectorsAlive.Add(core);
             core.GetComponent<MonsterEntityBase>().m_registeredInManager.Add(this);
         }

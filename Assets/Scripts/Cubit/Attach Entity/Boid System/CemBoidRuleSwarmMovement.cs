@@ -19,7 +19,7 @@ public class CemBoidRuleSwarmMovement : CemBoidRuleBase {
     Vector3 m_swarmMovementForceVector;
     Vector3 m_swarmMovementTargetPoint;
     public bool m_applyRule;
-
+    public bool m_isInitialized;
 
     void Start()
     {
@@ -79,7 +79,7 @@ public class CemBoidRuleSwarmMovement : CemBoidRuleBase {
 
     void getSwarmMovementForceVector(List<GameObject> agents)
     {
-        float distanceFactor = Mathf.Clamp01((Vector3.Distance(m_baseScript.getAverageSwarmPosition(), m_swarmMovementTargetPoint) / 200f));
+        float distanceFactor = Mathf.Clamp01((Vector3.Distance(m_baseScript.getAverageSwarmPosition(), m_swarmMovementTargetPoint) / 100f));
         m_swarmMovementForceVector = (m_swarmMovementTargetPoint - m_baseScript.getAverageSwarmPosition()).normalized * m_swarmMovementPower * distanceFactor;
     }
 
@@ -140,7 +140,9 @@ public class CemBoidRuleSwarmMovement : CemBoidRuleBase {
             return false;
         }
 
-        m_swarmMovementTargetPoint += m_swarmMovementOffset;
+        Vector3 offset = m_swarmMovementOffset;
+        //Vector3 offset = Camera.main.transform.rotation * m_swarmMovementOffset;
+        m_swarmMovementTargetPoint += offset;
 
         return true;
     }
@@ -163,5 +165,21 @@ public class CemBoidRuleSwarmMovement : CemBoidRuleBase {
 
         m_useRule = copyScript2.m_useRule;
         m_swarmMovementPower = copyScript2.m_swarmMovementPower;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+
     }
 }

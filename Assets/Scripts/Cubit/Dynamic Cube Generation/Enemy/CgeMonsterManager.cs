@@ -11,6 +11,8 @@ public class CgeMonsterManager : MonoBehaviour
 
     public List<GameObject> m_ejectorsAlive;
     public List<GameObject> m_wormsAlive;
+    public List<GameObject> m_morphersAlive;
+    public List<GameObject> m_monstersAlive;
 
     private CGE m_cge;
 
@@ -39,6 +41,16 @@ public class CgeMonsterManager : MonoBehaviour
         {
             createEjector();
         }
+
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            createWorm();
+        }
+
+        if (Input.GetKeyUp(KeyCode.B))
+        {
+            createMorpher();
+        }
     }
 
     void createEjector()
@@ -47,7 +59,7 @@ public class CgeMonsterManager : MonoBehaviour
 
         foreach(GameObject cube in m_cge.m_activeCubes)
         {
-            if(cube.GetComponent<CubeEntityState>().canBeCoreToEnemyEjector() && cube.GetComponent<MonsterEntityBase>() == null)
+            if(cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
             {
                 potentialCubes.Add(cube);
             }
@@ -64,17 +76,88 @@ public class CgeMonsterManager : MonoBehaviour
 
         if (core != null)
         {
-            core.GetComponent<CubeEntitySystem>().setToCoreEjector();
+            core.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_coreEnemyEjector);
             m_ejectorsAlive.Add(core);
+            m_monstersAlive.Add(core);
+            //core.GetComponent<MonsterEntityBase>().m_registeredInManager.Add(this);
+        }
+    }
+    void createWorm()
+    {
+        List<GameObject> potentialCubes = new List<GameObject>();
+
+        foreach (GameObject cube in m_cge.m_activeCubes)
+        {
+            if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
+            {
+                potentialCubes.Add(cube);
+            }
+        }
+
+        GameObject core = null;
+        if (potentialCubes.Count > 0)
+        {
+            int randomIndex = Random.Range(0, potentialCubes.Count);
+            core = potentialCubes[randomIndex];
+        }
+        else
+            Debug.Log("Warning: Tried to create Worm, but no fitting cube was found!");
+
+        if (core != null)
+        {
+            core.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_coreEnemyWorm);
+            m_wormsAlive.Add(core);
+            m_monstersAlive.Add(core);
+            //core.GetComponent<MonsterEntityBase>().m_registeredInManager.Add(this);
+        }
+    }
+    void createMorpher()
+    {
+        List<GameObject> potentialCubes = new List<GameObject>();
+
+        foreach (GameObject cube in m_cge.m_activeCubes)
+        {
+            if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
+            {
+                potentialCubes.Add(cube);
+            }
+        }
+
+        GameObject core = null;
+        if (potentialCubes.Count > 0)
+        {
+            int randomIndex = Random.Range(0, potentialCubes.Count);
+            core = potentialCubes[randomIndex];
+        }
+        else
+            Debug.Log("Warning: Tried to create Worm, but no fitting cube was found!");
+
+        if (core != null)
+        {
+            core.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_coreEnemyMorpher);
+            m_morphersAlive.Add(core);
+            m_monstersAlive.Add(core);
             //core.GetComponent<MonsterEntityBase>().m_registeredInManager.Add(this);
         }
     }
 
-    public void deregisterEnemy(GameObject enemyScript)
+    public void deregisterEnemy(MonsterEntityAbstractBase enemyScript)
     {
         if (enemyScript.GetType() == typeof(MonsterEntityEjector))
         {
-            m_ejectorsAlive.Remove(enemyScript);
+            m_ejectorsAlive.Remove(enemyScript.gameObject);
         }
+
+        if(enemyScript.GetType() == typeof(MonsterEntityWorm))
+        {
+            m_wormsAlive.Remove(enemyScript.gameObject);
+        }
+
+        if(enemyScript.GetType() == typeof(MonsterEntityMorpher))
+        {
+            m_morphersAlive.Remove(enemyScript.gameObject);
+        }
+
+        m_monstersAlive.Remove(enemyScript.gameObject);
     }
 }

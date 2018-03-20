@@ -10,7 +10,7 @@ public class CemBoidBase : AttachEntityBase
     //public static float s_cameraRotationSpeed = 3f;
     //public static bool s_moveCameraWhileIdle = true;
 
-    public static bool s_calculateInBase = true;
+    public static bool s_calculateInBase = false;
     public static bool s_calculateInFixedUpdate = false;
 
     //public GameObject m_spawnPrefab;
@@ -25,6 +25,7 @@ public class CemBoidBase : AttachEntityBase
     public float m_affectedByplayerMovementPower;
 
     [Header("--- (Leader) ---")]
+    public bool m_gameObjectIsLeader;
     public GameObject m_leader;
     public bool m_leaderApplyPostMovement;
 
@@ -40,17 +41,21 @@ public class CemBoidBase : AttachEntityBase
     public Vector3 m_averageSwarmMovement;
     public bool m_averageSwarmPositionCalculated;
     public bool m_averageSwarmMovementCalculated;
+    public bool m_isInitialized;
     //public bool m_isFreeze;
     // Use this for initialization
     void Start ()
     {
-        initializeStuff();
+        if(!m_isInitialized)
+            initializeStuff();
 	}
 
     void initializeStuff()
     {
         m_rules = new List<CemBoidRuleBase>();
         m_agents = new List<GameObject>();
+
+        m_isInitialized = true;
     }
 	
 	// Update is called once per frame
@@ -233,17 +238,22 @@ public class CemBoidBase : AttachEntityBase
                 foreach (CemBoidAttached attachedScript in attachedScripts)
                 {
                     if (attachedScript.m_isAttachedToBase == this)
+                    {
                         isLegit = false;
+                    }
                 }
                 
                 if (isLegit)
                 {
                     m_agents.Add(agent);
 
+                    if(m_leader != null)
+                        agent.GetComponent<Rigidbody>().velocity = m_leader.GetComponent<Rigidbody>().velocity;
 
                     CemBoidAttached attachedScript = agent.AddComponent<CemBoidAttached>();
                     attachedScript.m_isAttachedToBase = this;
 
+                    getRules();
                     foreach (CemBoidRuleBase rule in m_rules)
                     {
                         rule.onAddAgent(m_agents, agent);
@@ -264,11 +274,22 @@ public class CemBoidBase : AttachEntityBase
             {
                 if (m_agents.Contains(agent))
                 {
+                    getRules();
                     foreach (CemBoidRuleBase rule in m_rules)
                     {
                         rule.onRemoveAgent(m_agents, agent);
                     }
+                    CemBoidAttached[] attachedScripts = agent.GetComponents<CemBoidAttached>();
+                    foreach (CemBoidAttached attachedScript in attachedScripts)
+                    {
+                        if (attachedScript.m_isAttachedToBase == this)
+                        {
+                            Destroy(attachedScript);
+                        }
+                    }
+
                     m_agents.Remove(agent);
+                    
                 }
                 else
                     Debug.Log("Warning: Tried to remove agent that was not in the list!");
@@ -344,6 +365,24 @@ public class CemBoidBase : AttachEntityBase
                 }
             }
         }
+    }
+    public void setValuesFlat(CemBoidBase copyScript)
+    {
+        m_maxSwarmSize = copyScript.m_maxSwarmSize;
+        m_maxIndividualSpeed = copyScript.m_maxIndividualSpeed;
+        m_airResistancePower = copyScript.m_airResistancePower;
+        m_lookInFlightDirection = copyScript.m_lookInFlightDirection;
+        m_lookInFlightDirectionPower = copyScript.m_lookInFlightDirectionPower;
+
+        //m_spawnPrefab = copyScript.m_spawnPrefab;
+        m_affectedByplayerMovementPower = copyScript.m_affectedByplayerMovementPower;
+
+        m_gameObjectIsLeader = copyScript.m_gameObjectIsLeader;
+        //m_leader = copyScript.m_leader;
+        m_leaderApplyPostMovement = copyScript.m_leaderApplyPostMovement;
+
+        m_allowInput = copyScript.m_allowInput;
+        m_inputRadius = copyScript.m_inputRadius;
     }
 
     public override void setValuesByPrefab(GameObject prefab)
@@ -467,4 +506,41 @@ public class CemBoidBase : AttachEntityBase
 
     }
     */
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValuesFlat((CemBoidBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        List<GameObject> agents = new List<GameObject>(m_agents);
+        foreach (GameObject agent in m_agents)
+        {
+            CemBoidAttached[] scripts = GetComponents<CemBoidAttached>();
+            foreach(CemBoidAttached script in scripts)
+            {
+                if(script.m_isAttachedToBase == this)
+                {
+                    Destroy(script);
+                }
+            }
+        }
+        List<CemBoidRuleBase> rules = new List<CemBoidRuleBase>(m_rules);
+        foreach(CemBoidRuleBase rule in m_rules)
+        {
+            rule.prepareDestroyScript();
+        }
+        Destroy(this);
+
+    }
+    public override void assignScripts()
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        if (m_gameObjectIsLeader)
+            m_leader = this.gameObject;
+    }
 }

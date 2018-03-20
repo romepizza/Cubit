@@ -1,12 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerEntityAttachSystem : AttachSystemBase
 {
+    public GameObject m_showGrabbedNumberObject;
     [Header("----- SETTINGS -----")]
     public float m_duration = -1;
-    public int m_maxCubesGrabbed;
+    
 
     [Header("--- (Catch System) ---")]
     public Vector3 m_catchOffset;
@@ -19,13 +21,12 @@ public class PlayerEntityAttachSystem : AttachSystemBase
 
         
     [Header("--- (Cube Movement) ---")]
-    public float m_movementAffectsCubesFactor;
     /*
     public float m_cubeMovementPower;
     public float m_maxSpeed;
     */
     [Header("----- DEBUG -----")]
-    public List<GameObject> m_grabbedCubes;
+    //public List<GameObject> m_cubeList;
     public AttachEntityBase m_attachEntity;
     //public List<CubeEntityMovementFollowPoint> m_grabbedCubesFollowPointScripts;
 
@@ -61,17 +62,17 @@ public class PlayerEntityAttachSystem : AttachSystemBase
     // Grab System
     public bool addToGrab(GameObject cubeAdd)
     {
-        if (m_grabbedCubes.Count < m_maxCubesGrabbed)
+        if (m_cubeList.Count < m_maxCubesGrabbed)
         {
             CubeEntityAttached attachedScript = cubeAdd.GetComponent<CubeEntitySystem>().getStateComponent().addAttachedScript();
             attachedScript.setValuesByObject(this.gameObject, this);
             
-            cubeAdd.GetComponent<CubeEntitySystem>().setToAttachedPlayer();
+            cubeAdd.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_attachedPlayerPrefab);
             //CubeEntityMovementFollowPoint script = cubeAdd.GetComponent<CubeEntitySystem>().getMovementComponent().getSingleFollowPointScript();
-            m_grabbedCubes.Add(cubeAdd);
+            m_cubeList.Add(cubeAdd);
             m_attachEntity.addAgent(cubeAdd);
             //m_grabbedCubesFollowPointScripts.Add(script);
-            
+            updateGrabbedText();
             return true;
         }
         else
@@ -79,12 +80,13 @@ public class PlayerEntityAttachSystem : AttachSystemBase
     }
     public override void deregisterCube(GameObject cubeRemove)
     {
-        if (m_grabbedCubes.Contains(cubeRemove))
+        if (m_cubeList.Contains(cubeRemove))
         {
             cubeRemove.GetComponent<CubeEntityState>().removeAttachedScript();
-            int removeIndex = m_grabbedCubes.IndexOf(cubeRemove);
-            m_grabbedCubes.RemoveAt(removeIndex);
+            int removeIndex = m_cubeList.IndexOf(cubeRemove);
+            m_cubeList.RemoveAt(removeIndex);
             m_attachEntity.removeAgent(cubeRemove);
+            updateGrabbedText();
             //m_grabbedCubesFollowPointScripts.RemoveAt(removeIndex);
         }
         else
@@ -94,7 +96,7 @@ public class PlayerEntityAttachSystem : AttachSystemBase
     // Catch System
     public void manageCatchSystem()
     {
-        if (m_grabbedCubes.Count > 0)
+        if (m_cubeList.Count > 0)
         {
             //m_catchPoint = transform.position + /*Camera.main.transform.rotation **/ m_catchOffset;
             moveGrabbedCubesSinglePoint();
@@ -141,4 +143,34 @@ public class PlayerEntityAttachSystem : AttachSystemBase
         }
     }
     */
+    // utility
+    void updateGrabbedText()
+    {
+        if (m_showGrabbedNumberObject == null || m_showGrabbedNumberObject.GetComponent<Text>() == null)
+            return;
+
+        if (m_cubeList.Count > 0)
+            m_showGrabbedNumberObject.GetComponent<Text>().text = m_cubeList.Count.ToString();
+        else
+            m_showGrabbedNumberObject.GetComponent<Text>().text = "";
+    }
+
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        Debug.Log("Warning: This Method should not be called!");
+    }
+    
+
+    public override void prepareDestroyScript()
+    {
+        List<GameObject> list = new List<GameObject>(m_cubeList);
+        foreach (GameObject agent in list)
+            deregisterCube(agent);
+    }
+    public override void assignScripts()
+    {
+        Debug.Log("Warning: This Method should not be called!");
+    }
 }

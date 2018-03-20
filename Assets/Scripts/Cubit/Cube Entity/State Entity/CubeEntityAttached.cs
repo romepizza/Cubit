@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeEntityAttached : MonoBehaviour
+public class CubeEntityAttached : EntityCopiableAbstract
 {
     public GameObject m_attachedToGameObject;
     public int m_affiliation;
@@ -24,13 +24,13 @@ public class CubeEntityAttached : MonoBehaviour
         {
             m_attachedToGameObject = gameObject;
             m_affiliation = CubeEntityState.s_AFFILIATION_PLAYER;
-            m_monster = CubeEntityState.s_MONSTER_NONE;
+            m_monster = CubeEntityState.s_TYPE_NONE;
         }
         else if (gameObject.GetComponent<CubeEntitySystem>() != null)
         {
             m_attachedToGameObject = gameObject;
             m_affiliation = gameObject.GetComponent<CubeEntitySystem>().getStateComponent().m_affiliation;
-            m_monster = gameObject.GetComponent<CubeEntitySystem>().getStateComponent().m_monster;
+            m_monster = gameObject.GetComponent<CubeEntitySystem>().getStateComponent().m_type;
         }
         else
             Debug.Log("Warning: Something might have gone wrong here!");
@@ -44,5 +44,20 @@ public class CubeEntityAttached : MonoBehaviour
         }
         else
             Debug.Log("Warning: m_attachSystemScript was null");
+    }
+
+    
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        
+    }
+    
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        m_attachSystemScript = GetComponent<AttachSystemBase>();
     }
 }

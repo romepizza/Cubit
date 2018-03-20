@@ -38,13 +38,13 @@ public class CgeFormRect : CgeForm
             moveForm(direction);
 
         manageQueues();
-        /*
+        
         if(m_showCells)
         {
             for (int i = 0; i < m_cells.Count; i++)
-                m_cells[i].drawCube();
+                m_cells[i].drawCell();
         }
-        */
+        
     }
 
     // Management

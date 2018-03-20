@@ -18,18 +18,60 @@ public class CubeEntityTransform : MonoBehaviour
         Mesh mesh = /*Instantiate(*/transformObject.GetComponent<MeshFilter>().sharedMesh/*)*/;
         GetComponent<MeshFilter>().sharedMesh = mesh;
         transform.localScale = transformObject.transform.localScale;
+        Collider[] colliders = GetComponents<Collider>();
+        if (colliders.Length > 0)
+        {
+            for (int i = colliders.Length - 1; i >= 0; i--)
+            {
+                //Debug.Log("i: " + i);
+                Destroy(colliders[i]);
+            }
+        }
 
+
+        
+
+        /*
         BoxCollider[] boxColliders = GetComponents<BoxCollider>();
         SphereCollider[] shpereColliders = GetComponents<SphereCollider>();
         CapsuleCollider[] capsuleColliders = GetComponents<CapsuleCollider>();
 
-        for (int i = 0; i < boxColliders.Length; i++)
+        for (int i = boxColliders.Length; i >0; i--)
             Destroy(boxColliders[i]);
         for (int i = 0; i < shpereColliders.Length; i++)
             Destroy(shpereColliders[i]);
         for (int i = 0; i < capsuleColliders.Length; i++)
             Destroy(capsuleColliders[i]);
-
+            
+        */
+        BoxCollider[] boxColliders = transformObject.GetComponents<BoxCollider>();
+        foreach (BoxCollider collider in boxColliders)
+        {
+            BoxCollider col = gameObject.AddComponent<BoxCollider>();
+            col.size = collider.size;
+            col.center = collider.center;
+            col.material = collider.sharedMaterial;
+            col.enabled = collider.enabled;
+        }
+        SphereCollider[] shpereColliders = transformObject.GetComponents<SphereCollider>();
+        foreach (SphereCollider collider in shpereColliders)
+        {
+            SphereCollider col = gameObject.AddComponent<SphereCollider>();
+            col.radius = collider.radius;
+            col.center = collider.center;
+            col.material = collider.sharedMaterial;
+        }
+        CapsuleCollider[] capsuleColliders = transformObject.GetComponents<CapsuleCollider>();
+        foreach (CapsuleCollider collider in capsuleColliders)
+        {
+            CapsuleCollider col = gameObject.AddComponent<CapsuleCollider>();
+            col.radius = collider.radius;
+            col.direction = collider.direction;
+            col.center = collider.center;
+            col.height = collider.height;
+            col.material = collider.sharedMaterial;
+        }
+        /*
         if (transformObject.GetComponent<BoxCollider>() != null)
         {
             gameObject.AddComponent<BoxCollider>();
@@ -53,6 +95,7 @@ public class CubeEntityTransform : MonoBehaviour
             GetComponent<CapsuleCollider>().height = transformObject.GetComponent<CapsuleCollider>().height;
             GetComponent<CapsuleCollider>().material = transformObject.GetComponent<CapsuleCollider>().sharedMaterial;
         }
+        */
 
         Rigidbody rb = transformObject.GetComponent<Rigidbody>();
         if(rb != null)
@@ -68,5 +111,6 @@ public class CubeEntityTransform : MonoBehaviour
                 myRb.collisionDetectionMode = rb.collisionDetectionMode;
             }
         }
+
     }
 }

@@ -8,11 +8,14 @@ public class CubeEntityMovement : MonoBehaviour
     [Header("----- SETTINGS -----")]
     [Header("----- DEBUG -----")]
     public CubeEntitySystem m_entitySystemScript;
-    public List<CubeEntityMovementAcceleration> m_accelerationComponents;
-    public List<CubeEntityMovementFollowPoint> m_followPointsComponents;
+    //public List<CubeEntityMovementAcceleration> m_accelerationComponents;
+    //public List<CubeEntityMovementFollowPoint> m_followPointsComponents;
+    //public List<CubeEntityMovementHoming> m_homingComponents;
+    public List<CubeEntityMovementAbstract> m_movementComponents;
 
 
     // Getter
+    /*
     public CubeEntityMovementAcceleration getSingleAccelerationScript()
     {
         if (m_accelerationComponents.Count != 1)
@@ -33,49 +36,56 @@ public class CubeEntityMovement : MonoBehaviour
         else
             return m_followPointsComponents[0];
     }
+    */
 
-    // Remove Components
-    public void removeAllMovementComponents()
+
+    // --- Add Components ---
+    public CubeEntityMovementAbstract addMovementComponent(CubeEntityMovementAbstract copyScript, GameObject target, Vector3 targetPosition)
     {
-        removeAllAccelerationComponents();
-        removeAllFollowPointComponents();
-    }
-    public void removeAllAccelerationComponents()
-    {
-        for (int i = m_accelerationComponents.Count - 1; i >= 0; i--)
-            removeAccelerationComponent(m_accelerationComponents[i]);
-        m_accelerationComponents = new List<CubeEntityMovementAcceleration>();
-    }
-    public void removeAccelerationComponent(CubeEntityMovementAcceleration removeScript)
-    {
-        if(m_accelerationComponents.Contains(removeScript))
+        if (copyScript == null)
         {
-            m_accelerationComponents.Remove(removeScript);
-            Destroy(removeScript);
+            Debug.Log("Aborted: copyScript was null!");
         }
-        else
-        {
-            Debug.Log("Warning: Tried to remove CubeEntityMovementAcceleration that wasn't registered!");
-        }
+        System.Type type = copyScript.GetType();
+        Component copy = gameObject.AddComponent(type);
+
+        ((CubeEntityMovementAbstract)copy).enabled = true;
+        ((CubeEntityMovementAbstract)copy).pasteScript(copyScript, target, targetPosition);
+        ((CubeEntityMovementAbstract)copy).assignScripts();
+        ((CubeEntityMovementAbstract)copy).m_useThis = true;
+
+        return (CubeEntityMovementAbstract)copy;
     }
 
-    public void removeAllFollowPointComponents()
+    // --- Remove Components ---
+    public void removeComponents(System.Type type)
     {
-        for (int i = m_followPointsComponents.Count - 1; i >= 0; i--)
-            removeFollowPointComponent(m_followPointsComponents[i]);
-        m_followPointsComponents = new List<CubeEntityMovementFollowPoint>();
+        int i = 0;
+        Component component;
+        do
+        {
+            component = GetComponent(type) as Component;
+            if (component == null)
+            {
+                break;
+            }
+            
+            CubeEntityMovementAbstract movementComponent = (CubeEntityMovementAbstract)component;
+            if (m_movementComponents.Contains(movementComponent))
+                m_movementComponents.Remove(movementComponent);
+            movementComponent.prepareDestroyScript();
+            i++;
+        } while (component == null && i < 20);
+        if(i >= 15)
+        {
+            Debug.Log("Warning: >15 movementscripts were attached");
+        }
     }
-    public void removeFollowPointComponent(CubeEntityMovementFollowPoint removeScript)
+    public void removeComponent(CubeEntityMovementAbstract removeScript)
     {
-        if (m_followPointsComponents.Contains(removeScript))
-        {
-            m_followPointsComponents.Remove(removeScript);
-            Destroy(removeScript);
-        }
-        else
-        {
-            Debug.Log("Warning: Tried to remove CubeEntityMovementFollowPoint that wasn't registered!");
-        }
+        if (m_movementComponents.Contains(removeScript))
+            m_movementComponents.Remove(removeScript);
+        removeScript.prepareDestroyScript();
     }
 
     // Add Movement Components
@@ -92,7 +102,7 @@ public class CubeEntityMovement : MonoBehaviour
         tmp.m_maxSpeed = maxSpeed;
         tmp.m_movementScript = this;
 
-        m_accelerationComponents.Add(tmp);
+        m_movementComponents.Add(tmp);
 
         return tmp;
     }
@@ -108,7 +118,28 @@ public class CubeEntityMovement : MonoBehaviour
         //tmp.m_useSmoothArrival = smoothArrival;
         tmp.m_movementScript = this;
 
-        m_followPointsComponents.Add(tmp);
+        m_movementComponents.Add(tmp);
+
+        return tmp;
+    }
+    public CubeEntityMovementHoming addHomingComponent(GameObject target)
+    {
+        CubeEntityMovementHoming tmp = gameObject.AddComponent<CubeEntityMovementHoming>();
+
+        /*
+        tmp.m_accelerationPower = ;
+        tmp.m_maxSpeed = ;
+        tmp.m_deviationPower = ;
+        tmp.m_duration = ;
+        tmp.m_maxAngle = ;
+        tmp.m_collisionSpeed = ;
+        */
+        
+        tmp.m_target = target;
+        tmp.m_movementScript = this;
+        tmp.initializeStuff();
+
+        m_movementComponents.Add(tmp);
 
         return tmp;
     }

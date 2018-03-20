@@ -2,37 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterEntityWorm : MonsterEntityBase
+public class MonsterEntityWorm : MonsterEntityAbstractBase
 {
     [Header("----- SETTINGS -----")]
     [Header("----- DEBUG -----")]
     [Header("--- (Scripts) ---")]
     public bool placeHolder;
-
     // Use this for initialization
-    void Start()
-    {
-        m_isMovable = true;
-
-        m_rb.mass = 1f;
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if (m_rb.velocity.magnitude > 0.001f)
-        {
-            m_rb.velocity = Vector3.zero;
-        }
-    }
-
-    public void setValuesByScriptEjector(GameObject prefab)
+   
+    public override void pasteScript(EntityCopiableAbstract baseScript)
     {
 
     }
 
-    public void destroyScript()
+
+    public override void prepareDestroyScript()
     {
+        Constants.getMainCge().GetComponent<CgeMonsterManager>().deregisterEnemy(this);
         Destroy(this);
+    }
+    public override void assignScripts()
+    {
+
     }
 }

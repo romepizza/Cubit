@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeEntityEndState : MonoBehaviour
+public class CubeEntityEndState : EntityCopiableAbstract
 {
     [Header("----- SETTINGS -----")]
     public float m_duration;
@@ -17,7 +17,9 @@ public class CubeEntityEndState : MonoBehaviour
     {
 		if(m_durationEndTime < Time.time)
         {
-            m_cubeSystemScript.setToInactive();
+            if (GetComponent<MonsterEntityBase>() != null)
+                GetComponent<MonsterEntityBase>().die();
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_inactivePrefab);
         }
 	}
 
@@ -40,4 +42,18 @@ public class CubeEntityEndState : MonoBehaviour
         m_cubeSystemScript = systemScript;
     }
 
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        
+    }
+
+    // abstract
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        
+    }
 }

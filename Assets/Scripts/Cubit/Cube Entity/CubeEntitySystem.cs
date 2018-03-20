@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class CubeEntitySystem : MonoBehaviour
 {
-    public bool doStuff;
-    public GameObject test;
     [Header("----- SETTINGS -----")]
 
     [Header("----- DEBUG -----")]
     public CubeEntityAppearance m_appearanceComponent;
     public CubeEntityCharge m_chargeComponent;
-    public CubeEntityCollision m_collisionComponent;
+    //public CubeEntityCollision m_collisionComponent;
     public CubeEntityMovement m_movementComponent;
     public CubeEntityState m_stateComponent;
     public CubeEntityTransform m_transformComponent;
@@ -21,19 +19,9 @@ public class CubeEntitySystem : MonoBehaviour
     void Start ()
     {
         addComponentsAtStart();
-        //getPrefapSystem().setToInactive();
     }
+    
 
-    /*
-    void Update ()
-    {
-        if (doStuff)
-        {
-            doTestStuff();
-            doStuff = false;
-        }
-    }
-        */
 
 
     public void addComponentsAtStart()
@@ -48,10 +36,10 @@ public class CubeEntitySystem : MonoBehaviour
         //m_cubeEntityChargeComponent = GetComponent<CubeEntityCharge>();
         //GetComponent<CubeEntityCharge>() = this;
 
-        if(GetComponent<CubeEntityCollision>() == null)
-            gameObject.AddComponent<CubeEntityCollision>();
-        m_collisionComponent = GetComponent<CubeEntityCollision>();
-        GetComponent<CubeEntityCollision>().m_entitySystemScript = this;
+        //if(GetComponent<CubeEntityCollision>() == null)
+            //gameObject.AddComponent<CubeEntityCollision>();
+        //m_collisionComponent = GetComponent<CubeEntityCollision>();
+        //GetComponent<CubeEntityCollision>().m_entitySystemScript = this;
 
         if(GetComponent<CubeEntityMovement>() == null)
            gameObject.AddComponent<CubeEntityMovement>();
@@ -74,7 +62,9 @@ public class CubeEntitySystem : MonoBehaviour
         GetComponent<CubeEntityPrefapSystem>().m_entitySystemScript = this;
     }
 
-    // Prefabs
+    /*
+    // --- Prefabs ---
+    // neutral
     public void setToInactive()
     {
         getPrefapSystem().setToInactive();
@@ -83,52 +73,152 @@ public class CubeEntitySystem : MonoBehaviour
     {
         getPrefapSystem().setToActiveNeutral();
     }
-    public void setToActivePlayer(/*Vector3 targetPoint, float duration, float power, float maxSpeed*/)
+    // player
+    public void setToActivePlayer()
     {
         getPrefapSystem().setToActivePlayer();
-        //getMovementComponent().removeAllMovementComponents();
-        //getMovementComponent().addAccelerationComponent(targetPoint, duration, power, maxSpeed);
     }
     public void setToAttachedPlayer(Vector3 targetPoint, float duration, float power, float maxSpeed)
     {
-        getMovementComponent().removeAllMovementComponents();
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
         getPrefapSystem().setToAttachedPlayer();
-        //getMovementComponent().addFollowPointComponent(targetPoint, duration, power, maxSpeed);
     }
     public void setToAttachedPlayer()
     {
-        getMovementComponent().removeAllMovementComponents();
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
         getPrefapSystem().setToAttachedPlayer();
     }
-    public void setToActiveEnemyEjector(/*Vector3 targetPoint, float duration, float power, float maxSpeed*/)
+    // ejector
+    public void setToActiveEnemyEjector()
     {
         getPrefapSystem().setToActiveEnemyEjector();
-        //getMovementComponent().removeAllMovementComponents();
-        //getMovementComponent().addAccelerationComponent(targetPoint, duration, power, maxSpeed);
     }
     public void setToAttachedEnemyEjector(Vector3 targetPoint, float duration, float power, float maxSpeed)
     {
         getPrefapSystem().setToAttachedEnemyEjector();
-        getMovementComponent().removeAllAccelerationComponents();
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
         getMovementComponent().addFollowPointComponent(targetPoint, duration, power, maxSpeed);
     }
-    public void setToAttachedEnemyWorm()
+    public void setToAttachedEnemyEjector()
     {
-        getPrefapSystem().setToAttachedEnemyWorm();
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
+        getPrefapSystem().setToAttachedEnemyEjector();
     }
     public void setToCoreEjector()
     {
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
         getPrefapSystem().setToCoreEjector();
-        getMovementComponent().removeAllAccelerationComponents();
-
+    }
+    // worm
+    public void setToAttachedEnemyWorm()
+    {
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
+        getPrefapSystem().setToAttachedEnemyWorm();
     }
     public void setToCoreWorm()
     {
         getPrefapSystem().setToCoreWorm();
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
+    }
+    // morpher
+    public void setToActiveEnemyMorpher()
+    {
+        getPrefapSystem().setToActiveEnemyMorpher();
+    }
+    public void setToAttachedEnemyMorpher()
+    {
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
+        getPrefapSystem().setToAttachedEnemyMorpher();
+    }
+    public void setToCoreMorpher()
+    {
+        getMovementComponent().removeComponents(typeof(CubeEntityMovementAbstract));
+        getPrefapSystem().setToCoreMorpher();
+    }
+    */
+    // Dynamically
+    public void setAttachedDynamicly(CubeEntityState stateScript)
+    {
+        // player
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_PLAYER)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_attachedPlayerPrefab);
+
+        // drone
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_DRONE)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_attachedDronePrefab);
+
+        // ejector
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_EJECTOR)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_attachedEnemyEjector);
+
+        // worm
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_WORM)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_attachedEnemyWorm);
+
+        // Morpher
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_MORPHER)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_attachedEnemyMorpher);
+    }
+    public void setActiveDynamicly(CubeEntityState stateScript)
+    {
+        // player
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_PLAYER)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activePlayerPrefab);
+
+        // drone
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_DRONE)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeDronePrefab);
+
+        // ejector
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_EJECTOR)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyEjector);
+
+        // worm
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_WORM)
+        {
+            if(Random.Range(0f, 1f) > 0.5f)
+                GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyEjector);
+            else
+                GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyMorpher);
+
+        }
+
+        // Morpher
+        if (stateScript.GetComponent<CubeEntityState>().m_type == CubeEntityState.s_TYPE_MORPHER)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyMorpher);
+    }
+    public void setActiveDynamicly(int type)
+    {
+        // player
+        if (type == CubeEntityState.s_TYPE_PLAYER)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activePlayerPrefab);
+
+        // drone
+        if (type == CubeEntityState.s_TYPE_DRONE)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeDronePrefab);
+
+        // ejector
+        if (type == CubeEntityState.s_TYPE_EJECTOR)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyEjector);
+
+        // worm
+        if (type == CubeEntityState.s_TYPE_WORM)
+        {
+            if (Random.Range(0f, 1f) > 0.5f)
+                GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyEjector);
+            else
+                GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyMorpher);
+
+        }
+
+        // Morpher
+        if (type == CubeEntityState.s_TYPE_MORPHER)
+            GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeEnemyMorpher);
     }
 
 
     // Setter
+    /*
     public bool setAppearanceComponent(GameObject appearanceSettings)
     {
         if (m_appearanceComponent == null)
@@ -291,6 +381,7 @@ public class CubeEntitySystem : MonoBehaviour
     {
         return false;
     }
+    */
 
     // Getter
     public CubeEntityAppearance getAppearanceComponent()
@@ -303,7 +394,7 @@ public class CubeEntitySystem : MonoBehaviour
     }
     public CubeEntityCollision getCollisionComponent()
     {
-        return m_collisionComponent;
+        return null;
     }
     public CubeEntityMovement getMovementComponent()
     {
@@ -321,27 +412,4 @@ public class CubeEntitySystem : MonoBehaviour
     {
         return m_prefapSystemComponent;
     }
-
-
-    void OnCollisionEnter(Collision colision)
-    {
-        //if(colision.gameObject == Constants.getPlayer() && getStateComponent().canBeCoreToEnemy())
-            //setToCoreEjector();
-    }
-
-    void OnDrawGizmos()
-    {
-        if(doStuff)
-        {
-            
-            //doStuff = false;
-        }
-    }
-
-    void doTestStuff()
-    {
-        setToCoreEjector();
-    }
-
-
 }

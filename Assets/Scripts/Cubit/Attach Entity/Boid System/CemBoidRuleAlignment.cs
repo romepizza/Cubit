@@ -33,6 +33,7 @@ public class CemBoidRuleAlignment : CemBoidRuleBase
     public int m_alignmentCounter;
     Dictionary<GameObject, Vector3> m_alignmentForceVectors;
     Dictionary<GameObject, float> m_alignmentActualRadii;
+    public bool m_isInitialized;
 
     // Use this for initialization
     void Start()
@@ -282,5 +283,21 @@ public class CemBoidRuleAlignment : CemBoidRuleBase
         agnets = new List<GameObject>(m_alignmentActualRadii.Keys);
         foreach (GameObject agent in agnets)
             m_alignmentActualRadii[agent] = m_alignmentRadius;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        
     }
 }

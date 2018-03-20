@@ -11,6 +11,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     public float m_predatorRadius;
     public int m_predatorMaxPartners;
     public int m_predatorMaxPartnerChecks;
+    
 
     [Header("- (Predators) -")]
     public bool m_predatorFillPredatorsOnAdd;
@@ -23,6 +24,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
 
     [Header("--- (Leader) ---")]
     public float m_predatorAffectLeader;
+    public bool m_leaderIsPredator;
 
     [Header("--- (Adjust Radius) ---")]
     public bool m_useAdjustRadius;
@@ -44,17 +46,25 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     public List<GameObject> m_predatorNotPredators;
     Dictionary<GameObject, float> m_predatorActualRadii;
     public bool m_predatorPlayerIsPredator;
+    public bool m_isInitialized;
+    public bool m_initialPredatorsReached;
 
     void Start()
     {
-        initializeStuff();
+        if (!m_isInitialized)
+        {
+            initializeStuff();
+            manageInitialPredator();
+        }
     }
     void initializeStuff()
     {
         m_predatorForceVectors = new Dictionary<GameObject, Vector3>();
         m_predatorActualRadii = new Dictionary<GameObject, float>();
         m_predatorNotPredators = new List<GameObject>();
-        manageInitialPredator();
+        m_predatorPredators = new List<GameObject>();
+
+        m_isInitialized = true;
     }
 
     void Update()
@@ -97,19 +107,21 @@ public class CemBoidRulePredator : CemBoidRuleBase {
         if (!m_useRule)
             return;
 
+
         foreach (GameObject agent in agents)
         {
             if (m_predatorForceVectors.ContainsKey(agent))
                 m_predatorForceVectors[agent] = Vector3.zero;
         }
-        
-        foreach(GameObject predator in m_predatorPredators)
-        { 
+
+        foreach (GameObject predator in m_predatorPredators)
+        {
             int nearAgentsCount = 0;
             int nearObjectsCount = 0;
 
             if (predator == null)
                 continue;
+
 
             Collider[] colliders = Physics.OverlapSphere(predator.transform.position, m_predatorActualRadii[predator]);
             // adjust radius
@@ -160,6 +172,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                 }
             }
         }
+
     }
 
     public override void applyRule(List<GameObject> agents)
@@ -191,8 +204,12 @@ public class CemBoidRulePredator : CemBoidRuleBase {
         {
             m_predatorForceVectors.Add(agent, Vector3.zero);
             m_predatorNotPredators.Add(agent);
-            if (m_predatorFillPredatorsOnAdd)
+            if (m_predatorFillPredatorsOnAdd && !m_initialPredatorsReached)
+            {
                 addPredator(agent);
+                if (m_predatorPredators.Count >= m_predatorNumberInitialPredators)
+                    m_initialPredatorsReached = true;
+            }
         }
         else
             Debug.Log("Warning: Tried to add agent to predator vectors, but it was already in the list!");
@@ -263,36 +280,40 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     {
         if (m_predatorPredators.Count < m_predatorMaxPredators)
         {
-            if (predator != null && !m_predatorPredators.Contains(predator))
+            if (predator != null)
             {
-                CemBoidAttached script = null;
-                CemBoidAttached[] attachedScripts = predator.GetComponents<CemBoidAttached>();
-                foreach (CemBoidAttached attachedScript in attachedScripts)
+                if (!m_predatorPredators.Contains(predator))
                 {
-                    if (attachedScript.m_isAttachedToBase == m_baseScript)
+                    CemBoidAttached script = null;
+                    CemBoidAttached[] attachedScripts = predator.GetComponents<CemBoidAttached>();
+                    foreach (CemBoidAttached attachedScript in attachedScripts)
                     {
-                        script = attachedScript;
+                        if (attachedScript.m_isAttachedToBase == m_baseScript)
+                        {
+                            script = attachedScript;
+                        }
                     }
-                }
+                    m_predatorPredators.Add(predator);
+                    m_predatorActualRadii.Add(predator, m_predatorRadius);
+                    m_predatorNotPredators.Remove(predator);
 
-                m_predatorPredators.Add(predator);
-                m_predatorActualRadii.Add(predator, m_predatorRadius);
-                m_predatorNotPredators.Remove(predator);
+                    if (script != null)
+                    {
+                        if (script.m_predatorBaseScripts.Contains(this))
+                            Debug.Log("Warning: Tried to mark attached script of predator, but it was already marked!");
+                        else
+                            script.m_predatorBaseScripts.Add(this);
 
-                if (script != null)
-                {
-                    if (script.m_predatorBaseScripts.Contains(this))
-                        Debug.Log("Warning: Tried to mark attached script of predator, but it was already marked!");
+                        if (m_predatorsHighlightPredators && predator.GetComponent<CubeEntitySystem>() != null && m_predatorMaterial != null)
+                            predator.GetComponent<Renderer>().material = m_predatorMaterial;
+
+                        return true;
+                    }
                     else
-                        script.m_predatorBaseScripts.Add(this);
-
-                    if (m_predatorsHighlightPredators && predator.GetComponent<CubeEntitySystem>() != null && m_predatorMaterial != null)
-                        predator.GetComponent<Renderer>().material = m_predatorMaterial;
-
-                    return true;
+                        ;// Debug.Log("Warning: Tried to add object to predators, that was already in the list!");
                 }
                 else
-                    ;// Debug.Log("Warning: Tried to add object to predators, that was already in the list!");
+                    ;//Debug.Log("Aborted: predator already was a predator!");
             }
             else
             {
@@ -344,7 +365,7 @@ public class CemBoidRulePredator : CemBoidRuleBase {
                     return true;
                 }
                 else
-                    Debug.Log("Warning: Tried to add object to predators, that was already in the list!");
+                    ;//Debug.Log("Warning: Tried to add object to predators, that was already in the list!");
             }
             else
             {
@@ -514,57 +535,6 @@ public class CemBoidRulePredator : CemBoidRuleBase {
     // copy
     public override void setValues(CemBoidRuleBase copyScript)
     {
-        /*if (copyScript == null)
-        {
-            Debug.Log("Aborted: CemBoidRulePredator script was null!");
-            return;
-        }
-        if (copyScript.GetType() != this.GetType())
-        {
-            Debug.Log("Aborted: Copy script wasn't predator script!");
-            return;
-        }
-
-        CemBoidRulePredator copyScript2 = (CemBoidRulePredator)copyScript;
-
-        m_useRule = copyScript2.m_useRule;
-
-        m_predatorPower = copyScript2.m_predatorPower;
-        m_predatorRadius = copyScript2.m_predatorRadius;
-        m_predatorMaxPartners = copyScript2.m_predatorMaxPartners;
-        m_predatorMaxPartnerChecks = copyScript2.m_predatorMaxPartnerChecks;
-
-        m_predatorMaxPredators = copyScript2.m_predatorMaxPredators;
-        m_predatorNumberInitialPredators = copyScript2.m_predatorNumberInitialPredators;
-        m_predatorsHighlightPredators = copyScript2.m_predatorsHighlightPredators;
-
-        m_predatorAffectLeader = copyScript2.m_predatorAffectLeader;
-
-        m_useAdjustRadius = copyScript2.m_useAdjustRadius;
-        m_predatorMinAdjustmentDifference = copyScript2.m_predatorMinAdjustmentDifference;
-        m_predatorMinRadius = copyScript2.m_predatorMinRadius;
-        m_predatorAdjustStep = copyScript2.m_predatorAdjustStep;
-
-        m_requireLineOfSight = copyScript2.m_requireLineOfSight;
-        m_requireAngle = copyScript2.m_requireAngle;
-        m_maxAngle = copyScript2.m_maxAngle;
-
-        m_predatorPlayerIsPredator = copyScript2.m_predatorPlayerIsPredator;
-        setPlayerAsPredator(m_predatorPlayerIsPredator);
-
-        setNumberOfPredators(m_predatorNumberInitialPredators);
-
-        List<GameObject> agnets = new List<GameObject>(m_predatorForceVectors.Keys);
-        foreach (GameObject agent in agnets)
-            m_predatorForceVectors[agent] = Vector3.zero;
-
-        agnets = new List<GameObject>(m_predatorAcualRadii.Keys);
-        foreach (GameObject agent in agnets)
-            m_predatorAcualRadii[agent] = m_predatorRadius;
-        */
-    }
-    public void setValuesPredator(CemBoidRuleBase copyScript, int numberPredators)
-    {
         if (copyScript == null)
         {
             Debug.Log("Aborted: CemBoidRulePredator script was null!");
@@ -590,6 +560,56 @@ public class CemBoidRulePredator : CemBoidRuleBase {
         m_predatorsHighlightPredators = copyScript2.m_predatorsHighlightPredators;
 
         m_predatorAffectLeader = copyScript2.m_predatorAffectLeader;
+        m_leaderIsPredator = copyScript2.m_leaderIsPredator;
+        m_predatorFillPredatorsOnAdd = copyScript2.m_predatorFillPredatorsOnAdd;
+
+        m_useAdjustRadius = copyScript2.m_useAdjustRadius;
+        m_predatorMinAdjustmentDifference = copyScript2.m_predatorMinAdjustmentDifference;
+        m_predatorMinRadius = copyScript2.m_predatorMinRadius;
+        m_predatorAdjustStep = copyScript2.m_predatorAdjustStep;
+
+        m_requireLineOfSight = copyScript2.m_requireLineOfSight;
+        m_requireAngle = copyScript2.m_requireAngle;
+        m_maxAngle = copyScript2.m_maxAngle;
+        m_predatorPlayerIsPredator = copyScript2.m_predatorPlayerIsPredator;
+        //setPlayerAsPredator(m_predatorPlayerIsPredator);
+
+        //setNumberOfPredators(m_predatorNumberInitialPredators);
+
+        List<GameObject> agnets = new List<GameObject>(m_predatorForceVectors.Keys);
+        foreach (GameObject agent in agnets)
+            m_predatorForceVectors[agent] = Vector3.zero;
+    }
+    public void setValuesPredator(CemBoidRuleBase copyScript, int numberPredators)
+    {
+        Debug.Log(this.GetInstanceID() + ": setValue");
+        if (copyScript == null)
+        {
+            Debug.Log("Aborted: CemBoidRulePredator script was null!");
+            return;
+        }
+        if (copyScript.GetType() != this.GetType())
+        {
+            Debug.Log("Aborted: Copy script wasn't predator script!");
+            return;
+        }
+
+        CemBoidRulePredator copyScript2 = (CemBoidRulePredator)copyScript;
+
+        m_useRule = copyScript2.m_useRule;
+
+        m_predatorPower = copyScript2.m_predatorPower;
+        m_predatorRadius = copyScript2.m_predatorRadius;
+        m_predatorMaxPartners = copyScript2.m_predatorMaxPartners;
+        m_predatorMaxPartnerChecks = copyScript2.m_predatorMaxPartnerChecks;
+
+        m_predatorMaxPredators = copyScript2.m_predatorMaxPredators;
+        m_predatorFillPredatorsOnAdd = copyScript2.m_predatorFillPredatorsOnAdd;
+        m_predatorNumberInitialPredators = copyScript2.m_predatorNumberInitialPredators;
+        m_predatorsHighlightPredators = copyScript2.m_predatorsHighlightPredators;
+
+        m_predatorAffectLeader = copyScript2.m_predatorAffectLeader;
+        m_leaderIsPredator = copyScript2.m_leaderIsPredator;
 
         m_useAdjustRadius = copyScript2.m_useAdjustRadius;
         m_predatorMinAdjustmentDifference = copyScript2.m_predatorMinAdjustmentDifference;
@@ -601,9 +621,9 @@ public class CemBoidRulePredator : CemBoidRuleBase {
         m_maxAngle = copyScript2.m_maxAngle;
 
         m_predatorPlayerIsPredator = copyScript2.m_predatorPlayerIsPredator;
-        setPlayerAsPredator(m_predatorPlayerIsPredator);
+        //setPlayerAsPredator(m_predatorPlayerIsPredator);
 
-        setNumberOfPredators(numberPredators);
+        //setNumberOfPredators(numberPredators);
         setPredatorHighlight(m_predatorsHighlightPredators);
 
         List<GameObject> agnets = new List<GameObject>(m_predatorForceVectors.Keys);
@@ -613,5 +633,26 @@ public class CemBoidRulePredator : CemBoidRuleBase {
         agnets = new List<GameObject>(m_predatorActualRadii.Keys);
         foreach (GameObject agent in agnets)
             m_predatorActualRadii[agent] = m_predatorRadius;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        m_baseScript = GetComponent<CemBoidBase>();
+        if (!m_isInitialized)
+            initializeStuff();
+        
+        if (m_leaderIsPredator && m_baseScript.m_leader != null)
+            addPredator(m_baseScript.m_leader);
     }
 }

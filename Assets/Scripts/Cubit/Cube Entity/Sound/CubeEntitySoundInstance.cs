@@ -10,7 +10,7 @@ public class CubeEntitySoundInstance : MonoBehaviour
     public float m_removeTime;
     public bool m_destroyAfterwards;
     public float m_delayRdy;
-
+    
     // Use this for initialization
     void Start()
     {

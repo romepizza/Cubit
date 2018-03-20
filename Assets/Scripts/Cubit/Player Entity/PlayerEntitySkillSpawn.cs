@@ -125,7 +125,7 @@ public class PlayerEntitySkillSpawn : MonoBehaviour
     {
         GameObject cube = m_inactiveCubes.Dequeue();
 
-        cube.GetComponent<CubeEntitySystem>().setToInactive();
+        cube.GetComponent<CubeEntitySystem>().GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_inactivePrefab);
         cube.transform.position = targetPosition;
         cube.transform.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere, ForceMode.Acceleration);
         cube.transform.GetComponent<Rigidbody>().velocity = Random.insideUnitSphere;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeEntityCollisionEffect : MonoBehaviour
+public class CubeEntityCollisionEffect : EntityCopiableAbstract
 {
     [Header("----- SETTINGS -----")]
     public int m_collisionDelayFrames;
@@ -89,10 +89,11 @@ public class CubeEntityCollisionEffect : MonoBehaviour
             {
                 loseLife(this.gameObject, 1);
                 SoundManager.addSoundPlayerCubeHit(transform.position);
-                if(Random.Range(0f, 1f) < 0.5f)
-                    changeMaxCubes(-1);
-                setCubeToActiveNeutral();
-                
+                //if(Random.Range(0f, 1f) < 0.3f)
+                  //changeMaxCubes(-1);
+                //setCubeToActiveNeutral();
+
+                //Constants.getPlayer().GetComponent<PlayerEntityAttachSystem>().addToGrab(this.gameObject);
             }
 
             // --- Core ---
@@ -122,7 +123,7 @@ public class CubeEntityCollisionEffect : MonoBehaviour
     {
         if (GetComponent<CubeEntityAttached>() != null)
             GetComponent<CubeEntityAttached>().deregisterAttach();
-        m_collisionScript.m_entitySystemScript.setToActiveNeutral();
+        m_collisionScript.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activeNeutralPrefab);
     }
 
     void loseLife(GameObject victim, int damage)
@@ -164,7 +165,7 @@ public class CubeEntityCollisionEffect : MonoBehaviour
     void launchCubePlayer()
     {
         m_collisionScript.m_entitySystemScript.getMovementComponent().addAccelerationComponent(transform.position + Camera.main.transform.forward, 0.5f, 1000f, 50f);
-        m_collisionScript.m_entitySystemScript.setToActivePlayer();
+        m_collisionScript.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_activePlayerPrefab); ;
     }
 
 
@@ -175,5 +176,18 @@ public class CubeEntityCollisionEffect : MonoBehaviour
         m_collisionScript = collisionScript;
         m_collisionRelationship = collisionRelationship;
         m_explosionEffect = explosionEffect;
+    }
+
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        
     }
 }

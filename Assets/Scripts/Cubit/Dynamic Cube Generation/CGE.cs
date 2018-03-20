@@ -56,7 +56,7 @@ public class CGE : MonoBehaviour
             Quaternion rotation = Quaternion.Euler(new Vector3(0, 0, 1));
             GameObject cube = Instantiate(m_prefab, m_cubeChildObject.transform);
             cube.GetComponent<CubeEntitySystem>().addComponentsAtStart();
-            cube.GetComponent<CubeEntitySystem>().setToInactive();
+            cube.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_inactivePrefab);
             //m_tidyUp.deactivateCube(cube);
             cube.transform.position = m_inactivePosition + Vector3.right * i * 4f;
             deactivateCube(cube);
@@ -64,10 +64,10 @@ public class CGE : MonoBehaviour
     }
 
     // Activate
-    public void activateCube(Vector3 targetPosition)
+    public GameObject activateCubeUnsafe(Vector3 targetPosition)
     {
         if (!m_spawnCubes)
-            return;
+            return null;
 
         if (m_inactiveCubes.Count > 0)
         {
@@ -110,11 +110,61 @@ public class CGE : MonoBehaviour
 
                 m_activeCubes.Add(cube);
             }
+
+            return cube;
         }
+        return null;
     }
+
+    public GameObject activateCubeSafe(Vector3 targetPosition)
+    {
+        if (!m_spawnCubes)
+            return null;
+
+        if (m_inactiveCubes.Count > 0)
+        {
+
+            GameObject cube = null;
+            int tries = 0;
+            do
+            {
+                cube = m_inactiveCubes.Dequeue();
+                if (!cube.GetComponent<CubeEntityState>().isInactive())
+                {
+                    m_activeCubes.Add(cube);
+                    cube = null;
+                }
+            } while (cube == null && tries < 100f);
+            if(tries > 90)
+            {
+                Debug.Log("Warning: no inactive cubes found!");
+            }
+
+
+            if (cube != null)
+            {
+
+                cube.transform.position = targetPosition;
+                //cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                //cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
+                //cube.SetActive(true);
+                //cube.transform.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 100f, ForceMode.Acceleration);
+                //cube.transform.GetComponent<Rigidbody>().velocity = m_player.GetComponent<Rigidbody>().velocity * 0.5f;
+                //cube.transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                m_activeCubes.Add(cube);
+            }
+
+            return cube;
+        }
+        return null;
+    }
+
     public void registerActiveCube(GameObject cube)
     {
-        m_activeCubes.Add(cube);
+        if(!m_activeCubes.Contains(cube))
+            m_activeCubes.Add(cube);
         //m_inactiveCubes.Remove(cube);
         //m_inactiveCubes.Dequeue();
     }

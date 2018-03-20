@@ -23,13 +23,16 @@ GameObject:
   - component: {fileID: 54704683432805436}
   - component: {fileID: 65616183967778200}
   - component: {fileID: 23226563299467426}
+  - component: {fileID: 114363777403917094}
   - component: {fileID: 114168506175264778}
   - component: {fileID: 114371655891268196}
   - component: {fileID: 114001986941517278}
   - component: {fileID: 114287085246997788}
-  - component: {fileID: 114976900806660940}
   - component: {fileID: 114107675199706856}
   - component: {fileID: 114729790267659980}
+  - component: {fileID: 114398517459507316}
+  - component: {fileID: 114491507411582018}
+  - component: {fileID: 114648837847820882}
   m_Layer: 8
   m_Name: Cube Entity Default (Inactive)
   m_TagString: Ball
@@ -130,7 +133,7 @@ MonoBehaviour:
   m_duration: -1
   m_state: 0
   m_affiliation: 0
-  m_monster: 0
+  m_type: 0
   m_durationEndTime: 0
   m_entitySystemScript: {fileID: 0}
   m_attachedScript: {fileID: 0}
@@ -147,8 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   doStuff: 0
   m_entitySystemScript: {fileID: 0}
-  m_accelerationComponents: []
-  m_followPointsComponents: []
+  m_movementComponents: []
 --- !u!114 &114168506175264778
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,11 +162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 893ed7bc5be56c349a1c974a01473c4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doStuff: 0
-  test: {fileID: 0}
   m_appearanceComponent: {fileID: 114371655891268196}
   m_chargeComponent: {fileID: 0}
-  m_collisionComponent: {fileID: 114976900806660940}
   m_movementComponent: {fileID: 114107675199706856}
   m_stateComponent: {fileID: 114001986941517278}
   m_transformComponent: {fileID: 114287085246997788}
@@ -181,6 +180,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_entitySystemScript: {fileID: 0}
+--- !u!114 &114363777403917094
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1171172515848604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0019f144ab541474daf173e3b0921acb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114371655891268196
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -193,11 +203,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_material: {fileID: 2100000, guid: 5b6f7f6fe8cb19747935e0e20957c828, type: 2}
-  m_materialColor: {r: 1, g: 1, b: 1, a: 0.491}
-  m_materialColorIntensity: 1
-  m_isEmissive: 0
-  m_emissionIntensity: 1
-  m_emissionColor: {r: 1, g: 1, b: 1, a: 0}
   m_lightColor: {r: 1, g: 1, b: 1, a: 0}
   m_lightIntensity: 0
   m_lightRange: 0
@@ -236,6 +241,54 @@ MonoBehaviour:
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   m_entitySystemComponent: {fileID: 0}
+--- !u!114 &114398517459507316
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1171172515848604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ecfe73a3571512449b4a118b2f0a2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_collidedThisFrame: 0
+  m_ownState: -1
+  m_ownAffiliation: -1
+  m_colliderState: -1
+  m_colliderAffiliation: -1
+  m_stateScript: {fileID: 0}
+--- !u!114 &114491507411582018
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1171172515848604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8ba9d69207cb446ab745c5501634c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_maxCharge: 0
+  m_minCharge: 0
+  m_chargePower: 0
+  m_currentCharge: 0
+--- !u!114 &114648837847820882
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1171172515848604}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698fde080e9ddc548b4014f9434e8368, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_initialParticleEffects: []
+  m_onChangeStateParticleEffects: []
+  m_activeParticleEffects: []
+  m_loopingParticleEffects: []
+  m_tempraryParticleEffects: []
 --- !u!114 &114729790267659980
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -247,32 +300,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fabaa7732b5781459c9d9f007d91d2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_entitySystemScript: {fileID: 0}
---- !u!114 &114976900806660940
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1171172515848604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a933c4699926443b24639c07d8a27c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_collisionDelayFrames: 1
-  m_explosionCurrent: {fileID: 0}
-  m_explosionEjector: {fileID: 1747737226624786, guid: c48dff4dc13fbfc4db91b3d791c7985e,
-    type: 2}
-  m_explosionPlayerIsHit: {fileID: 1249851537317034, guid: 1df5762c20c94b541a9da43066551516,
-    type: 2}
-  m_explosionEnemyIsHit: {fileID: 1747737226624786, guid: 1342334fc258ca546a8b3f21d233a31a,
-    type: 2}
-  m_player: {fileID: 0}
-  m_collidedWith: {fileID: 0}
-  m_collisionRelationship: 0
-  m_ownState: -1
-  m_ownAffiliation: -1
-  m_colliderState: -1
-  m_colliderAffiliation: -1
-  m_addCollision: 0
   m_entitySystemScript: {fileID: 0}

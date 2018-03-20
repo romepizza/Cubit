@@ -21,6 +21,7 @@ public class CemBoidRuleBubble : CemBoidRuleBase
     public Vector3 m_bubbleCenter;
     public int m_bubbleCounter;
     Dictionary<GameObject, Vector3> m_bubbleForceVectors;
+    public bool m_isInitialized;
 
     void Start()
     {
@@ -211,5 +212,21 @@ public class CemBoidRuleBubble : CemBoidRuleBase
         List<GameObject> agnets = new List<GameObject>(m_bubbleForceVectors.Keys);
         foreach (GameObject agent in agnets)
             m_bubbleForceVectors[agent] = Vector3.zero;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+
     }
 }

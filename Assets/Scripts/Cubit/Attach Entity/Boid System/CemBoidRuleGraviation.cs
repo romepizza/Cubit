@@ -13,6 +13,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
     public float m_gravitationMinPercentPerFrame;
     public float m_gravitationPower;
     public float m_gravitationMaxSpeed;
+    public float m_gravitationDampenRadius;
 
     [Header("--- (Leader) ---")]
     public float m_gravitationAffectLeader;
@@ -21,6 +22,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
     public int m_gravitationCounter;
     Dictionary<GameObject, Vector3> m_gravitationForceVectors;
     public Vector3 m_gravitationCenter;
+    public bool m_isInitialized;
 
     void Start()
     {
@@ -101,13 +103,14 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
         if (!m_useRule)
             return;
 
+
         Vector3 direction = (m_gravitationCenter - agent.transform.position);
         Vector3 flightDirection = agent.GetComponent<Rigidbody>().velocity;
         float angle = Vector3.Dot(direction.normalized, flightDirection.normalized);
 
         if (m_gravitationMaxSpeed <= 0  || angle < 0 || flightDirection.magnitude < m_gravitationMaxSpeed)
         {
-            float distanceFactor = Mathf.Clamp01((Vector3.Distance(agent.transform.position, m_gravitationCenter) / 200f));
+            float distanceFactor = Mathf.Clamp01((Vector3.Distance(agent.transform.position, m_gravitationCenter) / m_gravitationDampenRadius));
             m_gravitationForceVectors[agent] = direction.normalized * m_gravitationPower * distanceFactor;
             if (agent == m_baseScript.m_leader)
             {
@@ -152,7 +155,7 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
         if (m_gravitationForceVectors.ContainsKey(agent))
             m_gravitationForceVectors.Remove(agent);
         else
-            Debug.Log("Warning: Tried to remove agent from gravitation vectors, but it was not in the list!");
+            ;// Debug.Log("Warning: Tried to remove agent from gravitation vectors, but it was not in the list!");
     }
 
     // utility
@@ -175,7 +178,9 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
             m_gravitationCenter = m_baseScript.getAverageSwarmPosition();
         }
 
-        m_gravitationCenter += m_gravitationCenterOffset;
+        Vector3 offset = m_gravitationCenterOffset;
+        //Vector3 offset = Camera.main.transform.rotation * m_gravitationCenterOffset;
+        m_gravitationCenter += offset;
     }
 
     // copy
@@ -201,9 +206,28 @@ public class CemBoidRuleGraviation : CemBoidRuleBase {
         m_gravitationPower = copyScript2.m_gravitationPower;
         m_gravitationUseSwamCenter = copyScript2.m_gravitationUseSwamCenter;
         m_gravitationMaxSpeed = copyScript2.m_gravitationMaxSpeed;
+        m_gravitationDampenRadius = copyScript2.m_gravitationDampenRadius;
+        m_gravitationAffectLeader = copyScript2.m_gravitationAffectLeader;
+        m_gravitationCenterOffset = copyScript2.m_gravitationCenterOffset;
 
         List<GameObject> agnets = new List<GameObject>(m_gravitationForceVectors.Keys);
         foreach (GameObject agent in agnets)
             m_gravitationForceVectors[agent] = Vector3.zero;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CemBoidRuleBase)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        m_gravitationForceVectors = new Dictionary<GameObject, Vector3>();
     }
 }

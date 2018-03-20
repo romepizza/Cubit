@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class CemBoidRuleBase : MonoBehaviour
+public abstract class CemBoidRuleBase : EntityCopiableAbstract
 {
     [Header("------- Base Settings -------")]
     public bool m_useRule = true;

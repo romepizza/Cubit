@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeEntityMovementAcceleration : MonoBehaviour
+public class CubeEntityMovementAcceleration : CubeEntityMovementAbstract
 {
     [Header("----- SETTINGS -----")]
     public float m_duration;
     public float m_power;
-    public float m_maxSpeed;
     public Vector3 m_targetDirection;
     public Vector3 m_targetPoint;
 
@@ -17,20 +16,27 @@ public class CubeEntityMovementAcceleration : MonoBehaviour
 
     public CubeEntityMovement m_movementScript;
     private Rigidbody m_rb;
+    public bool m_isInitialized;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start ()
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+	}
+    void initializeStuff()
     {
         m_rb = GetComponent<Rigidbody>();
         if (m_rb == null)
-            Debug.Log("RigidBody of " + gameObject.name + " not found");	
-	}
+            Debug.Log("RigidBody of " + gameObject.name + " not found");
+    }
 	
 	// Update is called once per frame
 	void FixedUpdate ()
     {
         updateDuration();
-        updateAcceleration();
+        if(m_useThis)
+            updateAcceleration();
     }
 
 
@@ -38,7 +44,7 @@ public class CubeEntityMovementAcceleration : MonoBehaviour
     {
         if(m_duration >= 0 && m_durationEndTime < Time.time)
         {
-            m_movementScript.removeAccelerationComponent(this);
+            m_movementScript.removeComponent(this);
         }
     }
 
@@ -48,5 +54,51 @@ public class CubeEntityMovementAcceleration : MonoBehaviour
         {
             m_rb.AddForce(m_targetDirection.normalized * m_power, ForceMode.Acceleration);
         }
+    }
+
+    // setter
+    void setValues(CubeEntityMovementAcceleration copyScript)
+    {
+        m_duration = copyScript.m_duration;
+        m_power = copyScript.m_power;
+        m_maxSpeed = copyScript.m_maxSpeed;
+        m_targetPoint = copyScript.m_targetPoint;
+        m_targetDirection = copyScript.m_targetDirection;
+        m_useThis = copyScript.m_useThis;
+    }
+
+    void setValues(CubeEntityMovementAcceleration copyScript, Vector3 targetPosition)
+    {
+        m_duration = copyScript.m_duration;
+        m_power = copyScript.m_power;
+        m_maxSpeed = copyScript.m_maxSpeed;
+        m_targetPoint = targetPosition;
+
+        m_targetDirection = m_targetPoint - transform.position;
+        m_useThis = copyScript.m_useThis;
+    }
+
+    // abstract
+    public override void pasteScript(EntityCopiableAbstract baseScript)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CubeEntityMovementAcceleration)baseScript);
+    }
+    public override void prepareDestroyScript()
+    {
+        Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        m_movementScript = GetComponent<CubeEntityMovement>();
+        m_durationEndTime = m_duration + Time.time;
+    }
+
+    public override void pasteScript(EntityCopiableAbstract baseScript, GameObject target, Vector3 targetPosition)
+    {
+        if (!m_isInitialized)
+            initializeStuff();
+        setValues((CubeEntityMovementAcceleration)baseScript, targetPosition);
     }
 }

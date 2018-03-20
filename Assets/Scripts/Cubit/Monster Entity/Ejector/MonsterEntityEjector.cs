@@ -2,38 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterEntityEjector : MonsterEntityBase
+public class MonsterEntityEjector : MonsterEntityAbstractBase
 {
     [Header("----- SETTINGS -----")]
     [Header("----- DEBUG -----")]
     [Header("--- (Scripts) ---")]
     public bool placeHolder;
-    // Use this for initialization
-    void Start ()
-    {
-        m_isMovable = false;
-        m_rb = GetComponent<Rigidbody>();
-        if (m_rb == null)
-            Debug.Log("Warning: No rigidbody detected!");
-        m_rb.mass = 100000f;
-    }
-	
-	// Update is called once per frame
-	/*void Update ()
-    {
-		if(m_rb.velocity.magnitude > 0.001f)
-        {
-            m_rb.velocity = Vector3.zero;
-        }
-	}*/
 
-    public void setValuesByScriptEjector(GameObject prefab)
+    
+    public override void pasteScript(EntityCopiableAbstract baseScript)
     {
-
+        
     }
     
-    public void destroyScript()
+
+    public override void prepareDestroyScript()
     {
+        Constants.getMainCge().GetComponent<CgeMonsterManager>().deregisterEnemy(this);
         Destroy(this);
+    }
+    public override void assignScripts()
+    {
+        
     }
 }

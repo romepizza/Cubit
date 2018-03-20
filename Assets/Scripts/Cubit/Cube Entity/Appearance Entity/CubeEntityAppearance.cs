@@ -8,11 +8,11 @@ public class CubeEntityAppearance : MonoBehaviour
     [Header("----- SETTINGS -----")]
     [Header("--- (Material) ---")]
     public Material m_material;
-    public Color m_materialColor;
-    public float m_materialColorIntensity;
-    public bool m_isEmissive;
-    public float m_emissionIntensity;
-    public Color m_emissionColor;
+    //public Color m_materialColor;
+    //public float m_materialColorIntensity;
+    //public bool m_isEmissive;
+    //public float m_emissionIntensity;
+    //public Color m_emissionColor;
 
     [Header("--- (Light) ---")]
     public Color m_lightColor;
@@ -37,42 +37,12 @@ public class CubeEntityAppearance : MonoBehaviour
             Debug.Log("Error: Tried to add entitySystemComponent, but failed!");
     }
 	
-    /*
-    public void setAppearanceByPrefap(GameObject appearancePrefap)
-    {
-        if(appearancePrefap.GetComponent<MeshRenderer>() != null)
-        {
-            m_material = appearancePrefap.GetComponent<Renderer>().sharedMaterial;
-            applyCubeMaterial();
-        }
-        if (appearancePrefap.GetComponent<Light>() != null)
-        {
-            m_lightColor = appearancePrefap.GetComponent<Light>().color;
-            m_lightIntensity = appearancePrefap.GetComponent<Light>().intensity;
-            m_lightRange = appearancePrefap.GetComponent<Light>().range;
-            applyCubeLight();
-        }
-        if(appearancePrefap.GetComponent<TrailRenderer>() != null)
-        {
-            m_trailMaterial = appearancePrefap.GetComponent<TrailRenderer>().material;
-            m_trailColor = appearancePrefap.GetComponent<TrailRenderer>().startColor;
-            m_trailTime = appearancePrefap.GetComponent<TrailRenderer>().time;
-            m_trailWidth = appearancePrefap.GetComponent<TrailRenderer>().widthMultiplier;
-            applyCubeTrailRenderer();
-        }
-    }
-    */
     public void setAppearanceByScript(GameObject prefab)
     {
         CubeEntityAppearance appearanceSettingsScript = prefab.GetComponent<CubeEntityAppearance>();
         if (appearanceSettingsScript != null)
         {
             m_material = appearanceSettingsScript.m_material;
-            m_materialColor = appearanceSettingsScript.m_materialColor;
-            m_materialColorIntensity = appearanceSettingsScript.m_materialColorIntensity;
-            m_isEmissive = appearanceSettingsScript.m_isEmissive;
-            m_emissionColor = appearanceSettingsScript.m_emissionColor;
-            m_emissionIntensity = appearanceSettingsScript.m_emissionIntensity;
 
             m_lightColor = appearanceSettingsScript.m_lightColor;
             m_lightIntensity = appearanceSettingsScript.m_lightIntensity;
@@ -88,6 +58,7 @@ public class CubeEntityAppearance : MonoBehaviour
             applyCubeMaterialProperties();
             applyCubeLight();
             applyCubeTrailRenderer();
+            GetComponent<Renderer>().enabled = prefab.GetComponent<Renderer>().enabled;
         }
         
         CubeEntityFadeEmission fadeScript = prefab.GetComponent<CubeEntityFadeEmission>();
@@ -100,19 +71,24 @@ public class CubeEntityAppearance : MonoBehaviour
         }
     }
 
-    public void setAppearianceMaterialComponent(Material material, Color materialColor, float materialColorIntensity, bool isEmissive, Color emissionColor, float emissionIntensity)
+    public void setAppearanceMaterialComponent(Material material)
+    {
+        m_material = material;
+    }
+
+    public void setAppearanceMaterialComponent(Material material, Color materialColor, float materialColorIntensity, bool isEmissive, Color emissionColor, float emissionIntensity)
     {
         //if(material != null)
             m_material = material;
         //if(materialColor.r >= 0 && materialColor.g >= 0 && materialColor.b >= 0)
-            m_materialColor = materialColor;
+            //m_materialColor = materialColor;
         //if(materialColorIntensity >= 0)
-            m_materialColorIntensity = materialColorIntensity;
-        m_isEmissive = isEmissive;
+            //m_materialColorIntensity = materialColorIntensity;
+        //m_isEmissive = isEmissive;
         //if (emissionColor.r >= 0 && emissionColor.g >= 0 && emissionColor.b >= 0)
-            m_emissionColor = emissionColor;
+            //m_emissionColor = emissionColor;
         //if(emissionIntensity >= 0)
-            m_emissionIntensity = emissionIntensity;
+            //m_emissionIntensity = emissionIntensity;
     }
 
     public void setAppearianceLightComponent(Color lightColor, float lightIntensity, float lightRadius, LightShadows shadowType)
@@ -144,20 +120,23 @@ public class CubeEntityAppearance : MonoBehaviour
 
     void applyCubeMaterialProperties()
     {
-        if (m_material != null)
+        //if (m_material != null)
         {
             gameObject.GetComponent<MeshRenderer>().material = m_material;
-        }
-        else
-        {
-            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-            mpb.SetColor("_Color", m_materialColor * m_materialColorIntensity);
-            if (m_isEmissive)
-                GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+            //}
+            /*
             else
-                GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
-            mpb.SetColor("_EmissionColor", m_emissionColor * m_emissionIntensity);
-            GetComponent<Renderer>().SetPropertyBlock(mpb);
+            {
+                MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+                mpb.SetColor("_Color", m_materialColor * m_materialColorIntensity);
+                if (m_isEmissive)
+                    GetComponent<Renderer>().material.EnableKeyword("_EMISSION");
+                else
+                    GetComponent<Renderer>().material.DisableKeyword("_EMISSION");
+                mpb.SetColor("_EmissionColor", m_emissionColor * m_emissionIntensity);
+                GetComponent<Renderer>().SetPropertyBlock(mpb);
+            }
+            */
         }
     }
 
