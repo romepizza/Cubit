@@ -11,6 +11,7 @@ Material:
   m_ShaderKeywords: _ALPHAPREMULTIPLY_ON _EMISSION
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: 3000
   stringTagMap:
     RenderType: Transparent
@@ -72,5 +73,5 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 0.16972733, g: 0.8346254, b: 0, a: 0.5023097}
-    - _EmissionColor: {r: 0.10773967, g: 0.29722193, b: 0, a: 1}
+    - _Color: {r: 0.6725791, g: 0.56824064, b: 0.07984747, a: 0.51595956}
+    - _EmissionColor: {r: 0.38360992, g: 0.30665976, b: 0.04016556, a: 1}

@@ -15,11 +15,17 @@ public class CubeEntityPlasmaProjectile : MonsterEntityAbstractBase
     private void OnCollisionEnter(Collision collision)
     {
         GameObject colliderGameObject = collision.gameObject;
-        if (colliderGameObject.GetComponent<CubeEntitySystem>() != null)
+        CubeEntityState thisState = GetComponent<CubeEntityState>();
+        CubeEntityState colliderState = colliderGameObject.GetComponent<CubeEntityState>();
+
+        if (colliderState != null)
         {
-            if(colliderGameObject.GetComponent<CubeEntityState>().m_affiliation != GetComponent<CubeEntityState>().m_affiliation)
+            if (colliderState.m_affiliation != thisState.m_affiliation)
             {
-                GetComponent<MonsterEntityBase>().die();
+                if (colliderState.m_state == CubeEntityState.s_STATE_ATTACHED || colliderState.m_state == CubeEntityState.s_STATE_CORE)
+                {
+                    GetComponent<MonsterEntityBase>().die();
+                }
             }
         }
     }

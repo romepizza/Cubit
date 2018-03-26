@@ -121,7 +121,7 @@ public class MonsterEntitySkillGrab : EntityCopiableAbstract
         if (cubeAdd != null)
         {
             if (cubeAdd.GetComponent<CubeEntityState>().m_state == CubeEntityState.s_STATE_ATTACHED)
-                Debug.Log("Caution");
+                Debug.Log("Caution!");
 
             if (m_attachSystemScriptNew != null)
                 m_attachSystemScriptNew.registerToGrab(cubeAdd);

@@ -61,9 +61,11 @@ MeshRenderer:
   m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 88f1b8c4541b53e4ea2da0b5cdfe06ee, type: 2}
   m_StaticBatchInfo:
@@ -76,6 +78,7 @@ MeshRenderer:
   m_PreserveUVs: 1
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -182,7 +185,7 @@ MonoBehaviour:
   m_material: {fileID: 2100000, guid: 88f1b8c4541b53e4ea2da0b5cdfe06ee, type: 2}
   m_lightColor: {r: 0.75, g: 1, b: 0.7517241, a: 0}
   m_lightIntensity: 1
-  m_lightRange: 400
+  m_lightRange: 200
   m_lightShadowType: 0
   m_trailMaterial: {fileID: 2100000, guid: 123ac6dc79004e54b8b352a7e64acdca, type: 2}
   m_trailTime: 0.5
@@ -241,9 +244,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e33a94dc2d08a0a47a0fdd144596a26d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attachedToGameObject: {fileID: 0}
-  m_affiliation: 2
-  m_monster: 1
+  m_attachedToGameObject: {fileID: 1668736149874840}
+  m_affiliation: 20
+  m_monster: 50
   m_attachSystemScript: {fileID: 0}
 --- !u!114 &114839776629467806
 MonoBehaviour:

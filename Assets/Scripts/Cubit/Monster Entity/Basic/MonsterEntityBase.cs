@@ -140,7 +140,7 @@ public class MonsterEntityBase : EntityCopiableAbstract
     public void die()
     {
 
-        SoundManager.addSoundEjectorDeath(transform.position);
+        //SoundManager.addSoundEjectorDeath(transform.position);
 
         foreach (LevelEntityMonsterManager script in m_registeredInManager)
         {

@@ -9,19 +9,24 @@ public class CGE : MonoBehaviour
     public GameObject m_cubeChildObject;
     public CgeTidyUp m_tidyUp;
 
-    [Header("----- SETTINGS -----")]
-    public int m_poolSize;
-    public Vector3 m_inactivePosition;
-
-    [Header("----- DEBUG -----")]
-    public Queue<GameObject> m_inactiveCubes;
-    public List<GameObject> m_activeCubes;
-
     [Header("------- Settings -------")]
     public float m_deactivateDistance;
     public int m_deactivisionsPerFrame;
+    public int m_poolSize;
+    public Vector3 m_inactivePosition;
+
+    [Header("--- (Activate/Deactivate) ---")]
+    public bool m_enableDisableCubes;
+    [Header("- activision -")]
+    public bool m_stopMovementOnActivision;
+    public bool m_addRandomMovementOnActivision;
+    [Header("- deativision -")]
+    public bool m_stopMovementOnDeactivision;
+    //public bool m_setToDefaultPositionOnDeactivision;
 
     [Header("------- Debug -------")]
+    public Queue<GameObject> m_inactiveCubes;
+    public List<GameObject> m_activeCubes;
     public List<List<GameObject>> m_allCubes;
     public int m_checkedTotal;
     public bool m_spawnCubes;
@@ -98,10 +103,16 @@ public class CGE : MonoBehaviour
 
             if (cube != null)
             {
+                if (m_enableDisableCubes)
+                    cube.SetActive(true);
+
+                if (m_stopMovementOnActivision)
+                {
+                    cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                }
 
                 cube.transform.position = targetPosition;
-                //cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                //cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
                 //cube.SetActive(true);
                 //cube.transform.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 100f, ForceMode.Acceleration);
@@ -144,14 +155,23 @@ public class CGE : MonoBehaviour
             if (cube != null)
             {
 
-                cube.transform.position = targetPosition;
-                //cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
-                //cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                if(m_enableDisableCubes)
+                    cube.SetActive(true);
 
-                //cube.SetActive(true);
-                //cube.transform.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 100f, ForceMode.Acceleration);
-                //cube.transform.GetComponent<Rigidbody>().velocity = m_player.GetComponent<Rigidbody>().velocity * 0.5f;
-                //cube.transform.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                if (m_stopMovementOnActivision)
+                {
+                    cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+                }
+
+                if(m_addRandomMovementOnActivision)
+                {
+                    cube.transform.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * 100f, ForceMode.Acceleration);
+                    cube.transform.GetComponent<Rigidbody>().velocity = Random.insideUnitSphere * 5f;
+                }
+
+                cube.transform.position = targetPosition;
+
 
                 m_activeCubes.Add(cube);
             }
@@ -169,11 +189,12 @@ public class CGE : MonoBehaviour
         //m_inactiveCubes.Dequeue();
     }
 
+    // deactivate
     void checkForDeactivate()
     {
-        int checkedThisRound = 0;
+        int checkedThisFrame = 0;
         //int checks = (int)Mathf.Min(m_movesAndScansPerFrame, Mathf.Max(m_cellQueue.Count * 0.1f, 5))
-        while (checkedThisRound < m_deactivisionsPerFrame)
+        while (checkedThisFrame < m_deactivisionsPerFrame)
         {
             int index = m_activeCubes.Count - m_checkedTotal - 1;
 
@@ -200,7 +221,7 @@ public class CGE : MonoBehaviour
                     Debug.Log("Warning: Cube was null");
             }
 
-            checkedThisRound++;
+            checkedThisFrame++;
             m_checkedTotal++;
             if (m_checkedTotal > m_activeCubes.Count)
                 m_checkedTotal = 0;
@@ -208,18 +229,23 @@ public class CGE : MonoBehaviour
     }
     public void deactivateCube(GameObject cube)
     {
-        //cube.SetActive(false);
+        if (m_enableDisableCubes)
+            cube.SetActive(false);
 
-        //Vector3 position = m_inactivePosition + Vector3.right * m_inactivePositionIndex * 4f;
-        //m_inactivePositionIndex++;
+        if (m_stopMovementOnDeactivision)
+        {
+            cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        }
 
-        //cube.transform.position = position;
-        //cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        //cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        //if (m_setToDefaultPositionOnDeactivision)
+        //{
+            //Vector3 position = m_inactivePosition + Vector3.right * m_inactivePositionIndex * 4f;
+            //m_inactivePositionIndex++;
+            //cube.transform.position = position;
+        //}
 
         //cube.GetComponent<CubeEntitySystem>().setToInactive();
-        cube.GetComponent<Rigidbody>().velocity = Vector3.zero;
-        cube.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
         m_activeCubes.Remove(cube);
         m_inactiveCubes.Enqueue(cube);

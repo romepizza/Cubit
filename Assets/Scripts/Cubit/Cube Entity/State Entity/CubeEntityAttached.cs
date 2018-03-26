@@ -36,6 +36,13 @@ public class CubeEntityAttached : EntityCopiableAbstract
             Debug.Log("Warning: Something might have gone wrong here!");
     }
 
+    public void setValuesPlain(CubeEntityAttached baseScript)
+    {
+        m_attachedToGameObject = baseScript.m_attachedToGameObject;
+        m_affiliation = baseScript.m_affiliation;
+        m_monster = baseScript.m_monster;
+    }
+
     public void deregisterAttach()
     {
         if(m_attachSystemScript != null)
@@ -49,7 +56,7 @@ public class CubeEntityAttached : EntityCopiableAbstract
     
     public override void pasteScript(EntityCopiableAbstract baseScript)
     {
-        
+        setValuesPlain((CubeEntityAttached)baseScript);
     }
     
     public override void prepareDestroyScript()

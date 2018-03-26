@@ -5,6 +5,7 @@ using UnityEngine;
 public class CgeMonsterManager : MonoBehaviour
 {
     [Header("----- Settings -----")]
+    public bool m_spawnNewCube;
 
     [Header("----- DEBUG -----")]
     public bool m_toggle;
@@ -55,25 +56,31 @@ public class CgeMonsterManager : MonoBehaviour
 
     void createEjector()
     {
-        List<GameObject> potentialCubes = new List<GameObject>();
-
-        foreach(GameObject cube in m_cge.m_activeCubes)
-        {
-            if(cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
-            {
-                potentialCubes.Add(cube);
-            }
-        }
-
         GameObject core = null;
-        if (potentialCubes.Count > 0)
+
+        if (m_spawnNewCube)
         {
-            int randomIndex = Random.Range(0, potentialCubes.Count);
-            core = potentialCubes[randomIndex];
+            core = Constants.getMainCge().activateCubeSafe(getSpawnPosition());
         }
         else
-            Debug.Log("Warning: Tried to create Ejector, but no fitting cube was found!");
+        {
+            List<GameObject> potentialCubes = new List<GameObject>();
+            foreach (GameObject cube in m_cge.m_activeCubes)
+            {
+                if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
+                {
+                    potentialCubes.Add(cube);
+                }
+            }
 
+            if (potentialCubes.Count > 0)
+            {
+                int randomIndex = Random.Range(0, potentialCubes.Count);
+                core = potentialCubes[randomIndex];
+            }
+            else
+                Debug.Log("Warning: Tried to create Ejector, but no fitting cube was found!");
+        }
         if (core != null)
         {
             core.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_coreEnemyEjector);
@@ -84,25 +91,32 @@ public class CgeMonsterManager : MonoBehaviour
     }
     void createWorm()
     {
-        List<GameObject> potentialCubes = new List<GameObject>();
-
-        foreach (GameObject cube in m_cge.m_activeCubes)
-        {
-            if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
-            {
-                potentialCubes.Add(cube);
-            }
-        }
-
         GameObject core = null;
-        if (potentialCubes.Count > 0)
+
+        if (m_spawnNewCube)
         {
-            int randomIndex = Random.Range(0, potentialCubes.Count);
-            core = potentialCubes[randomIndex];
+            core = Constants.getMainCge().activateCubeSafe(getSpawnPosition());
         }
         else
-            Debug.Log("Warning: Tried to create Worm, but no fitting cube was found!");
+        { 
+            List<GameObject> potentialCubes = new List<GameObject>();
 
+            foreach (GameObject cube in m_cge.m_activeCubes)
+            {
+                if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
+                {
+                    potentialCubes.Add(cube);
+                }
+            }
+
+            if (potentialCubes.Count > 0)
+            {
+                int randomIndex = Random.Range(0, potentialCubes.Count);
+                core = potentialCubes[randomIndex];
+            }
+            else
+                Debug.Log("Warning: Tried to create Worm, but no fitting cube was found!");
+        }
         if (core != null)
         {
             core.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_coreEnemyWorm);
@@ -113,25 +127,32 @@ public class CgeMonsterManager : MonoBehaviour
     }
     void createMorpher()
     {
-        List<GameObject> potentialCubes = new List<GameObject>();
-
-        foreach (GameObject cube in m_cge.m_activeCubes)
-        {
-            if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
-            {
-                potentialCubes.Add(cube);
-            }
-        }
-
         GameObject core = null;
-        if (potentialCubes.Count > 0)
+
+        if (m_spawnNewCube)
         {
-            int randomIndex = Random.Range(0, potentialCubes.Count);
-            core = potentialCubes[randomIndex];
+            core = Constants.getMainCge().activateCubeSafe(getSpawnPosition());
         }
         else
-            Debug.Log("Warning: Tried to create Worm, but no fitting cube was found!");
+        {
+            List<GameObject> potentialCubes = new List<GameObject>();
 
+            foreach (GameObject cube in m_cge.m_activeCubes)
+            {
+                if (cube.GetComponent<CubeEntityState>().canBeCoreGeneral() && cube.GetComponent<MonsterEntityBase>() == null)
+                {
+                    potentialCubes.Add(cube);
+                }
+            }
+
+            if (potentialCubes.Count > 0)
+            {
+                int randomIndex = Random.Range(0, potentialCubes.Count);
+                core = potentialCubes[randomIndex];
+            }
+            else
+                Debug.Log("Warning: Tried to create Worm, but no fitting cube was found!");
+        }
         if (core != null)
         {
             core.GetComponent<CubeEntityPrefapSystem>().setToPrefab(CubeEntityPrefabs.getInstance().s_coreEnemyMorpher);
@@ -141,6 +162,14 @@ public class CgeMonsterManager : MonoBehaviour
         }
     }
 
+    Vector3 getSpawnPosition()
+    {
+        Vector3 spawnPosition = Vector3.zero;
+        //spawnPosition = Constants.getPlayer().transform.position + Random.insideUnitSphere.normalized * Random.Range(250, 500);
+        spawnPosition = Constants.getPlayer().transform.position + Camera.main.transform.forward * Random.Range(250f, 500f);
+
+        return spawnPosition;
+    }
     public void deregisterEnemy(MonsterEntityAbstractBase enemyScript)
     {
         if (enemyScript.GetType() == typeof(MonsterEntityEjector))
